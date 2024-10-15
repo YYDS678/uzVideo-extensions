@@ -133,17 +133,17 @@ class PanTools {
       /// 如果需要 cookie 请在这里获取
       // this.quark.cookie = await this.getCookie(PanType.Quark);
       const data = await this.quark.getFilesByShareUrl(shareUrl);
-      return data;
+      return JSON.stringify(data);
     } else if (shareUrl.includes("https://drive.uc.cn")) {
       shareUrl = shareUrl.split("?")[0];
       /// 如果需要 cookie 请在这里获取
       // this.uc.cookie = await this.getCookie(PanType.UC);
       const data = await this.uc.getFilesByShareUrl(shareUrl);
-      return data;
+      return JSON.stringify(data);
     }
     const data = new PanListDetail();
     data.error = "";
-    return data;
+    return JSON.stringify(data);
   }
 
   /**
@@ -163,7 +163,7 @@ class PanTools {
         return new PanPlayInfo("", "获取 " + PanType.Quark + " cookie 失败~");
       }
       const data = await this.quark.getPlayUrl(item.data);
-      return data;
+      return JSON.stringify(data);
     } else if (item.panType === PanType.UC) {
       /// 如果需要 cookie 请在这里获取
       this.uc.cookie = await this.getCookie(PanType.UC);
@@ -175,10 +175,11 @@ class PanTools {
         return new PanPlayInfo("", "获取 " + PanType.UC + " cookie 失败~");
       }
       const data = await this.uc.getPlayUrl(item.data);
-      return data;
+      return JSON.stringify(data);
     }
 
-    return new PanPlayInfo("", "暂不支持该网盘类型");
+    const data = new PanPlayInfo("", "暂不支持该网盘类型");
+    return JSON.stringify(data);
   }
 }
 
