@@ -166,8 +166,9 @@ class Wogg20240929 extends WebApiBase {
     async searchVideo(args) {
         var backData = new RepVideoList()
         try {
-            let searchUrl = this.combineUrl(this.webSite + 'vodsearch/' + args.searchWord + '----------' + args.page + '---.html')
+            let searchUrl = this.combineUrl('vodsearch/' + args.searchWord + '----------' + args.page + '---.html')
             let repData = await req(searchUrl)
+            this.checkVerify(searchUrl, repData.data);
             const $ = cheerio.load(repData.data)
             let items = $('.module-search-item')
 
@@ -197,6 +198,18 @@ class Wogg20240929 extends WebApiBase {
         }
         return this.webSite + '/' + url
     }
+
+    /**
+     * 检查是否需要验证码
+     * @param {string} webUrl
+     * @param {any} data
+     **/
+    async checkVerify(webUrl, data) {
+        if (typeof data === "string" && data.includes("js=slider")) {
+            await goToVerify(webUrl);
+        }
+    }
+  
 }
 
 // json 中 instance 的值，这个名称一定要特殊
