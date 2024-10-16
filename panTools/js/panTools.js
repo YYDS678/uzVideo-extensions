@@ -160,7 +160,7 @@ class PanTools {
         this.updateCookie(PanType.Quark, this.quark.cookie);
       };
       if (this.quark.cookie === "") {
-        return new PanPlayInfo("", "获取 " + PanType.Quark + " cookie 失败~");
+        return  JSON.stringify(new PanPlayInfo("", "获取 " + PanType.Quark + " cookie 失败~"));
       }
       const data = await this.quark.getPlayUrl(item.data);
       return JSON.stringify(data);
@@ -172,7 +172,7 @@ class PanTools {
         this.updateCookie(PanType.UC, this.uc.cookie);
       };
       if (this.uc.cookie === "") {
-        return new PanPlayInfo("", "获取 " + PanType.UC + " cookie 失败~");
+        return JSON.stringify(new PanPlayInfo("", "获取 " + PanType.UC + " cookie 失败~"));
       }
       const data = await this.uc.getPlayUrl(item.data);
       return JSON.stringify(data);

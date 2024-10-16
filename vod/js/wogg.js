@@ -65,10 +65,11 @@ class Wogg20240929 extends WebApiBase {
      */
     async getVideoList(args) {
         var backData = new RepVideoList()
-        let url = this.webSite + `/vodshow/${args.url}--------${args.page}---.html`
+        let url = UZUtils.removeTrailingSlash(this.webSite) + `/vodshow/${args.url}--------${args.page}---.html`
         try {
             const pro = await req(url)
             backData.error = pro.error
+            this.checkVerify(url, pro.data);
             let videos = []
             if (pro.data) {
                 const $ = cheerio.load(pro.data)
@@ -97,12 +98,13 @@ class Wogg20240929 extends WebApiBase {
         try {
             let webUrl = UZUtils.removeTrailingSlash(this.webSite) + args.url
             let pro = await req(webUrl)
-
+            this.checkVerify(webUrl, pro.data);
             backData.error = pro.error
             let proData = pro.data
             if (proData) {
                 const $ = cheerio.load(proData)
                 let vodDetail = new VideoDetail()
+                vodDetail.vod_id = args.url
                 vodDetail.vod_name = $('.page-title')[0].children[0].data
                 vodDetail.vod_pic = $($('.mobile-play')).find('.lazyload')[0].attribs['data-src']
 
