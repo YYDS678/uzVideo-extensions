@@ -6,3 +6,12 @@
 |       core       |   vod    |  recommend   |   panTools    |
 | :--------------: | :------: | :----------: | :----------: |
 | uz影视 基础能力 | 视频扩展 | 推荐首页扩展 | 网盘工具扩展 |
+
+
+# 订阅
+
+https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/uzAio.json
+
+# 添加方式
+
+uz影视 -> 设置 -> 数据管理 -> 右上角 + -> 输入链接 -> 确定

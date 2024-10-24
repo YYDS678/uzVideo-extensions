@@ -2,7 +2,8 @@
 
 1. 请尽量整合在 `panTools` 内
 2. 请为扩展编写单独的 `json` 文件
-
+3. 请将 json 添加到 uzAio.json 的 panTools
+4. json 样例
 ```
 {
   "name": "扩展名称",

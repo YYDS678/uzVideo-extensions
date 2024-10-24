@@ -1,6 +1,8 @@
 # 推荐页扩展
 
 1. 请为扩展编写单独的 `json` 文件
+2. 请将 json 添加到 uzAio.json 的 recommend
+3. json 样例
 
 ```
 {
