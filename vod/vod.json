@@ -1,172 +1,172 @@
 [
-    {
-        "name": "玩偶哥哥",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wogg.js",
-        "instance": "wogg20240929",
-        "webSite": "https://www.wogg.net",
-        "remark": "网盘"
-    },
-    {
-        "name": "厂长视频",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/changZhang20240614.js",
-        "instance": "changZhang20240614",
-        "webSite": "https://czzy.top",
-        "remark": ""
-    },
-    {
-        "name": "在線之家",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/zxzj.js",
-        "instance": "zxzj20240620",
-        "webSite": "https://www.zxzja.com",
-        "remark": "頻繁搜索會觸發風控，建議間隔10秒以上"
-    },
-    {
-        "name": "歐樂",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/olevod.js",
-        "instance": "olevod20240620",
-        "webSite": "https://www.olevod.tv",
-        "remark": "需海外IP"
-    },
-    {
-        "name": "燒火電影",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/saohuo.js",
-        "instance": "saohuo20240623",
-        "webSite": "https://saohuo.tv",
-        "remark": ""
-    },
-    {
-        "name": "韓劇看看",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/hjkk.js",
-        "instance": "hjkk20240624",
-        "webSite": "https://www.hanjukankan.com",
-        "remark": ""
-    },
-    {
-        "name": "素白白",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/subaibai.js",
-        "instance": "sbb20240624",
-        "webSite": "https://www.subaibaiys.com",
-        "remark": ""
-    },
-    {
-        "name": "兩個BT",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/bttwo.js",
-        "instance": "bttwo20240628",
-        "webSite": "https://www.bttwoo.com",
-        "remark": ""
-    },
-    {
-        "name": "天天影視",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/tiantian.js",
-        "instance": "tiantian20240629",
-        "webSite": "http://op.ysdqjs.cn",
-        "remark": ""
-    },
-    {
-        "name": "蛋蛋劇",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/dandanju.js",
-        "instance": "dandanju20240704",
-        "webSite": "https://www.dandanju.tv",
-        "remark": ""
-    },
-    {
-        "name": "金牌影院",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jpyy.js",
-        "instance": "jpyy20240716",
-        "webSite": "https://www.ghw9zwp5.com",
-        "remark": ""
-    },
-    {
-        "name": "4k-av",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/4kav.js",
-        "instance": "www4kav20240705",
-        "webSite": "https://4k-av.com",
-        "remark": ""
-    },
-    {
-        "name": "瓜子web",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/gzys.js",
-        "instance": "gzys20240822",
-        "webSite": "https://api.zaqohu.com",
-        "remark": "不支持搜索"
-    },
-    {
-        "name": "瓜子app",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/gzapp.js",
-        "codeID": "ra5Z3wtXKshzSMK2",
-        "instance": "gzapp20241001",
-        "webSite": "https://api.9cec79d.com",
-        "remark": ""
-    },
-    {
-        "name": "囧次元",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jcy.js",
-        "codeID": "dzhxjUvYnVqYyIgM",
-        "instance": "jcy20240823",
-        "webSite": "http://43.142.232.217:8090",
-        "remark": ""
-    },
-    {
-        "name": "緣覺影視",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/yjys.js",
-        "instance": "yjys20240824",
-        "webSite": "https://www.yjys05.com",
-        "remark": ""
-    },
-    {
-        "name": "奇優影院",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/qiyou.js",
-        "instance": "qiyou20240904",
-        "webSite": "http://www.qiyoudy4.com",
-        "remark": ""
-    },
-    {
-        "name": "短劇天堂",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/duanjutt.js",
-        "instance": "duanjutt20240922",
-        "webSite": "https://duanjutt.tv",
-        "remark": "搜索間隔不能小於10秒"
-    },
-    {
-        "name": "老白聽書",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/laobai.js",
-        "instance": "laobai20240831",
-        "webSite": "https://apk-lb-json.fodexin.com",
-        "remark": ""
-    },
-    {
-        "name": "麻豆社",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/madou.js",
-        "instance": "madou20240626",
-        "webSite": "https://madou.club",
-        "remark": "需海外IP"
-    },
-    {
-        "name": "MISSAV",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/missav.js",
-        "instance": "missav20240627",
-        "webSite": "https://missav.com",
-        "remark": ""
-    },
-    {
-        "name": "Jable",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jable.js",
-        "instance": "jable20240831",
-        "webSite": "https://jable.tv",
-        "remark": ""
-    },
-    {
-        "name": "玩偶姐姐",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/hkdoll.js",
-        "instance": "hkdoll20240705",
-        "webSite": "https://hongkongdollvideo.com",
-        "remark": ""
-    },
-    {
-        "name": "Netflav",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/netflav.js",
-        "instance": "netflav20240905",
-        "webSite": "https://www.netflav.com",
-        "remark": ""
-    }
+  {
+    "name": "玩偶哥哥",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wogg.js",
+    "instance": "wogg20240929",
+    "webSite": "https://www.wogg.net",
+    "remark": "网盘"
+  },
+  {
+    "name": "厂长视频",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/changZhang20240614.js",
+    "instance": "changZhang20240614",
+    "webSite": "https://czzy.top",
+    "remark": ""
+  },
+  {
+    "name": "在線之家",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/zxzj.js",
+    "instance": "zxzj20240620",
+    "webSite": "https://www.zxzja.com",
+    "remark": "頻繁搜索會觸發風控，建議間隔10秒以上"
+  },
+  {
+    "name": "歐樂",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/olevod.js",
+    "instance": "olevod20240620",
+    "webSite": "https://www.olevod.tv",
+    "remark": "需海外IP"
+  },
+  {
+    "name": "燒火電影",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/saohuo.js",
+    "instance": "saohuo20240623",
+    "webSite": "https://saohuo.tv",
+    "remark": ""
+  },
+  {
+    "name": "韓劇看看",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/hjkk.js",
+    "instance": "hjkk20240624",
+    "webSite": "https://www.hanjukankan.com",
+    "remark": ""
+  },
+  {
+    "name": "素白白",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/subaibai.js",
+    "instance": "sbb20240624",
+    "webSite": "https://www.subaibaiys.com",
+    "remark": ""
+  },
+  {
+    "name": "兩個BT",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/bttwo.js",
+    "instance": "bttwo20240628",
+    "webSite": "https://www.bttwoo.com",
+    "remark": ""
+  },
+  {
+    "name": "天天影視",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/tiantian.js",
+    "instance": "tiantian20240629",
+    "webSite": "http://op.ysdqjs.cn",
+    "remark": ""
+  },
+  {
+    "name": "蛋蛋劇",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/dandanju.js",
+    "instance": "dandanju20240704",
+    "webSite": "https://www.dandanju.tv",
+    "remark": ""
+  },
+  {
+    "name": "金牌影院",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jpyy.js",
+    "instance": "jpyy20240716",
+    "webSite": "https://www.ghw9zwp5.com",
+    "remark": ""
+  },
+  {
+    "name": "4k-av",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/4kav.js",
+    "instance": "www4kav20240705",
+    "webSite": "https://4k-av.com",
+    "remark": ""
+  },
+  {
+    "name": "瓜子web",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/gzys.js",
+    "instance": "gzys20240822",
+    "webSite": "https://api.zaqohu.com",
+    "remark": "不支持搜索"
+  },
+  {
+    "name": "瓜子app",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/gzapp.js",
+    "codeID": "ra5Z3wtXKshzSMK2",
+    "instance": "gzapp20241001",
+    "webSite": "https://api.9cec79d.com",
+    "remark": ""
+  },
+  {
+    "name": "囧次元",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jcy.js",
+    "codeID": "HLvrrWA8nt8xs87l",
+    "instance": "jcy20240823",
+    "webSite": "http://43.142.232.217:8090",
+    "remark": ""
+  },
+  {
+    "name": "緣覺影視",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/yjys.js",
+    "instance": "yjys20240824",
+    "webSite": "https://www.yjys05.com",
+    "remark": ""
+  },
+  {
+    "name": "奇優影院",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/qiyou.js",
+    "instance": "qiyou20240904",
+    "webSite": "http://www.qiyoudy4.com",
+    "remark": ""
+  },
+  {
+    "name": "短劇天堂",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/duanjutt.js",
+    "instance": "duanjutt20240922",
+    "webSite": "https://duanjutt.tv",
+    "remark": "搜索間隔不能小於10秒"
+  },
+  {
+    "name": "老白聽書",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/laobai.js",
+    "instance": "laobai20240831",
+    "webSite": "https://apk-lb-json.fodexin.com",
+    "remark": ""
+  },
+  {
+    "name": "麻豆社",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/madou.js",
+    "instance": "madou20240626",
+    "webSite": "https://madou.club",
+    "remark": "需海外IP"
+  },
+  {
+    "name": "MISSAV",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/missav.js",
+    "instance": "missav20240627",
+    "webSite": "https://missav.com",
+    "remark": ""
+  },
+  {
+    "name": "Jable",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jable.js",
+    "instance": "jable20240831",
+    "webSite": "https://jable.tv",
+    "remark": ""
+  },
+  {
+    "name": "玩偶姐姐",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/hkdoll.js",
+    "instance": "hkdoll20240705",
+    "webSite": "https://hongkongdollvideo.com",
+    "remark": ""
+  },
+  {
+    "name": "Netflav",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/netflav.js",
+    "instance": "netflav20240905",
+    "webSite": "https://www.netflav.com",
+    "remark": ""
+  }
 ]
