@@ -12,7 +12,9 @@ class yjysClass extends WebApiBase {
         let backData = new RepVideoClassList()
         try {
             const pro = await req(webUrl + '/zzzzz', { headers: { 'User-Agent': this.UA } })
-            this.cookie = pro.headers['set-cookie'][0]
+            if (pro.headers['set-cookie']) {
+                this.cookie = pro.headers['set-cookie'][0]
+            }
             backData.error = pro.error
             const proData = pro.data
             if (proData) {
@@ -290,7 +292,7 @@ class yjysClass extends WebApiBase {
                     'User-Agent': this.UA,
                 },
             })
-            let cookie = cookieRequest.headers['set-cookie'][0].match(/(JSESSIONID=.*);/)[0]
+            let cookie = cookieRequest.headers['set-cookie']?.[0]?.match(/(JSESSIONID=.*);/)[0]
             // get img
             let imgRes = await req(validate, {
                 headers: {
