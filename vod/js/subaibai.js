@@ -1,20 +1,26 @@
 // ignore
-import {} from '../../core/uzVideo.js'
-import {} from '../../core/uzHome.js'
-import {} from '../../core/uz3lib.js'
-import {} from '../../core/uzUtils.js'
+import { } from '../../core/uzVideo.js'
+import { } from '../../core/uzHome.js'
+import { } from '../../core/uz3lib.js'
+import { } from '../../core/uzUtils.js'
 // ignore
 
 class sbbClass extends WebApiBase {
-    key = '素白白'
-    url = 'https://www.subaibaiys.com'
-    siteKey = ''
-    siteType = 0
-    headers = {
-        'User-Agent':
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+    /**
+     *
+     */
+    constructor() {
+        super();
+        this.key = '素白白'
+        this.url = 'https://www.subaibaiys.com'
+        this.siteKey = ''
+        this.siteType = 0
+        this.headers = {
+            'User-Agent':
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
+        }
+        this.cookie = {}
     }
-    cookie = {}
     /**
      * 异步获取分类列表的方法。
      * @param {UZArgs} args
@@ -201,10 +207,10 @@ class sbbClass extends WebApiBase {
                     })
                 ).data
                 let code = iframeHtml
-                        .match(/var url = '(.*?)'/)[1]
-                        .split('')
-                        .reverse()
-                        .join(''),
+                    .match(/var url = '(.*?)'/)[1]
+                    .split('')
+                    .reverse()
+                    .join(''),
                     temp = ''
                 for (let i = 0; i < code.length; i += 2) temp += String.fromCharCode(parseInt(code[i] + code[i + 1], 16))
                 const playUrl = temp.substring(0, (temp.length - 7) / 2) + temp.substring((temp.length - 7) / 2 + 7)

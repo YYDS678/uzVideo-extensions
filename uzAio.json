@@ -15,6 +15,20 @@
   ],
   "vod": [
     {
+      "name": "蜡笔盘",
+      "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/labipan.js",
+      "instance": "labipan20241028",
+      "webSite": "http://labipan.com",
+      "remark": "网盘"
+    },
+    {
+      "name": "木偶哥哥",
+      "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/mogg.js",
+      "instance": "mogg20241023",
+      "webSite": "http://www.mogg.top",
+      "remark": "网盘"
+    },
+    {
       "name": "玩偶哥哥",
       "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wogg.js",
       "instance": "wogg20240929",

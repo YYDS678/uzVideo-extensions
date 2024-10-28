@@ -1,14 +1,20 @@
 // ignore
-import {} from '../../core/uzVideo.js'
-import {} from '../../core/uzHome.js'
-import {} from '../../core/uz3lib.js'
-import {} from '../../core/uzUtils.js'
+import { } from '../../core/uzVideo.js'
+import { } from '../../core/uzHome.js'
+import { } from '../../core/uz3lib.js'
+import { } from '../../core/uzUtils.js'
 // ignore
 
 class missavClass extends WebApiBase {
-    url = 'https://missav.com'
-    headers = {
-        'User-Agent': 'PostmanRuntime/7.39.0',
+    /**
+     *
+     */
+    constructor() {
+        super();
+        this.url = 'https://missav.com'
+        this.headers = {
+            'User-Agent': 'PostmanRuntime/7.39.0',
+        }
     }
 
     /**

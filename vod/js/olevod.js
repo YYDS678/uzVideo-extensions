@@ -1,12 +1,18 @@
 // ignore
-import {} from '../../core/uzVideo.js'
-import {} from '../../core/uzHome.js'
-import {} from '../../core/uz3lib.js'
-import {} from '../../core/uzUtils.js'
+import { } from '../../core/uzVideo.js'
+import { } from '../../core/uzHome.js'
+import { } from '../../core/uz3lib.js'
+import { } from '../../core/uzUtils.js'
 // ignore
 
 class olevodClass extends WebApiBase {
-    webSite = 'https://www.olevod.tv'
+    /**
+     *
+     */
+    constructor() {
+        super();
+        this.webSite = 'https://www.olevod.tv'
+    }
     /**
      * 异步获取分类列表的方法。
      * @param {UZArgs} args
@@ -194,7 +200,7 @@ class olevodClass extends WebApiBase {
             r = [[], [], [], []]
         for (var i = 0; i < t.length; i++) {
             let e = this.he(t[i])
-            ;(r[0] += e.slice(2, 3)), (r[1] += e.slice(3, 4)), (r[2] += e.slice(4, 5)), (r[3] += e.slice(5))
+                ; (r[0] += e.slice(2, 3)), (r[1] += e.slice(3, 4)), (r[2] += e.slice(4, 5)), (r[3] += e.slice(5))
         }
         let a = []
         for (i = 0; i < r.length; i++) {
