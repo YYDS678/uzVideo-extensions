@@ -149,6 +149,48 @@
     "remark": ""
   },
   {
+    "name": "⚡️至臻网盘",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/zhizhen.js",
+    "instance": "zhizhen20241029",
+    "webSite": "https://mihdr.top/",
+    "remark": "至臻网盘"
+  },
+  {
+    "name": "🤠多多影音",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/duopan.js",
+    "instance": "duopan20241030",
+    "webSite": "https://tv.yydsys.top/",
+    "remark": "多多网盘"
+  },
+  {
+    "name": "🐲欧歌资源",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/ougepan.js",
+    "instance": "ougepan20241030",
+    "webSite": "https://woog.nxog.eu.org/",
+    "remark": "欧歌网盘"
+  },
+  {
+    "name": "🍔奥秘影视",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/aomipan.js",
+    "instance": "aomipan20241030",
+    "webSite": "https://vip.omii.top/",
+    "remark": "奥秘网盘"
+  },
+  {
+    "name": "⛅️云星日记",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/yunxing.js",
+    "instance": "yunxing20241030",
+    "webSite": "https://4k.4u4.cn",
+    "remark": "云星网盘"
+  },
+  {
+    "name": "🥔土豆粉条",
+    "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/tudou.js",
+    "instance": "tudou20241030",
+    "webSite": "https://yunpan.yunpay.cc",
+    "remark": "土豆网盘"
+  },
+  {
     "name": "麻豆社",
     "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/madou.js",
     "instance": "madou20240626",
