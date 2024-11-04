@@ -211,13 +211,23 @@ class QuarkUC {
     for (let index = 0; index < playForm.length; index++) {
       const flag = playForm[index];
       for (let index = 0; index < videos.length; index++) {
-        const element = videos[index];
+        const item = videos[index];
+        // 复制 item
+        const element = JSON.parse(JSON.stringify(item));
         element.flag = flag;
         const videoItem = new PanVideoItem();
         videoItem.data = element;
         videoItem.panType = this.panName;
         videoItem.name = element.name;
-        videoItem.fromName = flag;
+        if (this.isQuark) {
+          if (flag.includes("原画")) {
+            videoItem.fromName = `${flag}.需要SVIP`;
+          }else{
+            videoItem.fromName = `${flag}.需要VIP`;
+          }
+        }else{
+          videoItem.fromName = flag;
+        }
         data.videos.push(videoItem);
       }
     }
@@ -586,7 +596,15 @@ class QuarkUC {
     }
     return new PanPlayInfo("", "获取播放链接失败~2");
   }
-  /** * 获取播放格式 * @return {string[]} **/ getPlayForm() {
+  
+  /**
+   * 获取播放格式
+   * @return {string[]}
+   */
+  getPlayForm() {
+    if (this.isQuark) {
+      return [`原画`, `4K`];
+    }
     return this.isVip ? [`原画`, `4K`] : [`原画`];
   }
 }
@@ -674,19 +692,19 @@ class PanTools {
     //MARK: 4. 请实现获取网盘资源列表
     if (shareUrl.includes("https://pan.quark.cn")) {
       /// 如果需要 cookie 请在这里获取
-      this.quark.cookie = await this.getCookie(PanType.Quark);
-      this.quark.updateCookie = () => {
-        this.updateCookie(PanType.Quark, this.quark.cookie);
-      };
+      // this.quark.cookie = await this.getCookie(PanType.Quark);
+      // this.quark.updateCookie = () => {
+      //   this.updateCookie(PanType.Quark, this.quark.cookie);
+      // };
       const data = await this.quark.getFilesByShareUrl(shareUrl);
       return JSON.stringify(data);
     } else if (shareUrl.includes("https://drive.uc.cn")) {
       shareUrl = shareUrl.split("?")[0];
       /// 如果需要 cookie 请在这里获取
-      this.uc.cookie = await this.getCookie(PanType.UC);
-      this.uc.updateCookie = () => {
-        this.updateCookie(PanType.UC, this.uc.cookie);
-      };
+      // this.uc.cookie = await this.getCookie(PanType.UC);
+      // this.uc.updateCookie = () => {
+      //   this.updateCookie(PanType.UC, this.uc.cookie);
+      // };
       const data = await this.uc.getFilesByShareUrl(shareUrl);
       return JSON.stringify(data);
     }
