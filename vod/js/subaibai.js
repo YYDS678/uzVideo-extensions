@@ -1,25 +1,16 @@
 // ignore
-import { } from '../../core/uzVideo.js'
-import { } from '../../core/uzHome.js'
-import { } from '../../core/uz3lib.js'
-import { } from '../../core/uzUtils.js'
+import {} from '../../core/uzVideo.js'
+import {} from '../../core/uzHome.js'
+import {} from '../../core/uz3lib.js'
+import {} from '../../core/uzUtils.js'
 // ignore
 
 class sbbClass extends WebApiBase {
-    /**
-     *
-     */
     constructor() {
-        super();
-        this.key = '素白白'
-        this.url = 'https://www.subaibaiys.com'
-        this.siteKey = ''
-        this.siteType = 0
-        this.headers = {
-            'User-Agent':
-                'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1',
-        }
-        this.cookie = {}
+        super()
+        this.webSite = 'https://www.subaibaiys.com'
+        this.cookie = ''
+        this.UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
     }
     /**
      * 异步获取分类列表的方法。
@@ -32,29 +23,34 @@ class sbbClass extends WebApiBase {
         this.webSite = this.removeTrailingSlash(webUrl)
         let backData = new RepVideoClassList()
         try {
-            const pro = await req(webUrl, { headers: this.headers })
+            await this.sliderBypass(this.webSite)
+            const pro = await req(webUrl, {
+                headers: {
+                    'User-Agent': this.UA,
+                    Cookie: this.cookie,
+                },
+            })
             backData.error = pro.error
             let proData = pro.data
             if (proData) {
-                let document = parse(proData)
-                let allClass = document.querySelectorAll('ul.navlist a')
+                const $ = cheerio.load(proData)
                 let list = []
-                for (let index = 0; index < allClass.length; index++) {
-                    const element = allClass[index]
-                    let isIgnore = this.isIgnoreClassName(element.text)
+                let allClass = $('ul.navlist a')
+                allClass.each((_, e) => {
+                    let isIgnore = this.isIgnoreClassName($(e).text())
                     if (isIgnore) {
-                        continue
+                        return
                     }
-                    let type_name = element.text
-                    let url = element.attributes['href']
-
+                    let type_name = $(e).text()
+                    let url = $(e).attr('href')
                     if (url.length > 0 && type_name.length > 0) {
                         let videoClass = new VideoClass()
                         videoClass.type_id = url
                         videoClass.type_name = type_name
                         list.push(videoClass)
                     }
-                }
+                })
+
                 backData.data = list
             }
         } catch (error) {
@@ -64,30 +60,72 @@ class sbbClass extends WebApiBase {
         return JSON.stringify(backData)
     }
 
+    async sliderBypass(url) {
+        const pro = await req(url, { headers: this.headers })
+        let proData = pro.data
+        if (proData) {
+            const $ = cheerio.load(proData)
+            if ($('title').text() === '滑动验证') {
+                let slide_js = this.webSite + $('body script').attr('src')
+                let slide_js_res = await req(slide_js, {
+                    headers: {
+                        'User-Agent': this.UA,
+                    },
+                })
+                let vd_url = this.webSite + slide_js_res.data.match(/\/a20be899_96a6_40b2_88ba_32f1f75f1552_yanzheng_huadong\.php\?type=.*?&key=/)[0]
+                let [, key, value] = slide_js_res.data.match(/key="(.*?)",value="(.*?)";/)
+                vd_url = vd_url + `${key}&value=${md5encode(stringtoHex(value))}`
+                let vd_res = await req(vd_url, {
+                    headers: {
+                        'User-Agent': this.UA,
+                        Referer: this.webSite + '/',
+                    },
+                })
+                this.cookie = vd_res.headers['set-cookie'][0].split(';')[0]
+            }
+        }
+        function stringtoHex(acSTR) {
+            var val = ''
+            for (var i = 0; i <= acSTR.length - 1; i++) {
+                var str = acSTR.charAt(i)
+                var code = str.charCodeAt()
+                val += parseInt(code) + 1
+            }
+            return val
+        }
+        function md5encode(word) {
+            return Crypto.MD5(word).toString()
+        }
+    }
+
     /**
      * 获取分类视频列表
      * @param {UZArgs} args
      * @returns {Promise<RepVideoList>}
      */
     async getVideoList(args) {
-        let listUrl = this.removeTrailingSlash(args.url) + '/page/' + args.page
+        let listUrl = this.removeTrailingSlash(args.url)
+        // let listUrl = this.removeTrailingSlash(args.url) + '/page/' + args.page
+        if (args.page > 1) listUrl += '/page/' + args.page
         let backData = new RepVideoList()
         try {
-            let pro = await req(listUrl, { headers: this.headers })
+            let pro = await req(listUrl, {
+                headers: {
+                    'User-Agent': this.UA,
+                    Cookie: this.cookie,
+                },
+            })
             backData.error = pro.error
             let proData = pro.data
             if (proData) {
-                let document = parse(proData)
-                let allVideo = document.querySelectorAll('.bt_img.mi_ne_kd.mrb li')
+                const $ = cheerio.load(proData)
                 let videos = []
-                for (let index = 0; index < allVideo.length; index++) {
-                    const element = allVideo[index]
-                    let vodUrl = element.querySelector('a')?.attributes['href'] ?? ''
-                    let vodPic = element.querySelector('img.thumb')?.attributes['data-original'] ?? ''
-                    let vodName = element.querySelector('img.thumb')?.attributes['alt'] ?? ''
-                    let vodDiJiJi = element.querySelector('.jidi span')?.text
-                        ? element.querySelector('.jidi span')?.text
-                        : element.querySelector('.hdinfo')?.text
+                let allVideo = $('.bt_img.mi_ne_kd.mrb li')
+                allVideo.each((_, e) => {
+                    let vodUrl = $(e).find('a').attr('href')
+                    let vodPic = $(e).find('img.thumb').attr('data-original')
+                    let vodName = $(e).find('img.thumb').attr('alt')
+                    let vodDiJiJi = $(e).find('.jidi').text() || $(e).find('.hdinfo').text()
 
                     let videoDet = new VideoDetail()
                     videoDet.vod_id = vodUrl
@@ -95,7 +133,7 @@ class sbbClass extends WebApiBase {
                     videoDet.vod_name = vodName
                     videoDet.vod_remarks = vodDiJiJi.trim()
                     videos.push(videoDet)
-                }
+                })
                 backData.data = videos
             }
         } catch (error) {
@@ -113,15 +151,20 @@ class sbbClass extends WebApiBase {
         let backData = new RepVideoDetail()
         try {
             let webUrl = args.url
-            let pro = await req(webUrl, { headers: this.headers })
+            let pro = await req(webUrl, {
+                headers: {
+                    'User-Agent': this.UA,
+                    Cookie: this.cookie,
+                },
+            })
             backData.error = pro.error
             let proData = pro.data
             if (proData) {
-                let document = parse(proData)
-                let vod_content = document.querySelector('.yp_context')?.text ?? ''
-                let vod_pic = document.querySelector('.dyimg img')?.attributes['src'] ?? ''
-                let vod_name = document.querySelector('.moviedteail_tt h1')?.text ?? ''
-                let detList = document.querySelectorAll('ul.moviedteail_list li') ?? []
+                const $ = cheerio.load(proData)
+                let vod_content = $('.yp_context').text()
+                let vod_pic = $('.dyimg img').attr('src')
+                let vod_name = $('.moviedteail_tt h1').text()
+                let detList = $('ul.moviedteail_list li')
                 let vod_year = ''
                 let vod_director = ''
                 let vod_actor = ''
@@ -130,35 +173,35 @@ class sbbClass extends WebApiBase {
                 let vod_douban_score = ''
                 let type_name = ''
 
-                for (let index = 0; index < detList.length; index++) {
-                    const element = detList[index]
-                    if (element.text.includes('年份')) {
-                        vod_year = element.text.replace('年份：', '')
-                    } else if (element.text.includes('导演')) {
-                        vod_director = element.text.replace('导演：', '')
-                    } else if (element.text.includes('主演')) {
-                        vod_actor = element.text.replace('主演：', '')
-                    } else if (element.text.includes('地区')) {
-                        vod_area = element.text.replace('地区：', '')
-                    } else if (element.text.includes('语言')) {
-                        vod_lang = element.text.replace('语言：', '')
-                    } else if (element.text.includes('类型')) {
-                        type_name = element.text.replace('类型：', '')
-                    } else if (element.text.includes('豆瓣')) {
-                        vod_douban_score = element.text.replace('豆瓣：', '')
+                detList.each((_, e) => {
+                    const element = $(e)
+                    if (element.text().includes('年份')) {
+                        vod_year = element.text().replace('年份：', '')
+                    } else if (element.text().includes('导演')) {
+                        vod_director = element.text().replace('导演：', '')
+                    } else if (element.text().includes('主演')) {
+                        vod_actor = element.text().replace('主演：', '')
+                    } else if (element.text().includes('地区')) {
+                        vod_area = element.text().replace('地区：', '')
+                    } else if (element.text().includes('语言')) {
+                        vod_lang = element.text().replace('语言：', '')
+                    } else if (element.text().includes('类型')) {
+                        type_name = element.text().replace('类型：', '')
+                    } else if (element.text().includes('豆瓣')) {
+                        vod_douban_score = element.text().replace('豆瓣：', '')
                     }
-                }
+                })
 
-                let juJiDocment = document.querySelector('.paly_list_btn')?.querySelectorAll('a') ?? []
+                let juJiDocment = $('.paly_list_btn').find('a')
                 let vod_play_url = ''
-                for (let index = 0; index < juJiDocment.length; index++) {
-                    const element = juJiDocment[index]
+                juJiDocment.each((_, e) => {
+                    const element = $(e)
 
-                    vod_play_url += element.text
+                    vod_play_url += element.text()
                     vod_play_url += '$'
-                    vod_play_url += element.attributes['href']
+                    vod_play_url += element.attr('href')
                     vod_play_url += '#'
-                }
+                })
 
                 let detModel = new VideoDetail()
                 detModel.vod_year = vod_year
@@ -189,16 +232,24 @@ class sbbClass extends WebApiBase {
      */
     async getVideoPlayUrl(args) {
         let backData = new RepVideoPlayUrl()
-        // let url = 'https://www.subaibaiys.com/v_play/bXZfNTUxNDQtbm1fMQ==.html'
         let url = args.url
         try {
-            let html = await req(url, { headers: this.headers })
-            let document = parse(html.data)
-            let iframe = document.querySelectorAll('iframe').filter((iframe) => iframe.getAttribute('src').includes('Cloud'))
+            let html = await req(url, {
+                headers: {
+                    'User-Agent': this.UA,
+                    Cookie: this.cookie,
+                },
+            })
+            const $ = cheerio.load(html.data)
+            const isVipOnly = $('.noplay').text()
+            if (isVipOnly) {
+                backData.error = isVipOnly
+            }
+            let iframe = $('iframe').filter((i, iframe) => $(iframe).attr('src').includes('Cloud'))
 
             if (0 < iframe.length) {
                 const iframeHtml = (
-                    await req(iframe[0].getAttribute('src'), {
+                    await req($(iframe[0]).attr('src'), {
                         headers: {
                             Referer: url,
                             'User-Agent':
@@ -207,10 +258,10 @@ class sbbClass extends WebApiBase {
                     })
                 ).data
                 let code = iframeHtml
-                    .match(/var url = '(.*?)'/)[1]
-                    .split('')
-                    .reverse()
-                    .join(''),
+                        .match(/var url = '(.*?)'/)[1]
+                        .split('')
+                        .reverse()
+                        .join(''),
                     temp = ''
                 for (let i = 0; i < code.length; i += 2) temp += String.fromCharCode(parseInt(code[i] + code[i + 1], 16))
                 const playUrl = temp.substring(0, (temp.length - 7) / 2) + temp.substring((temp.length - 7) / 2 + 7)
@@ -219,8 +270,8 @@ class sbbClass extends WebApiBase {
             } else {
                 let playUrl = 'error'
 
-                const script = document.querySelectorAll('script')
-                const js = script.find((script) => script.text.includes('window.wp_nonce')).text ?? ''
+                const script = $('script')
+                const js = script.filter((i, script) => $(script).text().includes('window.wp_nonce')).text() ?? ''
                 const group = js.match(/(var.*)eval\((\w*\(\w*\))\)/)
                 const md5 = Crypto
                 const result = eval(group[1] + group[2])
@@ -243,28 +294,33 @@ class sbbClass extends WebApiBase {
         let backData = new RepVideoList()
         let url = this.removeTrailingSlash(this.webSite) + `/page/${args.page}?s=${args.searchWord}`
         try {
-            let resp = await req(url, { headers: this.headers })
+            let resp = await req(url, {
+                headers: {
+                    'User-Agent': this.UA,
+                    Cookie: this.cookie,
+                },
+            })
             backData.error = resp.error
             let respData = resp.data
 
             if (respData) {
-                let document = parse(respData)
-                let allVideo = document.querySelector('.search_list').querySelectorAll('li')
+                const $ = cheerio.load(respData)
+                let allVideo = $('.search_list li')
                 let videos = []
-                for (let index = 0; index < allVideo.length; index++) {
-                    const element = allVideo[index]
-                    let vodUrl = element.querySelector('a')?.attributes['href'] ?? ''
-                    let vodPic = element.querySelector('img.thumb')?.attributes['data-original'] ?? ''
-                    let vodName = element.querySelector('img.thumb')?.attributes['alt'] ?? ''
-                    let vodDiJiJi = element.querySelector('.jidi')?.text ?? ''
+                allVideo.each((_, e) => {
+                    const href = $(element).find('a').attr('href')
+                    const title = $(element).find('img.thumb').attr('alt')
+                    const cover = $(element).find('img.thumb').attr('data-original')
+                    const subTitle = $(element).find('.jidi span').text()
+                    const hdinfo = $(element).find('.hdinfo .qb').text()
 
                     let videoDet = new VideoDetail()
-                    videoDet.vod_id = vodUrl
-                    videoDet.vod_pic = vodPic
-                    videoDet.vod_name = vodName
-                    videoDet.vod_remarks = vodDiJiJi.trim()
+                    videoDet.vod_id = href
+                    videoDet.vod_pic = cover
+                    videoDet.vod_name = title
+                    videoDet.vod_remarks = subTitle || hdinfo
                     videos.push(videoDet)
-                }
+                })
                 backData.data = videos
             }
         } catch (e) {
@@ -272,45 +328,6 @@ class sbbClass extends WebApiBase {
         }
 
         return JSON.stringify(backData)
-    }
-
-    async request(reqUrl, referer, mth, data, hd) {
-        let headers = {
-            'User-Agent': this.headers['User-Agent'],
-            Cookie: Object.keys(this.cookie)
-                .map((key) => key + '=' + cookie[key])
-                .join(';'),
-        }
-
-        if (referer) {
-            headers.referer = encodeURIComponent(referer)
-        }
-
-        referer = await req(reqUrl, {
-            method: mth || 'get',
-            headers: headers,
-            data: data,
-            postType: mth === 'post' ? 'form' : '',
-        })
-
-        if (referer.headers['set-cookie']) {
-            const cookies = Array.isArray(referer.headers['set-cookie']) ? referer.headers['set-cookie'].join(';') : referer.headers['set-cookie']
-
-            for (const c of cookies.split(';')) {
-                var tmp = c.trim()
-                if (tmp.startsWith('result=')) {
-                    cookie.result = tmp.substring(7)
-                    return request(reqUrl, reqUrl, 'post', { result: cookie.result })
-                }
-                if (tmp.startsWith('esc_search_captcha=1')) {
-                    cookie.esc_search_captcha = 1
-                    delete cookie.result
-                    return request(reqUrl)
-                }
-            }
-        }
-
-        return referer.data
     }
 
     ignoreClassName = ['首页', '公告留言']
