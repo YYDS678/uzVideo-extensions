@@ -81,7 +81,7 @@ class sbbClass extends WebApiBase {
                         Referer: this.webSite + '/',
                     },
                 })
-                this.cookie = vd_res.headers['set-cookie'][0].split(';')[0]
+                this.cookie = vd_res.headers['set-cookie']?.[0].split(';')?.[0] ?? vd_res.headers['Set-Cookie']?.[0].split(';')?.[0]
             }
         }
         function stringtoHex(acSTR) {
