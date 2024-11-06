@@ -5,6 +5,7 @@
 - [panTools(网盘工具)扩展运行说明](#pantools网盘工具扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.31](#v1631)
     - [v1.6.20](#v1620)
     - [v1.6.00](#v1600)
     - [v1.5.50](#v1550)
@@ -142,6 +143,9 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+
+### v1.6.31
+1. 新增`UZUtils.setStorage` 和 `UZUtils.getStorage` 用于持久化存储数据，不同于 `getEnv` 和 `setEnv` 不会触发通知。
 
 ### v1.6.20
 
