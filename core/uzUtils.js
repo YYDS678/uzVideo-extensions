@@ -258,10 +258,11 @@ async function setEnv(uzTag, key, value, summary) {
 
 /**
  * 跳转到验证页面，自动保存cookie
- * @param {string} url
+ * @param {string} url 链接
+ * @param {string} ua 扩展请求的 user-agent，请保持一致，如果请求未设置请传空字符串
  **/
-async function goToVerify(url) {
-    await sendMessage('goToVerify', JSON.stringify({ url: url }))
+async function goToVerify(url, ua) {
+    await sendMessage('goToVerify', JSON.stringify({ url: url, ua: ua }))
 }
 
 /**

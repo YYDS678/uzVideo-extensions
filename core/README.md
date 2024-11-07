@@ -146,6 +146,7 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 
 ### v1.6.31
 1. 新增`UZUtils.setStorage` 和 `UZUtils.getStorage` 用于持久化存储数据，不同于 `getEnv` 和 `setEnv` 不会触发通知。
+2. `goToVerify` 验证函数增加 `ua` 参数。
 
 ### v1.6.20
 
