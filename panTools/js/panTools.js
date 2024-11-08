@@ -1157,69 +1157,46 @@ class PanTools {
     }
 
     /**
-     * 获取 cookie  ** 无法在 PanTools 外部操作**
+     * 获取 夸克 UC cookie  ** 无法在 PanTools 外部操作**
      * 环境变量 key 为 PanType.xx + "Cookie",请在 json 文件中添加
      * @param {PanType} panType
      * @returns {@Promise<string>}
      */
-    async getCookie(panType) {
+    async getQuarkUCCookie(panType) {
         const cookie = await getEnv(this.uzTag, panType + 'Cookie');
         return cookie;
     }
 
     /**
-     * 更新 cookie ** 无法在 PanTools 外部操作**
+     * 更新 夸克 UC cookie ** 无法在 PanTools 外部操作**
      * @param {PanType} panType
      * @param {string} cookie
      */
-    async updateCookie(panType, cookie) {
+    async updateQuarkUCCookie(panType, cookie) {
         await setEnv(this.uzTag, panType + 'Cookie', cookie);
     }
     
     /**
-     * 获取 data  ** 无法在 PanTools 外部操作**
+     * 获取 Alitoken  ** 无法在 PanTools 外部操作**
      * 环境变量 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
      * @param {PanType} panType
      * @param {string} keyWord
      * @returns {@Promise<string>}
      */
-    async getDataEnv(panType,keyWord) {
+    async getAliDataEnv(panType,keyWord) {
         const data = await getEnv(this.uzTag, panType + keyWord);
         return data;
     }
 
     /**
-     * 更新 data ** 无法在 PanTools 外部操作**
+     * 更新 Alitoken  ** 无法在 PanTools 外部操作**
      * @param {PanType} panType
      * @param {string} keyWord
      * @param {string} data
      */
-    async updateDataEnv(panType, keyWord, data) {
+    async updateAliDataEnv(panType, keyWord, data) {
         await setEnv(this.uzTag, panType + keyWord, data);
     }
-    
-    /**
-     * 获取 data  ** 无法在 PanTools 外部操作**
-     * 持久存储 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
-     * @param {PanType} panType
-     * @param {string} keyWord
-     * @returns {@Promise<string>}
-     */
-    async getDataStorage(panType,keyWord) {
-        const data = await getStorage(panType + keyWord);
-        return data;
-    }
-
-    /**
-     * 更新 data ** 无法在 PanTools 外部操作**
-     * @param {PanType} panType
-     * @param {string} keyWord
-     * @param {string} data
-     */
-    async updateDataStorage(panType, keyWord, data) {
-        await setStorage(panType + keyWord, data);
-    }
-    
     
 
     /**
@@ -1256,22 +1233,10 @@ class PanTools {
     async getShareVideos(shareUrl) {
         //MARK: 4. 请实现获取网盘资源列表
         if (shareUrl.includes('https://pan.quark.cn')) {
-            /// 如果需要 cookie 请在这里获取
-            // this.quark.cookie = await this.getCookie(PanType.Quark);
-            // this.quark.updateCookie = () => {
-            //   this.updateCookie(PanType.Quark, this.quark.cookie);
-            // };
-
             const data = await this.quark.getFilesByShareUrl(shareUrl);
-
             return JSON.stringify(data);
         } else if (shareUrl.includes('https://drive.uc.cn')) {
             shareUrl = shareUrl.split('?')[0];
-            /// 如果需要 cookie 请在这里获取
-            // this.uc.cookie = await this.getCookie(PanType.UC);
-            // this.uc.updateCookie = () => {
-            //   this.updateCookie(PanType.UC, this.uc.cookie);
-            // };
             const data = await this.uc.getFilesByShareUrl(shareUrl);
             return JSON.stringify(data);
         }else if (shareUrl.includes('https://www.alipan.com')) {
@@ -1293,11 +1258,11 @@ class PanTools {
         //MARK: 5. 请实现获取播放信息
         if (item.panType === PanType.Quark) {
             /// 如果需要 cookie 请在这里获取
-            this.quark.cookie = await this.getCookie(PanType.Quark);
+            this.quark.cookie = await this.getQuarkUCCookie(PanType.Quark);
             /// 更新 Quark cookie
             const that = this;
             this.quark.updateCookie = function () {
-                that.updateCookie(PanType.Quark, this.cookie);
+                that.updateQuarkUCCookie(PanType.Quark, this.cookie);
             };
             if (this.quark.cookie === '') {
                 const data = new PanPlayInfo();
@@ -1308,11 +1273,11 @@ class PanTools {
             return JSON.stringify(data);
         } else if (item.panType === PanType.UC) {
             /// 如果需要 cookie 请在这里获取
-            this.uc.cookie = await this.getCookie(PanType.UC);
+            this.uc.cookie = await this.getQuarkUCCookie(PanType.UC);
             /// 更新 UC cookie
             const that = this;
             this.uc.updateCookie = function () {
-                that.updateCookie(PanType.UC, this.cookie);
+                that.updateQuarkUCCookie(PanType.UC, this.cookie);
             };
             if (this.uc.cookie === '') {
                 const data = new PanPlayInfo();
@@ -1323,15 +1288,15 @@ class PanTools {
             return JSON.stringify(data);
         } else if (item.panType === PanType.Ali) {
             /// 如果需要 data 请在这里获取
-            this.ali.token32 = await this.getDataEnv(PanType.Ali, 'Token32');
-            this.ali.token280 = await this.getDataEnv(PanType.Ali, 'Token280');
-            /// 更新 UC cookie
+            this.ali.token32 = await this.getAliDataEnv(PanType.Ali, 'Token32');
+            this.ali.token280 = await this.getAliDataEnv(PanType.Ali, 'Token280');
+            /// 更新 token
             const that = this;
             this.ali.updateToken32 = function () {
-                that.updateToken32(PanType.Ali, 'Token32', this.ali.token32);
+                that.updateAliDataEnv(PanType.Ali, 'Token32', this.ali.token32);
             };
             this.ali.updateToken280 = function () {
-                that.updateToken280(PanType.Ali, 'Token280', this.ali.token32);
+                that.updateAliDataEnv(PanType.Ali, 'Token280', this.ali.token32);
             };
             if (this.ali.token32 === '' || this.ali.token280 === '') {
                 const data = new PanPlayInfo();
