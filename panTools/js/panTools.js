@@ -19,17 +19,23 @@ const PanType = {
      * UC
      **/
     UC: 'UC',
+    
+    /**
+     * 阿里
+     **/
+    Ali: '阿里',
 };
+
 
 /**
  * 播放信息
  **/
 class PanPlayInfo {
-    constructor() {
-        this.url = '';
-        this.error = '';
-        this.playHeaders = {};
-    }
+  constructor(url = "", error = "", playHeaders = {}) {
+    this.url = url;
+    this.error = error;
+    this.playHeaders = playHeaders;
+  }
 }
 
 /**
@@ -651,6 +657,474 @@ class QuarkUC {
     }
 }
 
+
+//MARK: - 阿里 相关实现
+class Ali {
+  constructor() { 
+    this.shareTokenCache = {};
+    this.saveFileIdCaches = {};
+    this.saveDirId = null;
+	this.userDriveId = null,
+    this.saveDirName = 'uz影视';
+    this.user = {};
+    this.oauth = {};
+    this.isVip = true;
+    this.token32 = '';
+    this.token280 = '';
+    this.apiUrl = 'https://api.aliyundrive.com/';
+    this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/';
+	this.updateToken32 = () => {};
+	this.updateToken280 = () => {};
+    this.baseHeaders = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
+    referer: 'https://www.aliyundrive.com',
+    'Content-Type': 'application/json',
+    };
+  }
+  
+  
+  get panName() {
+      return PanType.Ali;
+  }
+  
+  
+  delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+	
+	//验证时间戳
+  verifyTimestamp(timestamp) {
+    // 时间为了保证任意时区都一致 所以使用格林威治时间
+    const currentTimeString = new Date().toISOString();
+    const currentTime = new Date(currentTimeString).getTime();
+    const requestTime = new Date(timestamp).getTime();
+    const timeDifference = Math.abs(currentTime - requestTime);
+    // 检查时间差是否小于2分钟（120000毫秒）
+    return timeDifference < 120000;
+  }
+  
+  async api(url, data, headers, retry) {
+    headers = headers || {};
+    const auth = url.startsWith('adrive/');
+    Object.assign(headers, this.baseHeaders);
+    if (auth) {
+        Object.assign(headers, {
+            Authorization: this.user.auth,
+        });
+    }
+    
+    const leftRetry = retry || 3;
+    while (leftRetry > 0) {
+      try {
+        const response = await req(this.apiUrl + url, {
+          method: 'post',
+          headers: headers,
+          data: JSON.stringify(data),
+        });
+        if (response.code === 401) {
+          this.cookie = '';
+          return {};
+        }     
+        const resp = response.data;
+        return resp;
+      } catch (e) {}
+      leftRetry--;
+      await this.delay(1000);
+    }
+    return resp;
+  }
+
+ async openApi(url, data, headers, retry) {
+    headers = headers || {};
+    Object.assign(headers, {
+      Authorization: this.oauth.auth,
+    });
+    
+    const leftRetry = retry || 3;
+    while (leftRetry > 0) {
+      try {
+        const response = await req(this.openApiUrl + url, {
+          method: 'post',
+          headers: headers,
+          data: JSON.stringify(data),
+        });
+        if (response.code === 401) {
+          this.cookie = '';
+          return {};
+        }     
+        const resp = response.data;
+        return resp;
+      } catch (e) {}
+      leftRetry--;
+      await this.delay(1000);
+    }
+    return resp;
+  }
+  
+  
+  async login() {
+    if (!this.user.user_id || !this.verifyTimestamp(this.user.expire_time)) {
+        try{
+	      const loginResp = await req('https://auth.aliyundrive.com/v2/account/token', {
+            method: 'post',
+            headers: this.baseHeaders,
+            data: {
+                    refresh_token: this.token32,
+                    grant_type: 'refresh_token',
+                  },
+           });
+					  
+          if (loginResp.code == 200) {
+            this.user = loginResp.data;
+            this.user.expire_time = new Date().toISOString();
+            this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`;
+            this.token32 = loginResp.data.refresh_token;
+            this.updateToken32();
+          }
+        } catch (e) {}
+
+    }
+  }
+  
+  
+  async openAuth() {
+    if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
+       try{
+	     const openResp = await req('https://aliyundrive-oauth.messense.me/oauth/access_token', {
+            method: 'post',
+            headers: this.baseHeaders,
+            data: {
+              refresh_token: this.token280,
+              grant_type: 'refresh_token',
+            },
+          });
+					  
+        if (openResp.code == 200) {
+            this.oauth = openResp.data;
+            this.oauth.expire_time = new Date().toISOString();
+            this.oauth.auth = `${openResp.data.token_type} ${openResp.data.access_token}`;
+            this.token32 = openResp.data.refresh_token;
+            this.updateToken280();
+          }
+      } catch (e) {}
+				
+    }
+  }
+  
+  
+    /**
+   * 根据链接获取分享ID和文件夹ID
+   * @param {string} url
+   * @returns {null|{shareId: string, folderId: string}}
+   **/
+  getShareData(url) {
+    let regex = /https:\/\/www\.alipan\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?|https:\/\/www\.aliyundrive\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?/;
+    let matches = regex.exec(url);
+    if (matches) {
+        return {
+            shareId: matches[1] || matches[4],
+            folderId: matches[3] || matches[6] || 'root',
+        };
+    }
+    return null;
+  }
+  
+  /**
+   * 获取分享token
+   * @param {{shareId: string, sharePwd: string}} shareData
+   **/
+  async getShareToken(shareData) {
+    if (!this.shareTokenCache.hasOwnProperty(shareData.shareId)) {
+      delete this.shareTokenCache[shareData.shareId];
+      const shareToken = await this.api(`v2/share_link/get_share_token`, {
+            share_id: shareData.shareId,
+            share_pwd: shareData.sharePwd || '',
+        });
+      if (shareToken.expire_time) {
+            this.shareTokenCache[shareData.shareId] = shareToken;
+        }
+    }
+  }
+
+  clean() {
+    this.saveFileIdCaches = {};
+  }
+  
+  async clearSaveDir() {
+    const listData = await this.openApi(`openFile/list`, {
+        drive_id: this.userDriveId,
+        parent_file_id: this.saveDirId,
+        limit: 100,
+        order_by: 'updated_at',
+        order_direction: 'DESC',
+    });
+    if (listData.items) {
+        for (const item of listData.items) {
+            const del = await this.openApi(`openFile/delete`, {
+                drive_id: this.userDriveId,
+                file_id: item.file_id,
+            });
+        }
+    }
+  }
+  
+  async createSaveDir(clean = false) {
+    if (!this.user.device_id) return;
+    if (this.saveDirId) {
+        // 删除所有子文件
+        if (clean) await this.clearSaveDir();
+        return;
+    }
+    let driveInfo = await this.openApi(`user/getDriveInfo`, {});
+
+    if (driveInfo.resource_drive_id) {
+        this.userDriveId = driveInfo.resource_drive_id;
+        const listData = await this.openApi(`openFile/list`, {
+            drive_id: this.userDriveId,
+            parent_file_id: 'root',
+            limit: 100,
+            order_by: 'updated_at',
+            order_direction: 'DESC',
+        });
+        if (listData.items) {
+            for (const item of listData.items) {
+                if (item.name === this.saveDirName) {
+                    this.saveDirId = item.file_id;
+                    await this.clearSaveDir();
+                    break;
+                }
+            }
+            if (!this.saveDirId) {
+                const create = await this.openApi(`openFile/create`, {
+                    check_name_mode: 'refuse',
+                    drive_id: this.userDriveId,
+                    name: this.saveDirName,
+                    parent_file_id: 'root',
+                    type: 'folder',
+                });
+                
+                if (create.file_id) {
+                    this.saveDirId = create.file_id;
+                }
+            }
+        }
+	}
+  }
+
+  
+  async save(shareId, fileId, clean) {
+    await this.login();
+    await this.openAuth();  
+    await this.createSaveDir(clean);
+    if (clean) {
+      this.clean();
+    }
+    if (this.saveDirId == null) return null;
+	await this.getShareToken({ shareId });
+	if (!this.shareTokenCache.hasOwnProperty(shareId)) return null;
+    const saveResult = await this.api(
+        `adrive/v2/file/copy`,
+        {
+            file_id: fileId,
+            share_id: shareId,
+            auto_rename: true,
+            to_parent_file_id: this.saveDirId,
+            to_drive_id: this.userDriveId,
+        },
+        {
+            'X-Share-Token': this.shareTokenCache[shareId].share_token,
+        }
+    );
+    if (saveResult.file_id) return saveResult.file_id;
+    return false;
+  }
+  
+  
+   async getLiveTranscoding(shareId, fileId) {
+    if (!this.saveFileIdCaches[fileId]) {
+        const saveFileId = await this.save(shareId, fileId, true);
+        if (!saveFileId) return new PanPlayInfo('', 'Live 转存失败～');
+        this.saveFileIdCaches[fileId] = saveFileId;
+    }
+    const transcoding = await this.openApi(`openFile/getVideoPreviewPlayInfo`, {
+        file_id: this.saveFileIdCaches[fileId],
+        drive_id: this.userDriveId,
+        category: 'live_transcoding',
+        url_expire_sec: '14400',
+    });
+    if (transcoding.video_preview_play_info && transcoding.video_preview_play_info.live_transcoding_task_list) {
+        return new PanPlayInfo(transcoding.video_preview_play_info.live_transcoding_task_list[0], '');
+    }
+    return new PanPlayInfo('', '获取播放链接失败~1');
+  }
+  
+  async getDownload(shareId, fileId) {
+    if (!this.saveFileIdCaches[fileId]) {
+        const saveFileId = await this.save(shareId, fileId, true);
+        if (!saveFileId)
+          return new PanPlayInfo('', 'Download 转存失败～');
+        this.saveFileIdCaches[fileId] = saveFileId;
+    }
+    const down = await this.openApi(`openFile/getDownloadUrl`, {
+        file_id: this.saveFileIdCaches[fileId],
+        drive_id: this.userDriveId,
+    });
+    if (down.url) {
+        return new PanPlayInfo(down.url, '');
+    }
+    return new PanPlayInfo('', '获取播放链接失败~2');
+  }
+  
+  
+  findBestLCS(mainItem, targetItems) {
+    const results = [];
+    let bestMatchIndex = 0;
+    for (let i = 0; i < targetItems.length; i++) {
+      const currentLCS = UZUtils.lcs(mainItem.name, targetItems[i].name);
+      results.push({ target: targetItems[i], lcs: currentLCS });
+      if (currentLCS.length > results[bestMatchIndex].lcs.length) {
+        bestMatchIndex = i;
+      }
+    }
+    const bestMatch = results[bestMatchIndex];
+    return {
+      allLCS: results,
+      bestMatch: bestMatch,
+      bestMatchIndex: bestMatchIndex,
+    };
+  }
+	
+  async listFile (shareId, folderId, videos, subtitles, nextMarker) {
+        const subtitleExts = ['srt', 'ass', 'scc', 'stl', 'ttml'];
+        const listData = await this.api(
+            `adrive/v2/file/list_by_share`,
+            {
+                share_id: shareId,
+                parent_file_id: folderId,
+                limit: 200,
+                order_by: 'name',
+                order_direction: 'ASC',
+                marker: nextMarker || '',
+            },
+            {
+                'X-Share-Token': this.shareTokenCache[shareId].share_token,
+            }
+        );
+
+        const items = listData.items;
+        if (!items) return [];
+
+        if (listData.next_marker) {
+            const nextItems = await this.listFile(shareId, folderId, videos, subtitles, listData.next_marker);
+            for (const item of nextItems) {
+                items.push(item);
+            }
+        }
+
+        const subDir = [];
+
+        for (const item of items) {
+            if (item.type === 'folder') {
+                subDir.push(item);
+            } else if (item.type === 'file' && item.category === 'video') {
+                if (item.size < 1024 * 1024 * 5) continue;
+                item.name = item.name.replace(/玩偶哥.*【神秘的哥哥们】/g, '');
+                videos.push(item);
+            } else if (item.type === 'file' && subtitleExts.some((x) => item.file_extension.endsWith(x))) {
+                subtitles.push(item);
+            }
+        }
+
+        for (const dir of subDir) {
+            const subItems = await this.listFile(dir.share_id, dir.file_id, videos, subtitles);
+            for (const item of subItems) {
+                items.push(item);
+            }
+        }
+
+        return items;
+  };
+  
+   /**
+   * 获取文件列表
+   * @param {string} shareUrl
+   * @returns {@Promise<PanListDetail>}
+   **/
+  async getFilesByShareUrl(shareUrl) {
+    const data = new PanListDetail();
+    const shareData = typeof shareUrl === 'string' ? this.getShareData(shareUrl) : shareUrl;
+    if (!shareData) {
+      data.error = '分享链接无效';
+      return data;
+    }
+    await this.getShareToken(shareData);
+    if (!this.shareTokenCache[shareData.shareId]) {
+      data.error = '分享失效';
+      return data;
+    }
+
+    const videos = [];
+    const subtitles = [];
+    
+    await this.listFile(shareData.shareId, shareData.folderId, videos, subtitles);
+		
+	videos.forEach((item) => {
+		   // 复制 item
+       const element = JSON.parse(JSON.stringify(item));
+       const videoItem = new PanVideoItem();
+       videoItem.data = element;
+       videoItem.panType = this.panName;
+       videoItem.name = element.name;        
+       videoItem.fromName = '原画';
+       data.videos.push(videoItem);
+	});
+			
+    if (subtitles.length > 0) {
+        videos.forEach((item) => {
+            var matchSubtitle = this.findBestLCS(item, subtitles);
+            if (matchSubtitle.bestMatch) {
+                item.subtitle = matchSubtitle.bestMatch.target;
+            }
+  
+        });
+    }
+
+    return data;
+  }
+  
+
+  /**
+   * 获取播放信息
+   * @param {{flag:string,shareId:string,shareToken:string,fileId:string,shareFileToken:string }} data
+   * @returns {@Promise<PanPlayInfo>}
+   */
+  async getPlayUrl(data) {
+    let playData;
+    try {
+	  const shareId = data.share_id;
+	  const fileId = data.file_id;			
+      if (this.isVip) {
+        playData = await this.getDownload(
+          shareId,
+          fileId,         
+        );
+      } else {
+        playData = await this.getLiveTranscoding(
+          shareId,
+          fileId,
+        );
+      }
+    } catch (error) {
+        playData = new PanPlayInfo();
+        playData.error = error.toString();
+    }
+    return playData;
+  }
+   
+}
+
+
 //MARK: 网盘扩展统一入口
 /**
  * 网盘工具
@@ -661,6 +1135,7 @@ class PanTools {
 
         this.quark = new QuarkUC(true);
         this.uc = new QuarkUC(false);
+        this.ali = new Ali();
 
         /**
          * 扩展运行标识 ** uzApp 运行时自动赋值，请勿修改 **
@@ -700,6 +1175,52 @@ class PanTools {
     async updateCookie(panType, cookie) {
         await setEnv(this.uzTag, panType + 'Cookie', cookie);
     }
+    
+    /**
+     * 获取 data  ** 无法在 PanTools 外部操作**
+     * 环境变量 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
+     * @param {PanType} panType
+     * @param {string} keyWord
+     * @returns {@Promise<string>}
+     */
+    async getDataEnv(panType,keyWord) {
+        const data = await getEnv(this.uzTag, panType + keyWord);
+        return data;
+    }
+
+    /**
+     * 更新 data ** 无法在 PanTools 外部操作**
+     * @param {PanType} panType
+     * @param {string} keyWord
+     * @param {string} data
+     */
+    async updateDataEnv(panType, keyWord, data) {
+        await setEnv(this.uzTag, panType + keyWord, data);
+    }
+    
+    /**
+     * 获取 data  ** 无法在 PanTools 外部操作**
+     * 持久存储 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
+     * @param {PanType} panType
+     * @param {string} keyWord
+     * @returns {@Promise<string>}
+     */
+    async getDataStorage(panType,keyWord) {
+        const data = await getStorage(panType + keyWord);
+        return data;
+    }
+
+    /**
+     * 更新 data ** 无法在 PanTools 外部操作**
+     * @param {PanType} panType
+     * @param {string} keyWord
+     * @param {string} data
+     */
+    async updateDataStorage(panType, keyWord, data) {
+        await setStorage(panType + keyWord, data);
+    }
+    
+    
 
     /**
      * 设置用户指定的转存文件夹名称
@@ -714,6 +1235,7 @@ class PanTools {
         //MARK: 2. 请补充自定义转存文件夹名称
         this.quark.saveDirName = dirName;
         this.uc.saveDirName = dirName;
+        this.ali.saveDirName = dirName;
     }
 
     /**
@@ -723,6 +1245,7 @@ class PanTools {
         //MARK: 3. 请实现清理转存文件夹
         await this.quark.createSaveDir();
         await this.uc.createSaveDir();
+        await this.ali.createSaveDir();
     }
 
     /**
@@ -751,7 +1274,11 @@ class PanTools {
             // };
             const data = await this.uc.getFilesByShareUrl(shareUrl);
             return JSON.stringify(data);
+        }else if (shareUrl.includes('https://www.alipan.com')) {
+            const data = await this.ali.getFilesByShareUrl(shareUrl);
+            return JSON.stringify(data);
         }
+            
         const data = new PanListDetail();
         data.error = '';
         return JSON.stringify(data);
@@ -793,6 +1320,25 @@ class PanTools {
                 return JSON.stringify(data);
             }
             const data = await this.uc.getPlayUrl(item.data);
+            return JSON.stringify(data);
+        } else if (item.panType === PanType.Ali) {
+            /// 如果需要 data 请在这里获取
+            this.ali.token32 = await this.getDataEnv(PanType.Ali, 'Token32');
+            this.ali.token280 = await this.getDataEnv(PanType.Ali, 'Token280');
+            /// 更新 UC cookie
+            const that = this;
+            this.ali.updateToken32 = function () {
+                that.updateToken32(PanType.Ali, 'Token32', this.ali.token32);
+            };
+            this.ali.updateToken280 = function () {
+                that.updateToken280(PanType.Ali, 'Token280', this.ali.token32);
+            };
+            if (this.ali.token32 === '' || this.ali.token280 === '') {
+                const data = new PanPlayInfo();
+                data.error = '获取 ' + PanType.Ali + ' token 失败~';
+                return JSON.stringify(data);
+            }
+            const data = await this.ali.getPlayUrl(item.data);
             return JSON.stringify(data);
         }
 
