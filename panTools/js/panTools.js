@@ -373,7 +373,7 @@ class QuarkUC {
             3,
             'get'
         );
-        this.isVip = listData.data?.member_type === 'EXP_SVIP';
+        this.isVip = listData.data?.member_type === 'EXP_SVIP' || listData.data?.member_type === 'SUPER_VIP';
     }
     getPlayFormatList() {
         return this.isVip ? ['4K', '超清', '高清', '普画'] : ['普画'];
