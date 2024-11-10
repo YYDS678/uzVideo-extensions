@@ -286,7 +286,7 @@ class QuarkUC {
             playData = new PanPlayInfo();
             playData.error = error.toString();
         }
-        playData.playHeaders = { cookie: this.cookie };
+        playData.playHeaders = { Cookie: this.cookie,Referer: this.headers.Referer };
         return playData;
     }
     async api(url, data, retry, method) {
@@ -375,14 +375,14 @@ class QuarkUC {
         );
         this.isVip = listData.data?.member_type === 'EXP_SVIP' || listData.data?.member_type === 'SUPER_VIP';
     }
-    getPlayFormatList() {
-        return this.isVip ? ['4K', '超清', '高清', '普画'] : ['普画'];
-    }
-    getPlayFormtQuarkList() {
-        return this.isVip
-            ? ['4k', '2k', 'super', 'high', 'normal', 'low']
-            : ['low'];
-    }
+    // getPlayFormatList() {
+    //     return this.isVip ? ['4K', '超清', '高清', '普画'] : ['普画'];
+    // }
+    // getPlayFormtQuarkList() {
+    //     return this.isVip
+    //         ? ['4k', '2k', 'super', 'high', 'normal', 'low']
+    //         : ['low'];
+    // }
     async listFile(shareData, videos, subtitles, shareId, folderId, page) {
         if (page == null) page = 1;
         const prePage = 200;
@@ -577,23 +577,14 @@ class QuarkUC {
         });
         if (transcoding.data != null && transcoding.data.video_list != null) {
             const flagId = flag;
-            const index = UZUtils.findIndex(this.getPlayFormatList(), flagId);
-            const quarkFormat = this.getPlayFormtQuarkList()[index];
             for (const video of transcoding.data.video_list) {
-                if (video.resolution === quarkFormat) {
+                if (video.resolution === '4k') {
                     const info = new PanPlayInfo();
                     info.url = video.video_info.url;
                     info.error = '';
                     info.playHeaders = { Cookie: this.cookie };
                     return info;
                 }
-            }
-            if (transcoding.data.video_list[index].video_info.url != null) {
-                const info = new PanPlayInfo();
-                info.url = transcoding.data.video_list[index].video_info.url;
-                info.error = '';
-                info.playHeaders = { Cookie: this.cookie };
-                return info;
             }
         }
         const info = new PanPlayInfo();
