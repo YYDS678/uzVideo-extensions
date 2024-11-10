@@ -216,9 +216,6 @@ class QuarkUC {
             videoItem.data = element
             videoItem.panType = this.panName
             videoItem.name = element.name
-            if (index > 0) {
-                videoItem.fromName = `${index}`
-            }
             data.videos.push(videoItem)
         }
 
