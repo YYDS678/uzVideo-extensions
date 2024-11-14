@@ -3,6 +3,7 @@
 1. 新增扩展时，请补充 vod.json
 2. 请将 vod.json 复制到 uzAio.json 的 vod
 3. json 样例
+
 ```
 {
   "name": "名称",
@@ -15,7 +16,9 @@
   "userAgent": "", // 设置播放ua 优先级低于 getVideoPlayUrl 返回ua，用户可自行在 app 内修改
   "isLock": false, // 是否上锁 默认false(即不上锁)，用户可自行在 app 内修改
   "blockClassList": ["短剧"], // 屏蔽分类，用户可自行在 app 内修改
-  "env":""//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
+  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
+  "version":1,
+  "type":100
 }
 ```
 
