@@ -170,7 +170,7 @@ class UZUtils {
     /**
      * 读取持久化存储数据，如果不存在则返回空字符串
      * @param {string} key
-     * @returns {string}
+     * @returns {Promise<string>}
      */
     static async getStorage(key) {
         return await sendMessage('getStorage', JSON.stringify({ key: key }))
