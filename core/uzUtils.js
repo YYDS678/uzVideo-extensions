@@ -265,6 +265,18 @@ async function goToVerify(url, ua) {
     await sendMessage('goToVerify', JSON.stringify({ url: url, ua: ua }))
 }
 
+
+/**
+ * 跳转到网页，由用户操作绑定环境变量
+ * @param {{url: string, tips?: string, ua?: string}} options
+ * @property {string} url - 需要跳转的 url
+ * @property {string} [tips] - 提示信息
+ * @property {string} [ua] - user-agent 默认: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0.1 Safari/605.1.15
+ **/
+async function openWebToBindEnv(options) {
+    await sendMessage('openWebToBindEnv', JSON.stringify(options))
+}
+
 /**
  * toast 弹窗
  * @param {string} msg 提示信息

@@ -5,6 +5,7 @@
 - [panTools(网盘工具)扩展运行说明](#pantools网盘工具扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.40](#v1640)
     - [v1.6.35](#v1635)
     - [v1.6.31](#v1631)
     - [v1.6.20](#v1620)
@@ -151,13 +152,18 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 
 # 修改记录
 
+### v1.6.40
+
+1. 增加 `openWebToBindEnv` 函数。跳转网页，由用户选择绑定环境变量
 
 ### v1.6.35
+
 1. `json` 配置增加 `type` 字段 100 为视频源扩展、200 为推荐扩展、300 为网盘工具扩展。增加 `version` 字段为扩展版本号。
 2. 环境变量 `getEnv` `setEnv` 仅支持在 `json` 中声明 `env` 后调用，否则调用不生效。(持久存储请调用 `UZUtils.setStorage` `UZUtils.getStorage`)
 
 ### v1.6.31
-1. 新增`UZUtils.setStorage` 和 `UZUtils.getStorage` 用于持久化存储数据，不同于 `getEnv` 和 `setEnv` 不会触发通知。
+
+1. 新增 `UZUtils.setStorage` 和 `UZUtils.getStorage` 用于持久化存储数据，不同于 `getEnv` 和 `setEnv` 不会触发通知。
 2. `goToVerify` 验证函数增加 `ua` 参数。
 
 ### v1.6.20
