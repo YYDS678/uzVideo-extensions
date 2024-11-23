@@ -155,6 +155,7 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 ### v1.6.40
 
 1. 增加 `openWebToBindEnv` 函数。跳转网页，由用户选择绑定环境变量
+2. `req` 网络请求支持设置 `addressType`
 
 ### v1.6.35
 

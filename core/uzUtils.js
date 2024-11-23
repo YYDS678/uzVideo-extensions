@@ -214,11 +214,17 @@ const ReqResponseType = {
     stream: 'stream',
 }
 
+const ReqAddressType = {
+    any: 'any',
+    ipv4: 'ipv4',
+    ipv6: 'ipv6',
+}
+
 //MARK: - 网络请求
 /**
  * 网络请求
  * @param {string} url 请求的URL
- * @param {object} options 请求参数 {headers:{},method:"POST",data:{},responseType:ReqResponseType}
+ * @param { {headers:{},method:"GET",data:{},responseType:ReqResponseType,addressType:ReqAddressType}} options 请求参数 
  * @returns {Promise<ProData>}
  */
 async function req(url, options) {
