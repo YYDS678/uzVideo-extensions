@@ -318,7 +318,10 @@ class ChangZhang20240614 extends WebApiBase {
           const md5 = Crypto;
           const result = eval(group[1] + group[2]);
           let url = result.match(/url:.*?['"](.*?)['"]/)[1];
-          backData.data = url;
+		  const res = await req(url)
+          const b64Data = Crypto.enc.Base64.stringify(Crypto.enc.Utf8.parse(res.data))
+          backData.data = 'data:application/vnd.apple.mpegurl;base64,' + b64Data
+          //backData.data = url;
         }
       }
     } catch (error) {
