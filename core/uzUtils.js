@@ -224,7 +224,7 @@ const ReqAddressType = {
 /**
  * 网络请求
  * @param {string} url 请求的URL
- * @param { {headers:{},method:"GET",data:{},responseType:ReqResponseType,addressType:ReqAddressType}} options 请求参数 
+ * @param { {headers:{},method:"GET",data:{},responseType:ReqResponseType,addressType:ReqAddressType}} options 请求参数
  * @returns {Promise<ProData>}
  */
 async function req(url, options) {
@@ -270,7 +270,6 @@ async function setEnv(uzTag, key, value, summary) {
 async function goToVerify(url, ua) {
     await sendMessage('goToVerify', JSON.stringify({ url: url, ua: ua }))
 }
-
 
 /**
  * 跳转到网页，由用户操作绑定环境变量
