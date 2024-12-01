@@ -1,5 +1,5 @@
 const appConfig = {
-    _webSite: 'http://www.muoupan.top',
+    _webSite: 'https://tv.yydsys.top',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -34,33 +34,37 @@ async function getClassList(args) {
     backData.data = [
         {
             type_id: '1',
-            type_name: '木偶电影',
+            type_name: '多多电影',
             hasSubclass: false,
         },
         {
             type_id: '2',
-            type_name: '木偶剧集',
+            type_name: '多多剧集',
             hasSubclass: false,
         },
         {
-            type_id: '3',
-            type_name: '木偶动漫',
+            type_id: '5',
+            type_name: '多多短剧',
             hasSubclass: false,
         },
         {
             type_id: '4',
-            type_name: '木偶纪录片',
+            type_name: '多多动漫',
             hasSubclass: false,
         },
         {
-            type_id: '25',
-            type_name: '木偶综艺片',
+            type_id: '3',
+            type_name: '多多综艺',
+            hasSubclass: false,
+        },
+        {
+            type_id: '20',
+            type_name: '多多纪录片',
             hasSubclass: false,
         },
     ]
     return JSON.stringify(backData)
 }
-
 async function getSubclassList(args) {
     let backData = new RepVideoSubclassList()
     return JSON.stringify(backData)
@@ -69,7 +73,6 @@ async function getSubclassVideoList(args) {
     var backData = new RepVideoList()
     return JSON.stringify(backData)
 }
-
 /**
  * 获取分类视频列表
  * @param {UZArgs} args
@@ -199,6 +202,7 @@ async function searchVideo(args) {
             appConfig.webSite
         )}/index.php/vod/search/page/${args.page}/wd/${args.searchWord}.html`
         let repData = await req(searchUrl)
+
         const $ = cheerio.load(repData.data)
         let items = $('.module-search-item')
 

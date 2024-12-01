@@ -19,31 +19,12 @@
     ],
     "vod": [
         {
-            "name": "蜡笔盘",
-            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/labipan.js",
-            "instance": "labipan20241028",
-            "webSite": "http://labipan.com",
-            "remark": "网盘",
-            "version": "2",
-            "type": 100
-        },
-        {
-            "name": "木偶哥哥",
-            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/mogg.js",
-            "instance": "mogg20241023",
-            "webSite": "http://www.mogg.top",
-            "remark": "网盘",
-            "version": "2",
-            "type": 100
-        },
-        {
             "name": "玩偶哥哥",
             "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wogg.js",
-            "instance": "wogg20240929",
             "webSite": "https://www.wogg.net",
-            "remark": "网盘",
-            "version": "2",
-            "type": 100
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
         },
         {
             "name": "厂长视频",
@@ -210,24 +191,6 @@
             "type": 100
         },
         {
-            "name": "⚡️至臻网盘",
-            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/zhizhen.js",
-            "instance": "zhizhen20241029",
-            "webSite": "https://mihdr.top/",
-            "remark": "至臻网盘",
-            "version": "2",
-            "type": 100
-        },
-        {
-            "name": "🤠多多影音",
-            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/duopan.js",
-            "instance": "duopan20241030",
-            "webSite": "https://tv.yydsys.top/",
-            "remark": "多多网盘",
-            "version": "2",
-            "type": 100
-        },
-        {
             "name": "🐲欧歌资源",
             "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/ougepan.js",
             "instance": "ougepan20241030",
@@ -272,6 +235,78 @@
             "remark": "",
             "version": 1,
             "type": 100
+        },
+        {
+            "name": "🐱玩偶备用",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wobg.js",
+            "webSite": "http://wogg.xxooo.cf",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "🪵木偶哥哥",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/mogg.js",
+            "webSite": "http://www.muoupan.top",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "2",
+            "type": 101
+        },
+        {
+            "name": "🌾小米网盘",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/xiaomi.js",
+            "webSite": "http://www.mucpan.cc",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "⚡️至臻网盘",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/zhizhen.js",
+            "webSite": "https://mihdr.top",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "🖍蜡笔小新",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/labipan.js",
+            "webSite": "https://duopan.fun",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "🤠多多影音",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/duoduo.js",
+            "webSite": "https://tv.yydsys.top",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "🐲欧歌资源",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/ouge.js",
+            "webSite": "https://woog.nxog.eu.org",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "3",
+            "type": 101
+        },
+        {
+            "name": "🤙🏻六趣网盘",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/liuqu.js",
+            "webSite": "https://wp.0v.fit",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "1",
+            "type": 101
+        },
+        {
+            "name": "💧哔嘀影视",
+            "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/biliys.js",
+            "webSite": "https://www.xlys01.com",
+            "remark": "1.6.41 及以上版本可用",
+            "version": "1",
+            "type": 101
         },
         {
             "name": "麻豆社",
