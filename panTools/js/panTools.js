@@ -555,8 +555,7 @@ class Ali {
         this.user = {}
         this.oauth = {}
         this.isVip = true
-        this.token32 = ''
-        this.token280 = ''
+        this.token = ''
         this.apiUrl = 'https://api.aliyundrive.com/'
         this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/'
         this.updateToken = () => {}
@@ -652,7 +651,7 @@ class Ali {
                     method: 'post',
                     headers: this.baseHeaders,
                     data: {
-                        refresh_token: this.token32,
+                        refresh_token: this.token,
                         grant_type: 'refresh_token',
                     },
                 })
