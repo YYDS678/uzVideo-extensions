@@ -671,6 +671,8 @@ class Ali {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
                 let openToken = this.oauth.token || await getOpenToken()
+                uzUtile.debugLog('#######')
+                uzUtile.debugLog(openToken)
                 const openResp = await req('https://api-cf.nn.ci/alist/ali_open/token', {
                     method: 'post',
                     headers: this.baseHeaders,
@@ -703,6 +705,8 @@ class Ali {
                     }
                 });
             let openToken = openResp.data.refresh_token
+            uzUtile.debugLog('$$$$$$')
+            uzUtile.debugLog(openToken)
             return openToken
         } catch (e) {}
 
@@ -729,6 +733,8 @@ class Ali {
             let regex = /http.*code=(.*)/
             let matches = regex.exec(uri)
             let code = matches[1]
+            uzUtile.debugLog('#######')
+            uzUtile.debugLog(code)
             return code
         } catch (e) {};
     }
