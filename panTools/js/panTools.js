@@ -675,7 +675,7 @@ class Ali {
                 if(this.oauth.token){
                     openToken = this.oauth.token
                 } else {
-                    openToken = await getOpenToken()
+                    openToken = await this.getOpenToken()
                 }
                 UZUtils.debugLog('#######')
                 UZUtils.debugLog(openToken)
@@ -702,7 +702,7 @@ class Ali {
     async getOpenToken() {
                     UZUtils.debugLog('$$$$$$')
         try {
-            let code = await getOpenCode()
+            let code = await this.getOpenCode()
             let openResp = await req('https://api-cf.nn.ci/alist/ali_open/code', {
                     method: 'post',
                     headers: this.baseHeaders,
