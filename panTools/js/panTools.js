@@ -672,7 +672,7 @@ class Ali {
             try {
                 UZUtils.debugLog('&&&&&&&')
                 let openToken 
-                if this.oauth.token
+                if(this.oauth.token)
                     openToken = this.oauth.token
                 else
                     openToken = await getOpenToken()
