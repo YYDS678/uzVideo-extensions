@@ -671,7 +671,11 @@ class Ali {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
                 UZUtils.debugLog('&&&&&&&')
-                let openToken = this.oauth.token || await getOpenToken()
+                let openToken 
+                if this.oauth.token
+                    openToken = this.oauth.token
+                else
+                    openToken = await getOpenToken()
                 UZUtils.debugLog('#######')
                 UZUtils.debugLog(openToken)
                 const openResp = await req('https://api-cf.nn.ci/alist/ali_open/token', {
