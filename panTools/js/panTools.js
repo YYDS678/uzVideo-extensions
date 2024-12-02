@@ -700,6 +700,7 @@ class Ali {
     
     //获取token
     async getOpenToken() {
+                    UZUtils.debugLog('$$$$$$')
         try {
             let code = await getOpenCode()
             let openResp = await req('https://api-cf.nn.ci/alist/ali_open/code', {
@@ -711,7 +712,6 @@ class Ali {
                     }
                 });
             let openToken = openResp.data.refresh_token
-            UZUtils.debugLog('$$$$$$')
             UZUtils.debugLog(openToken)
             return openToken
         } catch (e) {}
@@ -720,6 +720,7 @@ class Ali {
 
     //获取授权码code
     async getOpenCode() {
+        UZUtils.debugLog('#######')
         let url = 'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
         let headers = this.baseHeaders
         Object.assign(headers, {
@@ -739,7 +740,7 @@ class Ali {
             let regex = /http.*code=(.*)/
             let matches = regex.exec(uri)
             let code = matches[1]
-            UZUtils.debugLog('#######')
+
             UZUtils.debugLog(code)
             return code
         } catch (e) {};
