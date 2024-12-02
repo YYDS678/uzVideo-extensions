@@ -136,15 +136,6 @@
         "type": 100
     },
     {
-        "name": "緣覺影視",
-        "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/yjys.js",
-        "instance": "yjys20240824",
-        "webSite": "https://www.yjys05.com",
-        "remark": "",
-        "version": "2",
-        "type": 100
-    },
-    {
         "name": "奇優影院",
         "api": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/qiyou.js",
         "instance": "qiyou20240904",
