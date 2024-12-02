@@ -670,6 +670,7 @@ class Ali {
     async openAuth() {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
+                uzUtile.debugLog('&&&&&&&')
                 let openToken = this.oauth.token || await getOpenToken()
                 uzUtile.debugLog('#######')
                 uzUtile.debugLog(openToken)
