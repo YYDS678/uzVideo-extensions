@@ -559,8 +559,7 @@ class Ali {
         this.token280 = ''
         this.apiUrl = 'https://api.aliyundrive.com/'
         this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/'
-        this.updateToken32 = () => {}
-        this.updateToken280 = () => {}
+        this.updateToken = () => {}
         this.baseHeaders = {
             'User-Agent':
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
@@ -660,10 +659,10 @@ class Ali {
 
                 if (loginResp.code == 200) {
                     this.user = loginResp.data
-                    this.user.expire_time = new Date().toISOString()
-                    this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`
-                    this.token32 = loginResp.data.refresh_token
-                    this.updateToken32()
+                    this.user.expire_time = new Date().toISOString();
+                    this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`;
+                    this.user.token = loginResp.data.refresh_token;
+                    this.updateToken()
                 }
             } catch (e) {}
         }
@@ -672,24 +671,67 @@ class Ali {
     async openAuth() {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
-                const openResp = await req('https://aliyundrive-oauth.messense.me/oauth/access_token', {
+                let openToken = this.oauth.token || await getOpenToken()
+                const openResp = await req('https://api-cf.nn.ci/alist/ali_open/token', {
                     method: 'post',
                     headers: this.baseHeaders,
                     data: {
-                        refresh_token: this.token280,
+                        refresh_token: openToken,
                         grant_type: 'refresh_token',
-                    },
+                    }
                 })
 
                 if (openResp.code == 200) {
                     this.oauth = openResp.data
                     this.oauth.expire_time = new Date().toISOString()
                     this.oauth.auth = `${openResp.data.token_type} ${openResp.data.access_token}`
-                    this.token32 = openResp.data.refresh_token
-                    this.updateToken280()
+                    this.oauth.token = openResp.data.refresh_token
                 }
             } catch (e) {}
         }
+    }
+    
+    //获取token
+    async getOpenToken() {
+        try {
+            let code = await getOpenCode()
+            let openResp = await req('https://api-cf.nn.ci/alist/ali_open/code', {
+                    method: 'post',
+                    headers: this.baseHeaders,
+                    data: {
+                        code: code,
+                        grant_type: 'authorization_code'
+                    }
+                });
+            let openToken = openResp.data.refresh_token
+            return openToken
+        } catch (e) {}
+
+    }
+
+    //获取授权码code
+    async getOpenCode() {
+        let url = 'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
+        let headers = this.baseHeaders
+        Object.assign(headers, {
+                Authorization: this.user.auth
+            })
+            
+        try {
+            let openResp = await req(url, {
+                    method: 'post',
+                    headers: headers,
+                    data: {
+                        authorize: 1,
+                        scope: 'user:base,file:all:read,file:all:write'
+                    }
+                })
+            let uri = openResp.data.redirectUri;
+            let regex = /http.*code=(.*)/
+            let matches = regex.exec(uri)
+            let code = matches[1]
+            return code
+        } catch (e) {};
     }
 
     /**
@@ -708,7 +750,7 @@ class Ali {
         }
         return null
     }
-
+    
     /**
      * 获取分享token
      * @param {{shareId: string, sharePwd: string}} shareData
@@ -1045,22 +1087,20 @@ class PanTools {
      * 获取 Alitoken  ** 无法在 PanTools 外部操作**
      * 环境变量 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
      * @param {PanType} panType
-     * @param {string} keyWord
      * @returns {@Promise<string>}
      */
-    async getAliDataEnv(panType, keyWord) {
-        const data = await getEnv(this.uzTag, panType + keyWord)
-        return data
+    async getAliDataEnv(panType) {
+        const token = await getEnv(this.uzTag, panType + 'Token')
+        return token
     }
 
     /**
      * 更新 Alitoken  ** 无法在 PanTools 外部操作**
      * @param {PanType} panType
-     * @param {string} keyWord
      * @param {string} data
      */
-    async updateAliDataEnv(panType, keyWord, data) {
-        await setEnv(this.uzTag, panType + keyWord, data)
+    async updateAliDataEnv(panType, token) {
+        await setEnv(this.uzTag, panType + 'Token', token)
     }
 
     /**
@@ -1152,17 +1192,14 @@ class PanTools {
             return JSON.stringify(data)
         } else if (item.panType === PanType.Ali) {
             /// 如果需要 data 请在这里获取
-            this.ali.token32 = await this.getAliDataEnv(PanType.Ali, 'Token32')
-            this.ali.token280 = await this.getAliDataEnv(PanType.Ali, 'Token280')
+            this.ali.token = await this.getAliDataEnv(PanType.Ali)
             /// 更新 token
             const that = this
-            this.ali.updateToken32 = function () {
-                that.updateAliDataEnv(PanType.Ali, 'Token32', this.ali.token32)
+            this.ali.updateToken = function () {
+                that.updateAliDataEnv(PanType.Ali, this.ali.token)
             }
-            this.ali.updateToken280 = function () {
-                that.updateAliDataEnv(PanType.Ali, 'Token280', this.ali.token32)
-            }
-            if (this.ali.token32 === '' || this.ali.token280 === '') {
+
+            if (this.ali.token === '') {
                 const data = new PanPlayInfo()
                 data.error = '获取 ' + PanType.Ali + ' token 失败~'
                 return JSON.stringify(data)
