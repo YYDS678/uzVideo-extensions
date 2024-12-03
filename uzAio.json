@@ -13,7 +13,7 @@
             "name": "UC、夸克、阿里 网盘解析工具",
             "url": "https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/panTools/js/panTools.js",
             "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
-            "version": "3",
+            "version": "4",
             "type": 300
         }
     ],
