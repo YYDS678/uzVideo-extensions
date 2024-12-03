@@ -483,7 +483,7 @@ class QuarkUC {
                     twokUrl = video.video_info.url
                 } else if (video.resolution === 'super') {
                     superUrl = video.video_info.url
-                } else if (video.resolution === 'height') {
+                } else if (video.resolution === 'high') {
                     heighkUrl = video.video_info.url
                 } else if (video.resolution === 'low') {
                     lowUrl = video.video_info.url
