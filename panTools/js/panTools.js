@@ -644,6 +644,7 @@ class Ali {
         return resp
     }
 
+    //用户登陆
     async login() {
         if (!this.user.user_id || !this.verifyTimestamp(this.user.expire_time)) {
             try {
@@ -667,6 +668,7 @@ class Ali {
         }
     }
 
+    //授权第三方Alist
     async openAuth() {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
@@ -690,7 +692,7 @@ class Ali {
         }
     }
     
-    //获取token
+    //根据授权码获取token
     async getOpenToken() {
         try {
             let code = await this.getOpenCode()
@@ -708,7 +710,7 @@ class Ali {
 
     }
 
-    //获取授权码code
+    //用户授权，获取授权码code
     async getOpenCode() {
         let url = 'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
         let headers = this.baseHeaders
