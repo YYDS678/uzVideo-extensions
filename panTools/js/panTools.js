@@ -554,7 +554,7 @@ class Ali {
         ;(this.userDriveId = null), (this.saveDirName = 'uz影视')
         this.user = {}
         this.oauth = {}
-        this.isVip = true
+        this.isSVip = true
         this.token = ''
         this.apiUrl = 'https://api.aliyundrive.com/'
         this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/'
@@ -874,7 +874,11 @@ class Ali {
             url_expire_sec: '14400',
         })
         if (transcoding.video_preview_play_info && transcoding.video_preview_play_info.live_transcoding_task_list) {
-            return new PanPlayInfo(transcoding.video_preview_play_info.live_transcoding_task_list[0], '')
+            let liveList = transcoding.video_preview_play_info.live_transcoding_task_list;
+            liveList.sort((a, b) => b.template_width - a.template_width);
+            const p= ['超清','高清','标清','普画','极速'];
+            const arr =['QHD','FHD','HD','SD','LD'];
+            return new PanPlayInfo(liveList[0].url, '')
         }
         return new PanPlayInfo('', '获取播放链接失败~1')
     }
@@ -1020,7 +1024,7 @@ class Ali {
         try {
             const shareId = data.share_id
             const fileId = data.file_id
-            if (this.isVip) {
+            if (this.isSVip) {
                 playData = await this.getDownload(shareId, fileId)
             } else {
                 playData = await this.getLiveTranscoding(shareId, fileId)
