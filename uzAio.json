@@ -353,5 +353,25 @@
             "version": "2",
             "type": 100
         }
+    ],
+    "live": [
+        {
+            "name": "📺电视直播",
+            "url": "https://tv.iill.top/m3u/Gather",
+            "type": 10,
+            "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
+        },
+        {
+            "name": "🎥网络直播",
+            "url": "https://tv.iill.top/m3u/Live",
+            "type": 10,
+            "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
+        },
+        {
+            "name": "🚴‍♂️体育直播",
+            "url": "https://tv.iill.top/m3u/Sport",
+            "type": 10,
+            "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
+        }
     ]
 }
