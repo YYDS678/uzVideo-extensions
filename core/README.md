@@ -5,6 +5,7 @@
 - [panTools(网盘工具 type:300)扩展运行说明](#pantools网盘工具-type300扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.42](#v1642)
     - [v1.6.41](#v1641)
     - [v1.6.40](#v1640)
     - [v1.6.35](#v1635)
@@ -151,6 +152,11 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+
+### v1.6.42
+
+1. `goToVerify` 链接的 `host` 只在和用户当前选中源的 `webSite` 的 `host` 一致时 才会触发小窗验证。
+2. 支持获取当前运行平台 `const kIsDesktop` `const kIsAndroid` `const kIsIOS` `const kIsWindows` `const kIsMacOS` `const kIsTV`
 
 ### v1.6.41
 
