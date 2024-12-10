@@ -224,17 +224,7 @@ class QuarkUC {
             videoItem.data = element
             videoItem.panType = this.panName
             videoItem.name = element.name
-            videoItem.fromName = '原画'
             data.videos.push(videoItem)
-            if (this.isQuark === true) {
-                const element2 = JSON.parse(JSON.stringify(item))
-                const videoItem2 = new PanVideoItem()
-                videoItem2.data = element
-                videoItem2.panType = this.panName
-                videoItem2.name = element.name
-                videoItem2.fromName = '最佳'
-                data.videos.push(videoItem2)
-            }
         }
 
         return data
@@ -258,7 +248,7 @@ class QuarkUC {
         let playData
         try {
             const { flag, shareId, shareToken, fileId, shareFileToken } = data
-            if (false === this.isQuark || flag === '原画') {
+            if (false === this.isQuark) {
                 playData = await this.getDownload(
                     shareId,
                     shareToken,
@@ -1327,7 +1317,6 @@ class PanTools {
                 data.error = '获取 ' + PanType.Quark + ' cookie 失败~'
                 return JSON.stringify(data)
             }
-            item.data.flag = item.fromName
             const data = await this.quark.getPlayUrl(item.data)
             return JSON.stringify(data)
         } else if (item.panType === PanType.UC) {
