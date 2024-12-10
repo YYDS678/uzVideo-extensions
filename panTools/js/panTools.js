@@ -171,7 +171,9 @@ class QuarkUC {
         }
     }
     get headers() {
-        const headers = this.isQuark ? QuarkClient.httpHeaders : UCClient.httpHeaders
+        const headers = this.isQuark
+            ? QuarkClient.httpHeaders
+            : UCClient.httpHeaders
         headers['Cookie'] = this.cookie
         return headers
     }
@@ -185,7 +187,7 @@ class QuarkUC {
         await this.getVip()
         const shareData = this.getShareData(shareUrl)
         if (shareData == null) {
-            data.error = '分享链接无效'
+            data.error = ''
             return data
         }
 
@@ -194,11 +196,17 @@ class QuarkUC {
         const videos = []
         const subtitles = []
         if (!this.shareTokenCache.hasOwnProperty(shareData.shareId)) {
-            data.error = '分享失效'
+            data.error = ''
             return data
         }
 
-        await this.listFile(shareData, videos, subtitles, shareData.shareId, shareData.folderId)
+        await this.listFile(
+            shareData,
+            videos,
+            subtitles,
+            shareData.shareId,
+            shareData.folderId
+        )
 
         if (subtitles.length > 0) {
             for (const item of videos) {
@@ -216,7 +224,17 @@ class QuarkUC {
             videoItem.data = element
             videoItem.panType = this.panName
             videoItem.name = element.name
+            videoItem.fromName = '原画'
             data.videos.push(videoItem)
+            if (this.isQuark === true) {
+                const element2 = JSON.parse(JSON.stringify(item))
+                const videoItem2 = new PanVideoItem()
+                videoItem2.data = element
+                videoItem2.panType = this.panName
+                videoItem2.name = element.name
+                videoItem2.fromName = '最佳'
+                data.videos.push(videoItem2)
+            }
         }
 
         return data
@@ -230,23 +248,41 @@ class QuarkUC {
     async getPlayUrl(data) {
         if (this.cookie.length === 0) {
             const info = new PanPlayInfo()
-            info.error = '请在 设置 -> 数据管理 -> 环境变量 中为' + this.panName + 'Cookie 添加值'
+            info.error =
+                '请在 设置 -> 数据管理 -> 环境变量 中为' +
+                this.panName +
+                'Cookie 添加值'
             return info
         }
         await this.getVip()
         let playData
         try {
             const { flag, shareId, shareToken, fileId, shareFileToken } = data
-            if (false === this.isQuark) {
-                playData = await this.getDownload(shareId, shareToken, fileId, shareFileToken, true)
+            if (false === this.isQuark || flag === '原画') {
+                playData = await this.getDownload(
+                    shareId,
+                    shareToken,
+                    fileId,
+                    shareFileToken,
+                    true
+                )
             } else {
-                playData = await this.getLiveTranscoding(shareId, shareToken, fileId, shareFileToken, flag)
+                playData = await this.getLiveTranscoding(
+                    shareId,
+                    shareToken,
+                    fileId,
+                    shareFileToken,
+                    flag
+                )
             }
         } catch (error) {
             playData = new PanPlayInfo()
             playData.error = error.toString()
         }
-        playData.playHeaders = { Cookie: this.cookie, Referer: this.headers.Referer }
+        playData.playHeaders = {
+            Cookie: this.cookie,
+            Referer: this.headers.Referer,
+        }
         return playData
     }
     async api(url, data, retry, method) {
@@ -267,10 +303,15 @@ class QuarkUC {
                 }
                 const resp = response.data
                 if (response.headers['set-cookie']) {
-                    const puus = [response.headers['set-cookie']].join(';;;').match(/__puus=([^;]+)/)
+                    const puus = [response.headers['set-cookie']]
+                        .join(';;;')
+                        .match(/__puus=([^;]+)/)
                     if (puus) {
                         if (this.cookie.match(/__puus=([^;]+)/)[1] != puus[1]) {
-                            this.cookie = this.cookie.replace(/__puus=[^;]+/, `__puus=${puus[1]}`)
+                            this.cookie = this.cookie.replace(
+                                /__puus=[^;]+/,
+                                `__puus=${puus[1]}`
+                            )
                             this.updateCookie()
                         }
                     }
@@ -305,10 +346,13 @@ class QuarkUC {
     async getShareToken(shareData) {
         if (!this.shareTokenCache.hasOwnProperty(shareData.shareId)) {
             delete this.shareTokenCache[shareData.shareId]
-            const shareToken = await this.api(`share/sharepage/token?${this.pr}`, {
-                pwd_id: shareData.shareId,
-                passcode: shareData.sharePwd || '',
-            })
+            const shareToken = await this.api(
+                `share/sharepage/token?${this.pr}`,
+                {
+                    pwd_id: shareData.shareId,
+                    passcode: shareData.sharePwd || '',
+                }
+            )
             if (shareToken.data != null && shareToken.data.stoken != null) {
                 this.shareTokenCache[shareData.shareId] = shareToken.data
             }
@@ -319,15 +363,24 @@ class QuarkUC {
             this.isVip = false
             return
         }
-        const listData = await this.api(`member?${this.pr}&uc_param_str=&fetch_subscribe=true&_ch=home&fetch_identity=true`, null, 3, 'get')
-        this.isVip = listData.data?.member_type === 'EXP_SVIP' || listData.data?.member_type === 'SUPER_VIP'
+        const listData = await this.api(
+            `member?${this.pr}&uc_param_str=&fetch_subscribe=true&_ch=home&fetch_identity=true`,
+            null,
+            3,
+            'get'
+        )
+        this.isVip =
+            listData.data?.member_type === 'EXP_SVIP' ||
+            listData.data?.member_type === 'SUPER_VIP'
     }
 
     async listFile(shareData, videos, subtitles, shareId, folderId, page) {
         if (page == null) page = 1
         const prePage = 200
         const listData = await this.api(
-            `share/sharepage/detail?${this.pr}&pwd_id=${shareId}&stoken=${encodeURIComponent(
+            `share/sharepage/detail?${
+                this.pr
+            }&pwd_id=${shareId}&stoken=${encodeURIComponent(
                 this.shareTokenCache[shareId].stoken
             )}&pdir_fid=${folderId}&force=0&_page=${page}&_size=${prePage}&_sort=file_type:asc,file_name:asc`,
             null,
@@ -344,17 +397,37 @@ class QuarkUC {
             } else if (item.file === true && item.obj_category === 'video') {
                 if (parseInt(item.size.toString()) < 1024 * 1024 * 5) continue
                 item.stoken = this.shareTokenCache[shareData.shareId].stoken
-                videos.push(QuarkUCVideoItem.objectFrom(item, shareData.shareId))
-            } else if (item.type === 'file' && this.subtitleExts.some((x) => item.file_name.endsWith(x))) {
-                subtitles.push(QuarkUCVideoItem.objectFrom(item, shareData.shareId))
+                videos.push(
+                    QuarkUCVideoItem.objectFrom(item, shareData.shareId)
+                )
+            } else if (
+                item.type === 'file' &&
+                this.subtitleExts.some((x) => item.file_name.endsWith(x))
+            ) {
+                subtitles.push(
+                    QuarkUCVideoItem.objectFrom(item, shareData.shareId)
+                )
             }
         }
         if (page < Math.ceil(listData.metadata._total / prePage)) {
-            const nextItems = await this.listFile(shareData, videos, subtitles, shareId, folderId, page + 1)
+            const nextItems = await this.listFile(
+                shareData,
+                videos,
+                subtitles,
+                shareId,
+                folderId,
+                page + 1
+            )
             items.push(...nextItems)
         }
         for (const dir of subDir) {
-            const subItems = await this.listFile(shareData, videos, subtitles, shareId, dir.fid)
+            const subItems = await this.listFile(
+                shareData,
+                videos,
+                subtitles,
+                shareId,
+                dir.fid
+            )
             items.push(...subItems)
         }
         return items
@@ -380,8 +453,17 @@ class QuarkUC {
         this.saveFileIdCaches = {}
     }
     async clearSaveDir() {
-        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
-        if (listData.data != null && listData.data.list != null && listData.data.list.length > 0) {
+        const listData = await this.api(
+            `file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`,
+            null,
+            3,
+            'get'
+        )
+        if (
+            listData.data != null &&
+            listData.data.list != null &&
+            listData.data.list.length > 0
+        ) {
             await this.api(`file/delete?${this.pr}`, {
                 action_type: 2,
                 filelist: listData.data.list.map((v) => v.fid),
@@ -391,7 +473,12 @@ class QuarkUC {
     }
     async createSaveDir(clean) {
         await this.clearSaveDir()
-        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
+        const listData = await this.api(
+            `file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`,
+            null,
+            3,
+            'get'
+        )
         if (listData.data != null && listData.data.list != null) {
             for (const item of listData.data.list) {
                 if (item.file_name === this.saveDirName) {
@@ -436,7 +523,12 @@ class QuarkUC {
         if (saveResult.data != null && saveResult.data.task_id != null) {
             let retry = 0
             while (true) {
-                const taskResult = await this.api(`task?${this.pr}&task_id=${saveResult.data.task_id}&retry_index=${retry}`, null, 3, 'get')
+                const taskResult = await this.api(
+                    `task?${this.pr}&task_id=${saveResult.data.task_id}&retry_index=${retry}`,
+                    null,
+                    3,
+                    'get'
+                )
                 if (
                     taskResult.data != null &&
                     taskResult.data.save_as != null &&
@@ -454,7 +546,13 @@ class QuarkUC {
     }
     async getLiveTranscoding(shareId, stoken, fileId, fileToken, flag) {
         if (!this.saveFileIdCaches.hasOwnProperty(fileId)) {
-            const saveFileId = await this.save(shareId, stoken, fileId, fileToken, true)
+            const saveFileId = await this.save(
+                shareId,
+                stoken,
+                fileId,
+                fileToken,
+                true
+            )
             if (saveFileId == null) {
                 const info = new PanPlayInfo()
                 info.error = 'Live 转存失败！'
@@ -468,42 +566,34 @@ class QuarkUC {
             resolutions: 'normal,low,high,super,2k,4k',
             supports: 'fmp4',
         })
-        var fourkUrl = ''
-        var twokUrl = ''
-        var superUrl = ''
-        var heighkUrl = ''
-        var lowUrl = ''
+        var playUrl = ''
         if (transcoding.data != null && transcoding.data.video_list != null) {
             const flagId = flag
             for (const video of transcoding.data.video_list) {
                 if (video.resolution === '4k') {
-                    fourkUrl = video.video_info.url
+                    playUrl = video.video_info.url
                     break
                 } else if (video.resolution === '2k') {
-                    twokUrl = video.video_info.url
+                    playUrl = video.video_info.url
+                    break
                 } else if (video.resolution === 'super') {
-                    superUrl = video.video_info.url
+                    playUrl = video.video_info.url
+                    break
                 } else if (video.resolution === 'high') {
-                    heighkUrl = video.video_info.url
+                    playUrl = video.video_info.url
+                    break
                 } else if (video.resolution === 'low') {
-                    lowUrl = video.video_info.url
+                    playUrl = video.video_info.url
+                    break
+                } else if (video.resolution === 'normal') {
+                    playUrl = video.video_info.url
+                    break
                 }
             }
         }
-
-        var playUrl = fourkUrl
         var errorStr = ''
-
-        if (fourkUrl.length > 0) {
-            playUrl = fourkUrl
-        } else if (twokUrl.length > 0) {
-            playUrl = twokUrl
-        } else if (superUrl.length > 0) {
-            playUrl = superUrl
-        } else if (heighkUrl.length > 0) {
-            playUrl = heighkUrl
-        } else if (lowUrl.length > 0) {
-            playUrl = lowUrl
+        if (playUrl.length > 0) {
+            playUrl = playUrl
         } else {
             errorStr = '获取播放链接失败'
         }
@@ -516,7 +606,13 @@ class QuarkUC {
         clean || (clean = false)
         try {
             if (!this.saveFileIdCaches.hasOwnProperty(fileId)) {
-                const saveFileId = await this.save(shareId, shareToken, fileId, fileToken, clean)
+                const saveFileId = await this.save(
+                    shareId,
+                    shareToken,
+                    fileId,
+                    fileToken,
+                    clean
+                )
                 if (saveFileId == null) {
                     const info = new PanPlayInfo()
                     info.error = '转存失败，可能空间不足～'
@@ -524,10 +620,17 @@ class QuarkUC {
                 }
                 this.saveFileIdCaches[fileId] = saveFileId
             }
-            const down = await this.api(`file/download?${this.pr}&uc_param_str=`, {
-                fids: [this.saveFileIdCaches[fileId]],
-            })
-            if (down.data != null && down.data.length > 0 && down.data[0].download_url != null) {
+            const down = await this.api(
+                `file/download?${this.pr}&uc_param_str=`,
+                {
+                    fids: [this.saveFileIdCaches[fileId]],
+                }
+            )
+            if (
+                down.data != null &&
+                down.data.length > 0 &&
+                down.data[0].download_url != null
+            ) {
                 const info = new PanPlayInfo()
                 info.url = down.data[0].download_url
                 info.error = ''
@@ -646,22 +749,28 @@ class Ali {
 
     //用户登陆
     async login() {
-        if (!this.user.user_id || !this.verifyTimestamp(this.user.expire_time)) {
+        if (
+            !this.user.user_id ||
+            !this.verifyTimestamp(this.user.expire_time)
+        ) {
             try {
-                const loginResp = await req('https://auth.aliyundrive.com/v2/account/token', {
-                    method: 'post',
-                    headers: this.baseHeaders,
-                    data: {
-                        refresh_token: this.token,
-                        grant_type: 'refresh_token',
-                    },
-                })
+                const loginResp = await req(
+                    'https://auth.aliyundrive.com/v2/account/token',
+                    {
+                        method: 'post',
+                        headers: this.baseHeaders,
+                        data: {
+                            refresh_token: this.token,
+                            grant_type: 'refresh_token',
+                        },
+                    }
+                )
 
                 if (loginResp.code == 200) {
                     this.user = loginResp.data
-                    this.user.expire_time = new Date().toISOString();
-                    this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`;
-                    this.user.token = loginResp.data.refresh_token;
+                    this.user.expire_time = new Date().toISOString()
+                    this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`
+                    this.user.token = loginResp.data.refresh_token
                     this.updateToken()
                 }
             } catch (e) {}
@@ -670,17 +779,24 @@ class Ali {
 
     //授权第三方Alist
     async openAuth() {
-        if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
+        if (
+            !this.oauth.access_token ||
+            !this.verifyTimestamp(this.oauth.expire_time)
+        ) {
             try {
-                const openToken = this.oauth.token || await this.getOpenToken()
-                const openResp = await req('https://api-cf.nn.ci/alist/ali_open/token', {
-                    method: 'post',
-                    headers: this.baseHeaders,
-                    data: {
-                        refresh_token: openToken,
-                        grant_type: 'refresh_token',
+                const openToken =
+                    this.oauth.token || (await this.getOpenToken())
+                const openResp = await req(
+                    'https://api-cf.nn.ci/alist/ali_open/token',
+                    {
+                        method: 'post',
+                        headers: this.baseHeaders,
+                        data: {
+                            refresh_token: openToken,
+                            grant_type: 'refresh_token',
+                        },
                     }
-                })
+                )
 
                 if (openResp.code == 200) {
                     this.oauth = openResp.data
@@ -691,48 +807,51 @@ class Ali {
             } catch (e) {}
         }
     }
-    
+
     //根据授权码获取token
     async getOpenToken() {
         try {
             let code = await this.getOpenCode()
-            let openResp = await req('https://api-cf.nn.ci/alist/ali_open/code', {
+            let openResp = await req(
+                'https://api-cf.nn.ci/alist/ali_open/code',
+                {
                     method: 'post',
                     headers: this.baseHeaders,
                     data: {
                         code: code,
-                        grant_type: 'authorization_code'
-                    }
-                });
+                        grant_type: 'authorization_code',
+                    },
+                }
+            )
             let openToken = openResp.data.refresh_token
             return openToken
         } catch (e) {}
-
     }
 
     //用户授权，获取授权码code
     async getOpenCode() {
-        let url = 'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
+        let url =
+            'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
         let headers = this.baseHeaders
         Object.assign(headers, {
-                Authorization: this.user.auth
-            })
-            
+            Authorization: this.user.auth,
+        })
+
         try {
             let openResp = await req(url, {
-                    method: 'post',
-                    headers: headers,
-                    data: {
-                        authorize: 1,
-                        scope: 'user:base,file:all:read,file:all:write'
-                    }
-                })
-            let uri = openResp.data.redirectUri;
+                method: 'post',
+                headers: headers,
+                data: {
+                    authorize: 1,
+                    scope: 'user:base,file:all:read,file:all:write',
+                },
+            })
+            let uri = openResp.data.redirectUri
             let regex = /http.*code=(.*)/
             let matches = regex.exec(uri)
             let code = matches[1]
             return code
-        } catch (e) {};
+        } catch (e) {}
     }
 
     /**
@@ -741,7 +860,8 @@ class Ali {
      * @returns {null|{shareId: string, folderId: string}}
      **/
     getShareData(url) {
-        let regex = /https:\/\/www\.alipan\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?|https:\/\/www\.aliyundrive\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?/
+        let regex =
+            /https:\/\/www\.alipan\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?|https:\/\/www\.aliyundrive\.com\/s\/([^\\/]+)(\/folder\/([^\\/]+))?/
         let matches = regex.exec(url)
         if (matches) {
             return {
@@ -751,7 +871,7 @@ class Ali {
         }
         return null
     }
-    
+
     /**
      * 获取分享token
      * @param {{shareId: string, sharePwd: string}} shareData
@@ -867,17 +987,24 @@ class Ali {
             if (!saveFileId) return new PanPlayInfo('', 'Live 转存失败～')
             this.saveFileIdCaches[fileId] = saveFileId
         }
-        const transcoding = await this.openApi(`openFile/getVideoPreviewPlayInfo`, {
-            file_id: this.saveFileIdCaches[fileId],
-            drive_id: this.userDriveId,
-            category: 'live_transcoding',
-            url_expire_sec: '14400',
-        })
-        if (transcoding.video_preview_play_info && transcoding.video_preview_play_info.live_transcoding_task_list) {
-            let liveList = transcoding.video_preview_play_info.live_transcoding_task_list;
-            liveList.sort((a, b) => b.template_width - a.template_width);
-            const p= ['超清','高清','标清','普画','极速'];
-            const arr =['QHD','FHD','HD','SD','LD'];
+        const transcoding = await this.openApi(
+            `openFile/getVideoPreviewPlayInfo`,
+            {
+                file_id: this.saveFileIdCaches[fileId],
+                drive_id: this.userDriveId,
+                category: 'live_transcoding',
+                url_expire_sec: '14400',
+            }
+        )
+        if (
+            transcoding.video_preview_play_info &&
+            transcoding.video_preview_play_info.live_transcoding_task_list
+        ) {
+            let liveList =
+                transcoding.video_preview_play_info.live_transcoding_task_list
+            liveList.sort((a, b) => b.template_width - a.template_width)
+            const p = ['超清', '高清', '标清', '普画', '极速']
+            const arr = ['QHD', 'FHD', 'HD', 'SD', 'LD']
             return new PanPlayInfo(liveList[0].url, '')
         }
         return new PanPlayInfo('', '获取播放链接失败~1')
@@ -938,7 +1065,13 @@ class Ali {
         if (!items) return []
 
         if (listData.next_marker) {
-            const nextItems = await this.listFile(shareId, folderId, videos, subtitles, listData.next_marker)
+            const nextItems = await this.listFile(
+                shareId,
+                folderId,
+                videos,
+                subtitles,
+                listData.next_marker
+            )
             for (const item of nextItems) {
                 items.push(item)
             }
@@ -953,13 +1086,21 @@ class Ali {
                 if (item.size < 1024 * 1024 * 5) continue
                 item.name = item.name.replace(/玩偶哥.*【神秘的哥哥们】/g, '')
                 videos.push(item)
-            } else if (item.type === 'file' && subtitleExts.some((x) => item.file_extension.endsWith(x))) {
+            } else if (
+                item.type === 'file' &&
+                subtitleExts.some((x) => item.file_extension.endsWith(x))
+            ) {
                 subtitles.push(item)
             }
         }
 
         for (const dir of subDir) {
-            const subItems = await this.listFile(dir.share_id, dir.file_id, videos, subtitles)
+            const subItems = await this.listFile(
+                dir.share_id,
+                dir.file_id,
+                videos,
+                subtitles
+            )
             for (const item of subItems) {
                 items.push(item)
             }
@@ -975,7 +1116,10 @@ class Ali {
      **/
     async getFilesByShareUrl(shareUrl) {
         const data = new PanListDetail()
-        const shareData = typeof shareUrl === 'string' ? this.getShareData(shareUrl) : shareUrl
+        const shareData =
+            typeof shareUrl === 'string'
+                ? this.getShareData(shareUrl)
+                : shareUrl
         if (!shareData) {
             data.error = '分享链接无效'
             return data
@@ -989,7 +1133,12 @@ class Ali {
         const videos = []
         const subtitles = []
 
-        await this.listFile(shareData.shareId, shareData.folderId, videos, subtitles)
+        await this.listFile(
+            shareData.shareId,
+            shareData.folderId,
+            videos,
+            subtitles
+        )
 
         videos.forEach((item) => {
             // 复制 item
@@ -1178,6 +1327,7 @@ class PanTools {
                 data.error = '获取 ' + PanType.Quark + ' cookie 失败~'
                 return JSON.stringify(data)
             }
+            item.data.flag = item.fromName
             const data = await this.quark.getPlayUrl(item.data)
             return JSON.stringify(data)
         } else if (item.panType === PanType.UC) {
