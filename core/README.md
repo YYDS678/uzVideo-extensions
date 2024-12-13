@@ -3,8 +3,10 @@
 - [视频源 type:101 扩展运行说明](#视频源-type101-扩展运行说明)
 - [uzHome(首页推荐 type:200) 扩展运行说明](#uzhome首页推荐-type200-扩展运行说明)
 - [panTools(网盘工具 type:300)扩展运行说明](#pantools网盘工具-type300扩展运行说明)
+- [danMu(弹幕 type:400) 扩展运行说明](#danmu弹幕-type400-扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.43](#v1643)
     - [v1.6.42](#v1642)
     - [v1.6.41](#v1641)
     - [v1.6.40](#v1640)
@@ -142,6 +144,30 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 
 ```
 
+# danMu(弹幕 type:400) 扩展运行说明
+1. 请勿删减 `danMuEmpty.js`  原有代码
+2. `danMuEmpty.js` 代码为示例，您需要根据您的业务逻辑进行修改。参考 `danMu.js`
+3. json 文件说明
+
+```
+{
+  "name": "名称",
+  "codeID": "如果选择了加密请填写，由 uz 生成",
+  "url": "扩展链接",
+  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
+  "version": 1, //扩展版本号
+  "type":400 // 弹幕扩展固定 400
+}
+```
+
+4. 流程图
+
+```mermaid
+graph TD
+A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
+
+```
+
 # 加密说明
 
 1. 您的扩展代码由 uz 进行加密，并生成 `codeID` 用于扩展解密。
@@ -153,10 +179,15 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 
 # 修改记录
 
+### v1.6.43
+1. 新增`kLocale` 获取用户当前 语言-地区
+2. 新增 `kAppVersion` 获取用户当前 app 版本号
+3.  新增弹幕扩展 `danMu.js` type:400
+
 ### v1.6.42
 
 1. `goToVerify` 链接的 `host` 只在和用户当前选中源的 `webSite` 的 `host` 一致时 才会触发小窗验证。
-2. 支持获取当前运行平台 `const kIsDesktop` `const kIsAndroid` `const kIsIOS` `const kIsWindows` `const kIsMacOS` `const kIsTV`
+2. 支持获取当前运行平台 `kIsDesktop` `kIsAndroid` `kIsIOS` `kIsWindows` `kIsMacOS` `kIsTV`
 
 ### v1.6.41
 

@@ -22,7 +22,10 @@ class UZUtils {
         }
         const hostStartIndex = protocolEndIndex + 3
         const hostEndIndex = url.indexOf('/', hostStartIndex)
-        const host = hostEndIndex === -1 ? url.slice(hostStartIndex) : url.slice(hostStartIndex, hostEndIndex)
+        const host =
+            hostEndIndex === -1
+                ? url.slice(hostStartIndex)
+                : url.slice(hostStartIndex, hostEndIndex)
 
         return `${url.slice(0, protocolEndIndex + 3)}${host}`
     }
@@ -105,7 +108,11 @@ class UZUtils {
      * @returns {string|null} - 匹配到的原始键，或 null
      */
     static findIgnoreCase(dict, key) {
-        if (typeof dict !== 'object' || dict === null || typeof key !== 'string') {
+        if (
+            typeof dict !== 'object' ||
+            dict === null ||
+            typeof key !== 'string'
+        ) {
             return null
         }
         for (let k in dict) {
@@ -123,7 +130,11 @@ class UZUtils {
      * @returns {any|null} - 匹配到的值，如果没有找到则返回 null
      */
     static findValueIgnoreCaseInDict(dict, key) {
-        if (typeof dict !== 'object' || dict === null || typeof key !== 'string') {
+        if (
+            typeof dict !== 'object' ||
+            dict === null ||
+            typeof key !== 'string'
+        ) {
             return null
         }
         for (let k in dict) {
@@ -142,7 +153,11 @@ class UZUtils {
      * @returns {object} - 更新后的字典
      */
     static addValueToDict(dict, key, value) {
-        if (typeof dict !== 'object' || dict === null || typeof key !== 'string') {
+        if (
+            typeof dict !== 'object' ||
+            dict === null ||
+            typeof key !== 'string'
+        ) {
             return dict
         }
 
@@ -164,7 +179,10 @@ class UZUtils {
      * @param {string} value
      */
     static async setStorage(key, value) {
-        await sendMessage('setStorage', JSON.stringify({ key: key, value: value }))
+        await sendMessage(
+            'setStorage',
+            JSON.stringify({ key: key, value: value })
+        )
     }
 
     /**
@@ -224,11 +242,20 @@ const ReqAddressType = {
 /**
  * 网络请求
  * @param {string} url 请求的URL
- * @param { {headers:{},method:"GET",data:{},responseType:ReqResponseType,addressType:ReqAddressType}} options 请求参数
+ * @param { object } options 请求参数
+ * @param {object} options.headers 请求头
+ * @param {string} options.method 请求方法
+ * @param {object} options.data 请求数据
+ * @param {object} options.queryParameters 查询参数（v1.6.3 及以上版本）
+ * @param {ReqResponseType} options.responseType 响应类型
+ * @param {ReqAddressType} options.addressType 地址类型
  * @returns {Promise<ProData>}
  */
 async function req(url, options) {
-    let pro = await sendMessage('req', JSON.stringify({ url: url, options: options }))
+    let pro = await sendMessage(
+        'req',
+        JSON.stringify({ url: url, options: options })
+    )
     return pro
 }
 
@@ -239,7 +266,10 @@ async function req(url, options) {
  * @returns {@Promise<string>}
  */
 async function getEnv(uzTag, key) {
-    let res = await sendMessage('getEnv', JSON.stringify({ uzTag: uzTag, key: key }))
+    let res = await sendMessage(
+        'getEnv',
+        JSON.stringify({ uzTag: uzTag, key: key })
+    )
     return res
 }
 
@@ -289,4 +319,59 @@ async function openWebToBindEnv(options) {
  **/
 function toast(msg, duration = 2) {
     sendMessage('toast', JSON.stringify({ msg: msg, duration: duration }))
+}
+
+// ignore
+//MARK: - 获取 uz 状态信息
+// 实际运行中为真实值，这里是模拟值
+
+/**
+ * @type {boolean} 是否为桌面
+ */
+const kIsDesktop = true
+
+/**
+ * @type {boolean} 是否为安卓
+ */
+const kIsAndroid = false
+
+/**
+ * @type {boolean} 是否为iOS
+ */
+const kIsIOS = false
+
+/**
+ * @type {boolean} 是否为Windows
+ */
+const kIsWindows = false
+
+/**
+ * @type {boolean} 是否为macOS
+ */
+const kIsMacOS = false
+
+/**
+ * @type {boolean}  是否为 TV 模式
+ */
+const kIsTV = false
+
+/**
+ * @type {string} 获取用户当前 语言-地区。
+ */
+const kLocale = 'zh-CN'
+
+/**
+ * @type {number} 当前版本
+ */
+const kAppVersion = 1643
+// ignore
+
+
+/**
+ * 格式化返回数据
+ * @param {object} params
+ * @returns {string}
+ */
+function formatBackData(params) {
+    return JSON.stringify(params)
 }
