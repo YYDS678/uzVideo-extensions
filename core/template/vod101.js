@@ -1,9 +1,9 @@
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
 // 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
-import {} from './uzVideo.js'
-import {} from './uzUtils.js'
-import {} from './uz3lib.js'
+import {} from '../uzVideo.js'
+import {} from '../uzUtils.js'
+import {} from '../uz3lib.js'
 
 // ignore
 

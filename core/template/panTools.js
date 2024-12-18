@@ -1,8 +1,10 @@
 // ignore
-import {} from '../../core/uzVideo.js'
-import {} from '../../core/uzHome.js'
-import {} from '../../core/uz3lib.js'
-import {} from '../../core/uzUtils.js'
+// 不支持导入，这里只是本地开发用于代码提示
+// 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
+import {} from '../uzVideo.js'
+import {} from './uzHome.js'
+import {} from '../uz3lib.js'
+import {} from '../uzUtils.js'
 // ignore
 
 /**
@@ -98,6 +100,10 @@ class PanMount {
     }
 }
 
+/**
+ * 网盘数据类型
+ * @type {{Video: string, Dir: string}}
+ **/
 const PanDataType = {
     /**
      * 视频
@@ -114,7 +120,12 @@ const PanDataType = {
  * 网盘挂载列表
  */
 class PanMountListData {
-    constructor(name = '', panType = PanType.UC, dataType = PanDataType.Dir, data = {}) {
+    constructor(
+        name = '',
+        panType = PanType.UC,
+        dataType = PanDataType.Dir,
+        data = {}
+    ) {
         /**
          * 列表展示名称
          */
@@ -306,7 +317,10 @@ class PanTools {
         } else if (item.panType === PanType.Ali) {
             /// 如果需要 data 请在这里获取
             this.ali.token32 = await this.getAliDataEnv(PanType.Ali, 'Token32')
-            this.ali.token280 = await this.getAliDataEnv(PanType.Ali, 'Token280')
+            this.ali.token280 = await this.getAliDataEnv(
+                PanType.Ali,
+                'Token280'
+            )
             /// 更新 token
             const that = this
             this.ali.updateToken32 = function () {
@@ -336,7 +350,11 @@ class PanTools {
      * @returns {@Promise<[PanMount]>}
      */
     async getSupportMountPan() {
-        return JSON.stringify([new PanMount('阿里盘', PanType.Ali), new PanMount('UC', PanType.UC), new PanMount('Quark', PanType.Quark)])
+        return JSON.stringify([
+            new PanMount('阿里盘', PanType.Ali),
+            new PanMount('UC', PanType.UC),
+            new PanMount('Quark', PanType.Quark),
+        ])
     }
 
     /**
@@ -344,10 +362,7 @@ class PanTools {
      * @param {PanType} panType
      * @returns {@Promise<{data:[PanMountListData],error:string}>}
      */
-    async getRootDir(panType) {
-        // https://drive-pc.quark.cn/1/clouddrive/file/sort?pr=ucpro&fr=pc&uc_param_str=&pdir_fid=0&_page=1&_size=50&_fetch_total=1&_fetch_sub_dirs=0&_sort=file_type:asc,updated_at:desc
-        // https://drive-pc.quark.cn/1/clouddrive/file/sort?pr=ucpro&fr=pc&uc_param_str=&pdir_fid=952e3d8a97e34eb3ae851e510971fb26&_page=1&_size=50&_fetch_total=1&_fetch_sub_dirs=0&_sort=file_type:asc,updated_at:desc
-    }
+    async getRootDir(panType) {}
 
     /**
      * 获取网盘挂载子目录

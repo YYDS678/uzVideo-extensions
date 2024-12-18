@@ -1,4 +1,5 @@
 - [扩展说明](#扩展说明)
+- [模板](#模板)
   - [uzUtils.js 提供网络、存储、toast 等功能](#uzutilsjs-提供网络存储toast-等功能)
 - [视频源 type:101 扩展运行说明](#视频源-type101-扩展运行说明)
 - [uzHome(首页推荐 type:200) 扩展运行说明](#uzhome首页推荐-type200-扩展运行说明)
@@ -29,7 +30,14 @@
 6. 集成库可在 `uz3lib.js` 查看，如需添加其他库通用库请联系[机器人](https://t.me/uzVideoAppbot)
 7. 成对使用 `// ignore` uz 内部会忽略包裹的内容
 
-## uzUtils.js 提供网络、存储、toast 等功能
+# 模板
+1. [视频源扩展 type:101 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/vod101.js)
+2. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
+3. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
+4. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
+
+
+## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
 
 # 视频源 type:101 扩展运行说明
 
