@@ -21,7 +21,7 @@
 
 |   名称   |                                                      订阅链接                                                      |
 | :------: | :----------------------------------------------------------------------------------------------------------------: |
-| UC、夸克 | https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/panTools/panTools.json |
+| UC、夸克 | https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/panTools/panTools.json |
 
 # 添加方式
 

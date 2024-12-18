@@ -21,7 +21,7 @@
 
 |   名称   |                                                      订阅链接                                                      |
 | :------: | :----------------------------------------------------------------------------------------------------------------: |
-| dandanPlay | https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/danMu.json |
+| dandanPlay | https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/danMu.json |
 
 # 添加方式
 

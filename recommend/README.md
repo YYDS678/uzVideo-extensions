@@ -20,7 +20,7 @@
 
 |     名称     |                                                     订阅链接                                                      |
 | :----------: | :---------------------------------------------------------------------------------------------------------------: |
-| 豆瓣推荐筛选 | https://ghp.ci/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/recommend/douban.json |
+| 豆瓣推荐筛选 | https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/recommend/douban.json |
 
 # 添加方式
 
