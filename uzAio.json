@@ -19,17 +19,17 @@
     ],
     "danMu": [
         {
-            "name": "dandanPlay 弹幕",
-            "remark": "数据来自 弹弹Play",
-            "url": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/js/danMu.js",
-            "type": 400,
-            "version": 1
-        },
-        {
             "name": "综合弹幕",
             "url": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/js/danMu2.txt",
             "codeID": "wMFsJrk98TmvWbYAjO4Mne3CZDRh619D",
             "remark": "别那么执着，搜不到就算了",
+            "type": 400,
+            "version": 1
+        },
+        {
+            "name": "dandanPlay 弹幕",
+            "remark": "数据来自 弹弹Play",
+            "url": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/js/danMu.js",
             "type": 400,
             "version": 1
         }
