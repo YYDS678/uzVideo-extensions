@@ -189,7 +189,8 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 # 修改记录
 
 ### v1.6.46
-1. `getVideoPlayUrl` 支持返回弹幕数据 `RepVideoPlayUrl.danMu` 
+1. `getVideoPlayUrl` 支持返回弹幕数据 `RepVideoPlayUrl.danMu`
+2. `UZArgs` 新增 `flag` 参数,取自 `vod_play_from`. 用于 `getVideoPlayUrl` 时获取当前线路。
 
 ### v1.6.43
 1. 新增`kLocale` 获取用户当前 语言-地区

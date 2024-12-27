@@ -219,7 +219,7 @@ class RepVideoPlayUrl {
          * @type {VodDanMu[]}
          */
         this.danMu = []
-        
+
         this.error = ''
     }
 }
@@ -230,12 +230,29 @@ class RepVideoPlayUrl {
  */
 class UZArgs {
     constructor() {
-        // 请求的URL
+        /**
+         * 请求的URL
+         * @type {string}
+         */
         this.url = ''
-        // 当前页码
+        
+        /**
+         * 当前页码
+         * @type {number}
+         */
         this.page = 1
-        //搜索关键词
+
+        /**
+         * 搜索关键词
+         * @type {string}
+         */
         this.searchWord = ''
+
+        /**
+         * 返回的线路(vod_play_from)标识
+         * @type {string} 
+         */
+        this.flag = ''
     }
 }
 
