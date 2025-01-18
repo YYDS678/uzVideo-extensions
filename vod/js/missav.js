@@ -11,7 +11,7 @@ class missavClass extends WebApiBase {
      */
     constructor() {
         super();
-        this.url = 'https://missav.com'
+        this.url = 'https://missav.ai'
         this.headers = {
             'User-Agent': 'PostmanRuntime/7.39.0',
         }
@@ -161,7 +161,7 @@ class missavClass extends WebApiBase {
             let html = await req(url, { headers: this.headers })
             backData.error = html.error
 
-            let uuid = html.data.match(/sixyik.com\\\/(.+)\\\/seek\\\/_0\.jpg/)[1]
+            let uuid = html.data.match(/nineyu\.com\\\/(.+)\\\/seek\\\/_0\.jpg/)[1]
             let m3u8 = m3u8Prefix + uuid + m3u8Suffix
 
             backData.data = m3u8
