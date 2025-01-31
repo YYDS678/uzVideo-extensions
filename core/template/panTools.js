@@ -32,10 +32,24 @@ const PanType = {
  * 播放信息
  **/
 class PanPlayInfo {
-    constructor(url = '', error = '', playHeaders = {}) {
+    constructor(url = '', error = '', playHeaders = {}, urls = []) {
+        /**
+         * 播放地址，优先取 urls, 如果 urls 为空，取该值
+         * @type {string}
+         */
         this.url = url
         this.error = error
         this.playHeaders = playHeaders
+
+        /**
+         * 多个播放地址，优先取该值 如果为空取 url
+         * @type {{name:string,url:string,headers:object,priority:number}[]}
+         * @property {string} name 名称 4k 高清 之类
+         * @property {string} url 播放地址
+         * @property {object} headers 播放头
+         * @property {number} priority 优先级
+         */
+        this.urls = []
     }
 }
 
@@ -343,7 +357,7 @@ class PanTools {
         return JSON.stringify(data)
     }
 
-    //MARK: - 挂载相关 以下暂未实现
+    //MARK: - 伪挂载相关 以下暂未实现
 
     /**
      * 返回支持挂载的网盘

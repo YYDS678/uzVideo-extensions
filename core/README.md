@@ -7,6 +7,7 @@
 - [danMu(弹幕 type:400) 扩展运行说明](#danmu弹幕-type400-扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.49](#v1649)
     - [v1.6.46](#v1646)
     - [v1.6.43](#v1643)
     - [v1.6.42](#v1642)
@@ -187,6 +188,9 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+
+### v1.6.49
+1. `PanPlayInfo` 新增 `urls` 字段，用于多线路播放
 
 ### v1.6.46
 1. `getVideoPlayUrl` 支持返回弹幕数据 `RepVideoPlayUrl.danMu`
