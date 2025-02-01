@@ -527,7 +527,7 @@ class QuarkUC {
                 }
                 return [
                     {
-                        name: 'raw',
+                        name: '原画',
                         url: down.data[0].download_url,
                         headers: {
                             Cookie: this.cookie,
@@ -904,7 +904,7 @@ class Ali {
             return [
                 {
                     url: down.url,
-                    name: 'raw',
+                    name: '原画',
                     priority: 0,
                     headers: {},
                 },
