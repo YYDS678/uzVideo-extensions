@@ -190,7 +190,7 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 # 修改记录
 
 ### v1.6.49
-1. `PanPlayInfo` 新增 `urls` 字段，用于多线路播放
+1. `PanPlayInfo` 和 `RepVideoPlayUrl` 新增 `urls` 字段，用于多线路播放
 
 ### v1.6.46
 1. `getVideoPlayUrl` 支持返回弹幕数据 `RepVideoPlayUrl.danMu`

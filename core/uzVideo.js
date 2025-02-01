@@ -210,6 +210,17 @@ class RepVideoPlayUrl {
         this.data = ''
 
         /**
+         * 多个播放地址，优先取该值 如果为空取 data
+         * @type {{name:string,url:string,headers:object,priority:number}[]}
+         * @property {string} name 名称 4k 高清 之类
+         * @property {string} url 播放地址
+         * @property {object} headers 播放头
+         * @property {number} priority 优先级
+         */
+        this.urls = []
+
+        
+        /**
          * 播放视频的请求header
          **/
         this.headers
@@ -235,7 +246,7 @@ class UZArgs {
          * @type {string}
          */
         this.url = ''
-        
+
         /**
          * 当前页码
          * @type {number}
@@ -250,7 +261,7 @@ class UZArgs {
 
         /**
          * 返回的线路(vod_play_from)标识
-         * @type {string} 
+         * @type {string}
          */
         this.flag = ''
     }
