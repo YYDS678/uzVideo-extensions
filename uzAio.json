@@ -13,7 +13,7 @@
             "name": "UC|夸克|阿里 网盘解析工具",
             "url": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/panTools/js/panTools.js",
             "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
-            "version": "7",
+            "version": "8",
             "type": 300
         }
     ],
@@ -343,6 +343,21 @@
             "remark": "网盘 | 1.6.41 及以上版本可用",
             "version": "1",
             "type": 101
+        },
+        {
+            "api": "https://cj.rycjapi.com/api.php/provide/vod",
+            "name": "🐝如意",
+            "type": 0
+        },
+        {
+            "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+            "name": "🐝黑木耳",
+            "type": 0
+        },
+        {
+            "api": "https://cjhwba.com/api.php/provide/vod/",
+            "name": "🐝华为吧",
+            "type": 0
         },
         {
             "name": "麻豆社",

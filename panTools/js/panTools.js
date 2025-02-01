@@ -196,7 +196,7 @@ class QuarkUC {
      **/
     async getFilesByShareUrl(shareUrl) {
         const data = new PanListDetail()
-        await this.getVip()
+        // await this.getVip()
         const shareData = this.getShareData(shareUrl)
         if (shareData == null) {
             data.error = ''
@@ -214,14 +214,14 @@ class QuarkUC {
 
         await this.listFile(shareData, videos, subtitles, shareData.shareId, shareData.folderId)
 
-        if (subtitles.length > 0) {
-            for (const item of videos) {
-                const matchSubtitle = this.findBestLCS(item, subtitles)
-                if (matchSubtitle.bestMatch != null) {
-                    item.subtitle = matchSubtitle.bestMatch.target
-                }
-            }
-        }
+        // if (subtitles.length > 0) {
+        //     for (const item of videos) {
+        //         const matchSubtitle = this.findBestLCS(item, subtitles)
+        //         if (matchSubtitle.bestMatch != null) {
+        //             item.subtitle = matchSubtitle.bestMatch.target
+        //         }
+        //     }
+        // }
         for (let index = 0; index < videos.length; index++) {
             const item = videos[index]
             // 复制 item
@@ -253,7 +253,6 @@ class QuarkUC {
             Cookie: this.cookie,
             Referer: this.headers.Referer,
         }
-        let urls = []
         try {
             const { flag, shareId, shareToken, fileId, shareFileToken } = data
 
@@ -261,34 +260,14 @@ class QuarkUC {
 
             if (saveFileId == null) {
                 const info = new PanPlayInfo()
-                info.error = '转存失败，可能空间不足～'
+                info.error = '转存失败，可能空间不足 或 cookie 错误～'
                 return info
             }
             this.saveFileIdCaches[fileId] = saveFileId
 
-            let rawData = await this.getDownload(shareId, shareToken, fileId, shareFileToken, true)
-            let transcodingData = await this.getLiveTranscoding(shareId, shareToken, fileId, shareFileToken, flag)
-            let rawPlayData = null
-
-            if (rawData) {
-                rawPlayData = {
-                    url: rawData.url,
-                    headers: headers,
-                    priority: 0,
-                    name: 'raw',
-                }
-            }
-
-            if (rawPlayData) {
-                if (false === this.isQuark) {
-                    rawPlayData.priority = 99
-                }
-                urls.push(rawPlayData)
-            }
-            if (transcodingData?.urls) {
-                urls.push(...transcodingData.urls)
-            }
-            playData.urls = urls
+            let rawUrls = await this.getDownload(shareId, shareToken, fileId, shareFileToken, true)
+            let transcodingUrls = await this.getLiveTranscoding(shareId, shareToken, fileId, shareFileToken, flag)
+            playData.urls = [...rawUrls, ...transcodingUrls]
             playData.urls.sort((a, b) => {
                 return b.priority - a.priority
             })
@@ -429,6 +408,7 @@ class QuarkUC {
     }
 
     async clearSaveDir() {
+        if (this.saveDirId == null) return
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null && listData.data.list.length > 0) {
             await this.api(`file/delete?${this.pr}`, {
@@ -440,7 +420,8 @@ class QuarkUC {
         this.saveFileIdCaches = {}
     }
     async createSaveDir(clean) {
-        await this.clearSaveDir()
+        // await this.clearSaveDir()
+        if (this.saveDirId != null) return
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null) {
             for (const item of listData.data.list) {
@@ -507,29 +488,21 @@ class QuarkUC {
         })
 
         var urls = []
+        const nameMap = {
+            FOUR_K: '4K',
+            SUPER: '超清',
+            HIGH: '高清',
+            NORMAL: '流畅',
+        }
         if (transcoding.data != null && transcoding.data.video_list != null) {
-            const flagId = flag
-            let priority = 0
             for (const video of transcoding.data.video_list) {
-                const resolution = video.resolution ?? ''
+                const resoultion = video.video_info?.resoultion
+                const priority = video.video_info?.width
                 const url = video.video_info?.url
-                if (resolution === '4k' && url) {
-                    priority = 9
-                } else if (resolution === '2k' && url) {
-                    priority = 8
-                } else if (resolution === 'super' && url) {
-                    priority = 7
-                } else if (resolution === 'high' && url) {
-                    priority = 6
-                } else if (resolution === 'low' && url) {
-                    priority = 5
-                } else if (resolution === 'normal' && url) {
-                    priority = 4
-                }
-                if (resolution && url) {
+                if (resoultion && url) {
                     urls.push({
                         url: url,
-                        name: resolution,
+                        name: nameMap[resoultion] ?? resoultion,
                         headers: {
                             Cookie: this.cookie,
                             referer: this.headers.Referer,
@@ -539,17 +512,7 @@ class QuarkUC {
                 }
             }
         }
-        var errorStr = '获取播放链接失败'
-        var url = ''
-        if (urls.length > 0) {
-            errorStr = ''
-            url = urls[0].url
-        }
-        const info = new PanPlayInfo()
-        info.url = url
-        info.error = errorStr
-        info.urls = urls
-        return info
+        return urls
     }
     async getDownload(shareId, shareToken, fileId, fileToken, clean) {
         clean || (clean = false)
@@ -558,14 +521,24 @@ class QuarkUC {
                 fids: [this.saveFileIdCaches[fileId]],
             })
             if (down.data != null && down.data.length > 0 && down.data[0].download_url != null) {
-                const info = new PanPlayInfo()
-                info.url = down.data[0].download_url
-                info.error = ''
-                info.playHeaders = { Cookie: this.cookie }
-                return info
+                let priority = 9999
+                if (this.isQuark && down.data[0].video_width > 2000) {
+                    priority = 0
+                }
+                return [
+                    {
+                        name: 'raw',
+                        url: down.data[0].download_url,
+                        headers: {
+                            Cookie: this.cookie,
+                            referer: this.headers.Referer,
+                        },
+                        priority: priority,
+                    },
+                ]
             }
         } catch (error) {}
-        return null
+        return []
     }
 }
 
@@ -794,6 +767,7 @@ class Ali {
     }
 
     async clearSaveDir() {
+        if (this.saveDirId == null) return
         const listData = await this.openApi(`openFile/list`, {
             drive_id: this.userDriveId,
             parent_file_id: this.saveDirId,
@@ -817,7 +791,7 @@ class Ali {
         if (this.saveDirId) {
             // 删除所有子文件
             // if (clean) await this.clearSaveDir()
-            await this.clearSaveDir()
+            // await this.clearSaveDir()
             return
         }
         let driveInfo = await this.openApi(`user/getDriveInfo`, {})
@@ -835,7 +809,7 @@ class Ali {
                 for (const item of listData.items) {
                     if (item.name === this.saveDirName) {
                         this.saveDirId = item.file_id
-                        await this.clearSaveDir()
+                        // await this.clearSaveDir()
                         break
                     }
                 }
@@ -891,17 +865,26 @@ class Ali {
         if (transcoding.video_preview_play_info && transcoding.video_preview_play_info.live_transcoding_task_list) {
             let liveList = transcoding.video_preview_play_info.live_transcoding_task_list
             liveList.sort((a, b) => b.template_width - a.template_width)
-            const p = ['超清', '高清', '标清', '普画', '极速']
-            const arr = ['QHD', 'FHD', 'HD', 'SD', 'LD']
+            const nameMap = {
+                QHD: '超清',
+                FHD: '高清',
+                HD: '标清',
+                SD: '普画',
+                LD: '极速',
+            }
 
             let urls = []
             for (let i = 0; i < liveList.length; i++) {
-                let url = liveList[i].url ?? ''
+                const video = liveList[i]
+                const url = video.url ?? ''
+                const priority = video.template_width
+                const name = nameMap[video.template_id] ?? video.template_id
+
                 if (url.length > 0) {
                     urls.push({
                         url: url,
-                        name: liveList[i].template_width.toString(),
-                        priority: 9 - i,
+                        name: name,
+                        priority: priority,
                         headers: {},
                     })
                 }
@@ -1057,20 +1040,20 @@ class Ali {
             const shareId = data.share_id
             const fileId = data.file_id
             if (!this.saveFileIdCaches[fileId]) {
-                const saveFileId = await this.save(shareId, fileId, true)
+                const saveFileId = await this.save(shareId, fileId, false)
                 if (!saveFileId) return new PanPlayInfo('', '转存失败～')
                 this.saveFileIdCaches[fileId] = saveFileId
             }
-            let rawList = await this.getDownload(shareId, fileId)
-            let transcodingList = await this.getLiveTranscoding(shareId, fileId)
-            playData.urls = [...rawList, ...transcodingList]
+            let rawUrls = await this.getDownload(shareId, fileId)
+            let transcodingUrls = await this.getLiveTranscoding(shareId, fileId)
+            playData.urls = [...rawUrls, ...transcodingUrls]
             playData.urls.sort((a, b) => b.priority - a.priority)
             playData.url = playData.urls[0].url
         } catch (error) {
             playData = new PanPlayInfo()
             playData.error = error.toString()
         }
-        await this.clearSaveDir()
+        this.clearSaveDir()
         return playData
     }
 }
@@ -1167,9 +1150,9 @@ class PanTools {
      */
     async cleanSaveDir() {
         //MARK: 3. 请实现清理转存文件夹
-        await this.quark.createSaveDir()
-        await this.uc.createSaveDir()
-        await this.ali.createSaveDir()
+        await this.quark.clearSaveDir()
+        await this.uc.clearSaveDir()
+        await this.ali.clearSaveDir()
     }
 
     /**
