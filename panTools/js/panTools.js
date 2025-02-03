@@ -97,39 +97,6 @@ class PanListDetail {
 //MARK: - 夸克 UC 相关实现
 // 抄自 https://github.com/jadehh/TVSpider
 
-class QuarkUCVideoItem {
-    constructor() {
-        this.fileId = ''
-        this.shareId = ''
-        this.shareToken = ''
-        this.shareFileToken = ''
-        this.seriesId = ''
-        this.name = ''
-        this.type = ''
-        this.formatType = ''
-        this.size = ''
-        this.parent = ''
-        this.shareData = null
-        this.lastUpdateAt = 0
-        this.subtitle = null
-    }
-    static objectFrom(itemJson, shareId) {
-        const item = new QuarkUCVideoItem()
-        item.fileId = itemJson.fid || ''
-        item.shareId = shareId
-        item.shareToken = itemJson.stoken || ''
-        item.shareFileToken = itemJson.share_fid_token || ''
-        item.seriesId = itemJson.series_id || ''
-        item.name = itemJson.file_name || ''
-        item.type = itemJson.obj_category || ''
-        item.formatType = itemJson.format_type || ''
-        item.size = (itemJson.size || '').toString()
-        item.parent = itemJson.pdir_fid || ''
-        item.lastUpdateAt = itemJson.last_update_at || 0
-        return item
-    }
-}
-
 class QuarkClient {
     static apiUrl = 'https://drive-pc.quark.cn/1/clouddrive/'
     static pr = 'pr=ucpro&fr=pc'
@@ -196,7 +163,6 @@ class QuarkUC {
      **/
     async getFilesByShareUrl(shareUrl) {
         const data = new PanListDetail()
-        // await this.getVip()
         const shareData = this.getShareData(shareUrl)
         if (shareData == null) {
             data.error = ''
@@ -238,25 +204,31 @@ class QuarkUC {
 
     /**
      * 获取播放信息
-     * @param {{flag:string,shareId:string,shareToken:string,fileId:string,shareFileToken:string }} data
+     * @param {{flag:string,shareId:string,shareToken:string,fileId:string,shareFileToken:string }} arg
      * @returns {@Promise<PanPlayInfo>}
      */
-    async getPlayUrl(data) {
+    async getPlayUrl(arg) {
         if (this.cookie.length === 0) {
             const info = new PanPlayInfo()
             info.error = '请在 设置 -> 数据管理 -> 环境变量 中为' + this.panName + 'Cookie 添加值'
             return info
         }
-        // await this.getVip()
+
         let playData = new PanPlayInfo()
         let headers = {
             Cookie: this.cookie,
             Referer: this.headers.Referer,
         }
         try {
-            const { flag, shareId, shareToken, fileId, shareFileToken } = data
+            const { flag, shareId, shareToken, fileId, shareFileToken } = arg
 
-            const saveFileId = await this.save(shareId, shareToken, fileId, shareFileToken, true)
+            const saveFileId = await this.save({
+                shareId,
+                stoken: shareToken,
+                fileId,
+                fileToken: shareFileToken,
+                clean: true,
+            })
 
             if (saveFileId == null) {
                 const info = new PanPlayInfo()
@@ -265,8 +237,10 @@ class QuarkUC {
             }
             this.saveFileIdCaches[fileId] = saveFileId
 
-            let rawUrls = await this.getDownload(shareId, shareToken, fileId, shareFileToken, true)
-            let transcodingUrls = await this.getLiveTranscoding(shareId, shareToken, fileId, shareFileToken, flag)
+            let rawUrls = await this.getDownload({ fileId: fileId })
+            let transcodingUrls = await this.getLiveTranscoding({
+                fileId: fileId,
+            })
             playData.urls = [...rawUrls, ...transcodingUrls]
             playData.urls.sort((a, b) => {
                 return b.priority - a.priority
@@ -312,6 +286,7 @@ class QuarkUC {
         }
         return resp
     }
+
     /**
      * 根据链接获取分享ID和文件夹ID
      * @param {string} url
@@ -374,9 +349,33 @@ class QuarkUC {
             } else if (item.file === true && item.obj_category === 'video') {
                 if (parseInt(item.size.toString()) < 1024 * 1024 * 5) continue
                 item.stoken = this.shareTokenCache[shareData.shareId].stoken
-                videos.push(QuarkUCVideoItem.objectFrom(item, shareData.shareId))
+                videos.push({
+                    fileId: item.fid || '',
+                    shareId: shareData.shareId,
+                    shareToken: item.stoken || '',
+                    shareFileToken: item.share_fid_token || '',
+                    seriesId: item.series_id || '',
+                    name: item.file_name || '',
+                    type: item.obj_category || '',
+                    formatType: item.format_type || '',
+                    size: (item.size || '').toString(),
+                    parent: item.pdir_fid || '',
+                    lastUpdateAt: item.last_update_at || 0,
+                })
             } else if (item.type === 'file' && this.subtitleExts.some((x) => item.file_name.endsWith(x))) {
-                subtitles.push(QuarkUCVideoItem.objectFrom(item, shareData.shareId))
+                subtitles.push({
+                    fileId: item.fid || '',
+                    shareId: shareData.shareId,
+                    shareToken: item.stoken || '',
+                    shareFileToken: item.share_fid_token || '',
+                    seriesId: item.series_id || '',
+                    name: item.file_name || '',
+                    type: item.obj_category || '',
+                    formatType: item.format_type || '',
+                    size: (item.size || '').toString(),
+                    parent: item.pdir_fid || '',
+                    lastUpdateAt: item.last_update_at || 0,
+                })
             }
         }
         if (page < Math.ceil(listData.metadata._total / prePage)) {
@@ -406,7 +405,9 @@ class QuarkUC {
             bestMatchIndex: bestMatchIndex,
         }
     }
-
+    /**
+     * 清空保存目录
+     */
     async clearSaveDir() {
         if (this.saveDirId == null) return
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
@@ -419,9 +420,13 @@ class QuarkUC {
         }
         this.saveFileIdCaches = {}
     }
-    async createSaveDir(clean) {
-        // await this.clearSaveDir()
+
+    /**
+     * 创建保存目录
+     */
+    async createSaveDir() {
         if (this.saveDirId != null) return
+        this.getVip()
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null) {
             for (const item of listData.data.list) {
@@ -444,9 +449,18 @@ class QuarkUC {
             }
         }
     }
-    async save(shareId, stoken, fileId, fileToken, clean) {
-        clean || (clean = false)
-        await this.createSaveDir(clean)
+    /**
+     * 保存分享的文件到个人网盘
+     * @param {Object} args 保存参数
+     * @param {string} args.shareId 分享ID
+     * @param {string} [args.stoken] 分享token，如果未提供会尝试从缓存获取
+     * @param {string} args.fileId 文件ID
+     * @param {string} args.fileToken 文件token
+     * @param {boolean} [args.clean=false] 是否清理已存在的保存目录
+     * @returns {Promise<string|null>} 返回保存成功的文件ID，失败返回null
+     */
+    async save({ shareId, stoken, fileId, fileToken, clean = false }) {
+        await this.createSaveDir()
         if (this.saveDirId == null) return null
         if (stoken == null) {
             await this.getShareToken({ shareId })
@@ -480,9 +494,21 @@ class QuarkUC {
         }
         return null
     }
-    async getLiveTranscoding(shareId, stoken, fileId, fileToken, flag) {
+
+    /**
+     * 获取转码后的播放地址
+     * @param {Object} args - 参数对象
+     * @param {string} args.fileId - 文件ID,用于从缓存中获取已保存的文件ID
+     * @returns {Promise<[{url: string, name: string, headers: Object, priority: number}]>} 返回包含不同清晰度播放地址的数组
+     * 数组元素格式:{url: string, name: string, headers: Object, priority: number}
+     * url: 视频播放地址
+     * name: 显示的名称
+     * headers: 请求头
+     * priority: 优先级
+     */
+    async getLiveTranscoding(args) {
         const transcoding = await this.api(`file/v2/play?${this.pr}`, {
-            fid: this.saveFileIdCaches[fileId],
+            fid: this.saveFileIdCaches[args.fileId],
             resolutions: 'normal,low,high,super,2k,4k',
             supports: 'fmp4',
         })
@@ -514,11 +540,22 @@ class QuarkUC {
         }
         return urls
     }
-    async getDownload(shareId, shareToken, fileId, fileToken, clean) {
-        clean || (clean = false)
+
+    /**
+     * 获取下载地址
+     * @param {Object} args - 参数对象
+     * @param {string} args.fileId - 文件ID,用于从缓存中获取已保存的文件ID
+     * @returns {Promise<[{url: string, name: string, headers: Object, priority: number}]>} 返回包含不同清晰度播放地址的数组
+     * 数组元素格式:{url: string, name: string, headers: Object, priority: number}
+     * url: 下载地址
+     * name: 显示的名称
+     * headers: 请求头
+     * priority: 优先级
+     */
+    async getDownload(args) {
         try {
             const down = await this.api(`file/download?${this.pr}&uc_param_str=`, {
-                fids: [this.saveFileIdCaches[fileId]],
+                fids: [this.saveFileIdCaches[args.fileId]],
             })
             if (down.data != null && down.data.length > 0 && down.data[0].download_url != null) {
                 let priority = 9999
@@ -830,7 +867,15 @@ class Ali {
         }
     }
 
-    async save(shareId, fileId, clean) {
+    /**
+     * 保存分享的文件到个人网盘
+     * @param {Object} params 保存参数
+     * @param {string} params.shareId 分享ID
+     * @param {string} params.fileId 文件ID
+     * @param {boolean} [params.clean=false] 是否清理已存在的保存目录
+     * @returns {Promise<string|null>} 返回保存成功的文件ID，失败返回null
+     */
+    async save({ shareId, fileId, clean = false }) {
         await this.login()
         await this.openAuth()
         await this.createSaveDir(clean)
@@ -1040,7 +1085,11 @@ class Ali {
             const shareId = data.share_id
             const fileId = data.file_id
             if (!this.saveFileIdCaches[fileId]) {
-                const saveFileId = await this.save(shareId, fileId, false)
+                const saveFileId = await this.save({
+                    shareId,
+                    fileId,
+                    clean: false,
+                })
                 if (!saveFileId) return new PanPlayInfo('', '转存失败～')
                 this.saveFileIdCaches[fileId] = saveFileId
             }
