@@ -1,0 +1,99 @@
+{
+    "recommend": [
+        {
+            "name": "热门电影推荐",
+            "codeID": "uz123456",
+            "url": "https://example.com/recommend/movies",
+            "remark": "每日更新热门电影",
+            "env": "API_KEY##请输入API密钥&&LANG##选择语言",
+            "version": 1,
+            "type": 200
+        }
+    ],
+    "panTools": [
+        {
+            "name": "网盘搜索工具",
+            "codeID": "uz654321",
+            "url": "https://example.com/pan/search",
+            "remark": "支持多种网盘资源搜索",
+            "env": "MAX_RESULTS##设置最大搜索结果数&&FILTER##过滤条件",
+            "version": 1,
+            "type": 300
+        }
+    ],
+    "danMu": [
+        {
+            "name": "弹幕库",
+            "codeID": "uz987654",
+            "url": "https://example.com/danmu/library",
+            "remark": "海量弹幕资源",
+            "env": "FONT_SIZE##设置弹幕字体大小&&COLOR##选择弹幕颜色",
+            "version": 1,
+            "type": 400
+        }
+    ],
+    "live": [
+        {
+            "name": "热门直播",
+            "url": "https://example.com/live/sources.m3u",
+            "remark": "高清直播源",
+            "type": 10
+        }
+    ],
+    "vod": [
+        {
+            "name": "木偶影视",
+            "codeID": "uz111111",
+            "url": "http://mogg.top",
+            "remark": "木偶影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        },
+        {
+            "name": "多多影视",
+            "codeID": "uz222222",
+            "url": "https://tv.yydsys.top",
+            "remark": "多多影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        },
+        {
+            "name": "蜡笔影视",
+            "codeID": "uz333333",
+            "url": "http://labipan.com",
+            "remark": "蜡笔影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        },
+        {
+            "name": "至臻影视",
+            "codeID": "uz444444",
+            "url": "https://mihdr.top",
+            "remark": "至臻影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        },
+        {
+            "name": "欧歌影视",
+            "codeID": "uz555555",
+            "url": "https://woog.nxog.eu.org",
+            "remark": "欧歌影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        },
+        {
+            "name": "立播影视",
+            "codeID": "uz666666",
+            "url": "https://libvio.link",
+            "remark": "立播影视站点",
+            "env": "",
+            "version": 1,
+            "type": 101
+        }
+    ]
+}
