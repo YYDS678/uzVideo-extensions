@@ -58,7 +58,7 @@
         {
             "name": "玩偶哥哥",
             "api": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/wogg.js",
-            "webSite": "https://www.wogg.net",
+            "webSite": "https://www.wogg.lol",
             "remark": "网盘 1.6.41 及以上版本可用",
             "version": "3",
             "type": 101
@@ -275,7 +275,7 @@
         {
             "name": "🪵木偶哥哥",
             "api": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/mogg.js",
-            "webSite": "http://www.muoupan.top",
+            "webSite": "http://www.mogg.top",
             "remark": "网盘 1.6.41 及以上版本可用",
             "version": "2",
             "type": 101
@@ -283,7 +283,7 @@
         {
             "name": "🌾小米网盘",
             "api": "https://gh-proxy.com/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/xiaomi.js",
-            "webSite": "http://www.mucpan.cc",
+            "webSite": "http://milvdou.fun/",
             "remark": "网盘 1.6.41 及以上版本可用",
             "version": "3",
             "type": 101
