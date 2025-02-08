@@ -321,6 +321,22 @@
             "type": 101
         },
         {
+            "name": "⚡闪电优汐",
+            "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/shandian.js",
+            "webSite": "http://1.95.79.193/",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "1",
+            "type": 101
+        },
+        {
+            "name": "🐯小小虎斑",
+            "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/huban.js",
+            "webSite": "http://103.45.162.207:20720",
+            "remark": "网盘 1.6.41 及以上版本可用",
+            "version": "1",
+            "type": 101
+        },
+        {
             "name": "🤙🏻六趣网盘",
             "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/liuqu.js",
             "webSite": "https://wp.0v.fit",
