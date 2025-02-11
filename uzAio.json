@@ -13,7 +13,7 @@
             "name": "UC|夸克|阿里 网盘解析工具",
             "url": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/panTools/js/panTools.js",
             "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
-            "version": "9",
+            "version": 10,
             "type": 300
         }
     ],
@@ -21,10 +21,10 @@
         {
             "name": "综合弹幕",
             "url": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/js/danMu2.txt",
-            "codeID": "GrLpTPWlxvDXv5LsL6iOsY8AUZJWqE5x",
+            "codeID": "uLw1JV3TG3FcJbLXOymm6Xp8d4JC3NjR",
             "remark": "别那么执着，搜不到就算了",
             "type": 400,
-            "version": 7
+            "version": 8
         },
         {
             "name": "dandanPlay 弹幕",

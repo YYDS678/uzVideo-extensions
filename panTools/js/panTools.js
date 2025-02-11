@@ -114,7 +114,7 @@ class UCClient {
     static httpHeaders = {
         'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
-        referer: 'https://drive.uc.cn',
+        Referer: 'https://drive.uc.cn',
         'Content-Type': 'application/json',
     }
 }
@@ -156,6 +156,12 @@ class QuarkUC {
         headers['Cookie'] = this.cookie
         return headers
     }
+    get playHeaders() {
+        return {
+            cookie: this.cookie,
+            Referer: this.isQuark ? 'https://pan.quark.cn/' : 'https://drive.uc.cn/',
+        }
+    }
     /**
      * 获取文件列表
      * @param {string} shareUrl
@@ -192,10 +198,23 @@ class QuarkUC {
             const item = videos[index]
             // 复制 item
             const element = JSON.parse(JSON.stringify(item))
+            let size = element.size / 1024 / 1024 / 1024
+            let unit = 'GB'
+            if (size < 1) {
+                size = size * 1024
+                unit = 'MB'
+            }
+            size = size.toFixed(1)
+            const remark = `[${size}${unit}]`
             const videoItem = new PanVideoItem()
             videoItem.data = element
             videoItem.panType = this.panName
             videoItem.name = element.name
+            if (kAppVersion > 1650) {
+                videoItem.remark = remark
+            } else {
+                videoItem.name = `${element.name} [${size}G]`
+            }
             data.videos.push(videoItem)
         }
 
@@ -215,10 +234,7 @@ class QuarkUC {
         }
 
         let playData = new PanPlayInfo()
-        let headers = {
-            Cookie: this.cookie,
-            Referer: this.headers.Referer,
-        }
+
         try {
             const { flag, shareId, shareToken, fileId, shareFileToken } = arg
 
@@ -249,7 +265,7 @@ class QuarkUC {
         } catch (error) {
             playData.error = error.toString()
         }
-        playData.playHeaders = headers
+        playData.playHeaders = this.playHeaders
         this.clearSaveDir()
         return playData
     }
@@ -426,7 +442,7 @@ class QuarkUC {
      */
     async createSaveDir() {
         if (this.saveDirId != null) return
-        this.getVip()
+        await this.getVip()
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null) {
             for (const item of listData.data.list) {
@@ -529,10 +545,7 @@ class QuarkUC {
                     urls.push({
                         url: url,
                         name: nameMap[resoultion] ?? resoultion,
-                        headers: {
-                            Cookie: this.cookie,
-                            referer: this.headers.Referer,
-                        },
+                        headers: this.playHeaders,
                         priority: priority,
                     })
                 }
@@ -566,10 +579,7 @@ class QuarkUC {
                     {
                         name: '原画',
                         url: down.data[0].download_url,
-                        headers: {
-                            Cookie: this.cookie,
-                            referer: this.headers.Referer,
-                        },
+                        headers: this.playHeaders,
                         priority: priority,
                     },
                 ]
@@ -1053,11 +1063,24 @@ class Ali {
         videos.forEach((item) => {
             // 复制 item
             const element = JSON.parse(JSON.stringify(item))
+            let size = element.size / 1024 / 1024 / 1024
+            let unit = 'GB'
+            if (size < 1) {
+                size = size * 1024
+                unit = 'MB'
+            }
+            size = size.toFixed(1)
+            const remark = `[${size}${unit}]`
+
             const videoItem = new PanVideoItem()
             videoItem.data = element
             videoItem.panType = this.panName
             videoItem.name = element.name
-            videoItem.fromName = '原画'
+            if (kAppVersion > 1650) {
+                videoItem.remark = remark
+            } else {
+                videoItem.name = `${element.name} [${size}G]`
+            }
             data.videos.push(videoItem)
         })
 
