@@ -213,7 +213,7 @@ class QuarkUC {
             if (kAppVersion > 1650) {
                 videoItem.remark = remark
             } else {
-                videoItem.name = `${element.name} [${size}G]`
+                videoItem.name = `${element.name} ${remark}`
             }
             data.videos.push(videoItem)
         }
@@ -1079,7 +1079,7 @@ class Ali {
             if (kAppVersion > 1650) {
                 videoItem.remark = remark
             } else {
-                videoItem.name = `${element.name} [${size}G]`
+                videoItem.name = `${element.name} ${remark}`
             }
             data.videos.push(videoItem)
         })
