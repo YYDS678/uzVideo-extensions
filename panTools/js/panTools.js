@@ -62,6 +62,11 @@ class PanVideoItem {
         this.name = ''
 
         /**
+         * 备注信息，如 文件大小
+         */ 
+        this.remark = ''
+
+        /**
          * 分组名称 例如 原画 、 普画  非必须
          */
         this.fromName = ''

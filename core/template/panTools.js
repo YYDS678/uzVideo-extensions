@@ -69,6 +69,11 @@ class PanVideoItem {
         this.fromName = ''
 
         /**
+         * 备注信息，如 文件大小
+         */
+        this.remark = ''
+
+        /**
          * 网盘类型 用于获取播放信息时
          * @type {PanType}
          **/
@@ -134,12 +139,7 @@ const PanDataType = {
  * 网盘挂载列表
  */
 class PanMountListData {
-    constructor(
-        name = '',
-        panType = PanType.UC,
-        dataType = PanDataType.Dir,
-        data = {}
-    ) {
+    constructor(name = '', panType = PanType.UC, dataType = PanDataType.Dir, data = {}) {
         /**
          * 列表展示名称
          */
@@ -331,10 +331,7 @@ class PanTools {
         } else if (item.panType === PanType.Ali) {
             /// 如果需要 data 请在这里获取
             this.ali.token32 = await this.getAliDataEnv(PanType.Ali, 'Token32')
-            this.ali.token280 = await this.getAliDataEnv(
-                PanType.Ali,
-                'Token280'
-            )
+            this.ali.token280 = await this.getAliDataEnv(PanType.Ali, 'Token280')
             /// 更新 token
             const that = this
             this.ali.updateToken32 = function () {
@@ -364,11 +361,7 @@ class PanTools {
      * @returns {@Promise<[PanMount]>}
      */
     async getSupportMountPan() {
-        return JSON.stringify([
-            new PanMount('阿里盘', PanType.Ali),
-            new PanMount('UC', PanType.UC),
-            new PanMount('Quark', PanType.Quark),
-        ])
+        return JSON.stringify([new PanMount('阿里盘', PanType.Ali), new PanMount('UC', PanType.UC), new PanMount('Quark', PanType.Quark)])
     }
 
     /**
