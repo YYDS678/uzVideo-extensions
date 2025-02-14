@@ -1642,10 +1642,10 @@ class PanTools {
                 })
             } else if (args.panType == PanType.UC) {
                 if (args.dataType == PanDataType.Video) {
-                    const urls = await this.quark.getVideoPlayUrl({ fileId: args.data.fid, isMount: true })
+                    const urls = await this.uc.getVideoPlayUrl({ fileId: args.data.fid, isMount: true })
                     playData.urls = urls
                 } else if (args.dataType == PanDataType.Unknown) {
-                    const urls = await this.quark.getDownload({ fileId: args.data.fid, isMount: true })
+                    const urls = await this.uc.getDownload({ fileId: args.data.fid, isMount: true })
                     playData.urls = urls
                 }
                 playData.playHeaders = this.uc.playHeaders
