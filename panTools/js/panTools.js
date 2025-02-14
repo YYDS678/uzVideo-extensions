@@ -63,7 +63,7 @@ class PanVideoItem {
 
         /**
          * 备注信息，如 文件大小
-         */ 
+         */
         this.remark = ''
 
         /**
@@ -96,6 +96,83 @@ class PanListDetail {
          */
         this.videos = []
         this.error = ''
+    }
+}
+
+/**
+ * 网盘挂载 类型
+ */
+class PanMount {
+    constructor(name = '', panType = PanType.UC, isLogin = false) {
+        /**
+         * 网盘展示名称
+         */
+        this.name = name
+
+        /**
+         * 网盘类型
+         * @type {PanType}
+         */
+        this.panType = panType
+
+        /**
+         * 是否已登录
+         * @type {boolean}
+         */
+        this.isLogin = isLogin
+    }
+}
+
+/**
+ * 网盘数据类型，目前只支持视频和目录
+ * @type {{Video: string, Dir: string}}
+ **/
+const PanDataType = {
+    /**
+     * 未知，其他
+     */
+    Unknown: 0,
+
+    /**
+     * 视频
+     */
+    Video: 10,
+
+    /**
+     * 目录
+     */
+    Dir: 20,
+}
+
+/**
+ * 网盘挂载列表
+ */
+class PanMountListData {
+    constructor(name = '', panType = PanType.UC, dataType = PanDataType.Dir, data = {}, remark = '') {
+        /**
+         * 列表展示名称
+         */
+        this.name = name
+        /**
+         * 网盘类型
+         * @type {PanDataType}
+         */
+        this.panType = panType
+
+        /**
+         * 备注信息，如 文件大小
+         */
+        this.remark = ''
+        /**
+         * 数据类型
+         * @type {PanDataType}
+         */
+        this.dataType = dataType
+        /**
+         * 关键数据
+         * @type {Object}
+         */
+        this.data = data
     }
 }
 
@@ -258,11 +335,8 @@ class QuarkUC {
             }
             this.saveFileIdCaches[fileId] = saveFileId
 
-            let rawUrls = await this.getDownload({ fileId: fileId })
-            let transcodingUrls = await this.getLiveTranscoding({
-                fileId: fileId,
-            })
-            playData.urls = [...rawUrls, ...transcodingUrls]
+            let urls = await this.getVideoPlayUrl({ fileId: fileId })
+            playData.urls = urls
             playData.urls.sort((a, b) => {
                 return b.priority - a.priority
             })
@@ -274,6 +348,16 @@ class QuarkUC {
         this.clearSaveDir()
         return playData
     }
+
+    async getVideoPlayUrl({ fileId, isMount = false }) {
+        let rawUrls = await this.getDownload({ fileId: fileId, isMount: isMount })
+        let transcodingUrls = await this.getLiveTranscoding({
+            fileId: fileId,
+            isMount: isMount,
+        })
+        return [...rawUrls, ...transcodingUrls]
+    }
+
     async api(url, data, retry, method) {
         retry || (retry = 3)
         let leftRetry = retry
@@ -517,9 +601,66 @@ class QuarkUC {
     }
 
     /**
+     *  获取指定目录下的文件列表
+     * @param {Object} param0
+     * @param {string} param0.pdir_fid - 目录ID
+     * @param {number} param0.page - 页码
+     * @returns {Promise<[PanMountListData]>}
+     */
+    async getFileList({ pdir_fid, page }) {
+        try {
+            pdir_fid = pdir_fid || '0'
+            page = page || 1
+            const resData = await this.api(
+                `file/sort?${this.pr}&uc_param_str=&pdir_fid=${pdir_fid}&_page=${page}&_size=50&_fetch_total=1&_fetch_sub_dirs=0&_sort=file_type:asc,file_name:asc`,
+                null,
+                3,
+                'get'
+            )
+
+            let list = resData.data?.list ?? []
+            let mountList = []
+            for (let index = 0; index < list.length; index++) {
+                const element = list[index]
+
+                let remark = ''
+                let size = element.size / 1024 / 1024 / 1024
+                let unit = 'GB'
+                if (size != 0) {
+                    if (size < 1) {
+                        size = size * 1024
+                        unit = 'MB'
+                    }
+                    size = size.toFixed(1)
+                    remark = `[${size}${unit}]`
+                }
+
+                let dataType = PanDataType.Unknown
+                if (element.category == 1) {
+                    dataType = PanDataType.Video
+                } else if (element.file_type == 0) {
+                    dataType = PanDataType.Dir
+                }
+                mountList.push({
+                    name: element.file_name,
+                    panType: this.panName,
+                    dataType: dataType,
+                    data: {
+                        fid: element.fid,
+                    },
+                    remark: remark,
+                })
+            }
+            return mountList
+        } catch (e) {}
+        return []
+    }
+
+    /**
      * 获取转码后的播放地址
      * @param {Object} args - 参数对象
      * @param {string} args.fileId - 文件ID,用于从缓存中获取已保存的文件ID
+     * @param {boolean} args.isMount - 是否挂载
      * @returns {Promise<[{url: string, name: string, headers: Object, priority: number}]>} 返回包含不同清晰度播放地址的数组
      * 数组元素格式:{url: string, name: string, headers: Object, priority: number}
      * url: 视频播放地址
@@ -528,8 +669,9 @@ class QuarkUC {
      * priority: 优先级
      */
     async getLiveTranscoding(args) {
+        let isMount = args.isMount ?? false
         const transcoding = await this.api(`file/v2/play?${this.pr}`, {
-            fid: this.saveFileIdCaches[args.fileId],
+            fid: isMount ? args.fileId : this.saveFileIdCaches[args.fileId],
             resolutions: 'normal,low,high,super,2k,4k',
             supports: 'fmp4',
         })
@@ -563,6 +705,7 @@ class QuarkUC {
      * 获取下载地址
      * @param {Object} args - 参数对象
      * @param {string} args.fileId - 文件ID,用于从缓存中获取已保存的文件ID
+     * @param {bool} args.isMount - 是否是挂载
      * @returns {Promise<[{url: string, name: string, headers: Object, priority: number}]>} 返回包含不同清晰度播放地址的数组
      * 数组元素格式:{url: string, name: string, headers: Object, priority: number}
      * url: 下载地址
@@ -571,9 +714,10 @@ class QuarkUC {
      * priority: 优先级
      */
     async getDownload(args) {
+        let isMount = args.isMount ?? false
         try {
             const down = await this.api(`file/download?${this.pr}&uc_param_str=`, {
-                fids: [this.saveFileIdCaches[args.fileId]],
+                fids: isMount ? [args.fileId] : [this.saveFileIdCaches[args.fileId]],
             })
             if (down.data != null && down.data.length > 0 && down.data[0].download_url != null) {
                 let priority = 9999
@@ -691,6 +835,16 @@ class Ali {
             await this.delay(1000)
         }
         return resp
+    }
+
+    // 一键就绪
+    async oneKeyReady() {
+        await this.login()
+        await this.openAuth()
+        if (this.userDriveId == null) {
+            const driveInfo = await this.openApi(`user/getDriveInfo`, {})
+            this.userDriveId = driveInfo.resource_drive_id
+        }
     }
 
     //用户登陆
@@ -846,10 +1000,8 @@ class Ali {
             // await this.clearSaveDir()
             return
         }
-        let driveInfo = await this.openApi(`user/getDriveInfo`, {})
 
-        if (driveInfo.resource_drive_id) {
-            this.userDriveId = driveInfo.resource_drive_id
+        if (this.userDriveId) {
             const listData = await this.openApi(`openFile/list`, {
                 drive_id: this.userDriveId,
                 parent_file_id: 'root',
@@ -891,8 +1043,7 @@ class Ali {
      * @returns {Promise<string|null>} 返回保存成功的文件ID，失败返回null
      */
     async save({ shareId, fileId, clean = false }) {
-        await this.login()
-        await this.openAuth()
+        await this.oneKeyReady()
         await this.createSaveDir(clean)
 
         if (this.saveDirId == null) return null
@@ -915,9 +1066,9 @@ class Ali {
         return false
     }
 
-    async getLiveTranscoding(shareId, fileId) {
+    async getLiveTranscoding({ fileId, isMount = false }) {
         const transcoding = await this.openApi(`openFile/getVideoPreviewPlayInfo`, {
-            file_id: this.saveFileIdCaches[fileId],
+            file_id: isMount ? fileId : this.saveFileIdCaches[fileId],
             drive_id: this.userDriveId,
             category: 'live_transcoding',
             url_expire_sec: '14400',
@@ -954,9 +1105,9 @@ class Ali {
         return []
     }
 
-    async getDownload(shareId, fileId) {
+    async getDownload({ fileId, isMount = false }) {
         const down = await this.openApi(`openFile/getDownloadUrl`, {
-            file_id: this.saveFileIdCaches[fileId],
+            file_id: isMount ? fileId : this.saveFileIdCaches[fileId],
             drive_id: this.userDriveId,
         })
 
@@ -1103,7 +1254,7 @@ class Ali {
 
     /**
      * 获取播放信息
-     * @param {{flag:string,shareId:string,shareToken:string,fileId:string,shareFileToken:string }} data
+     * @param {{flag:string,share_id:string,shareToken:string,file_id:string,shareFileToken:string }} data
      * @returns {@Promise<PanPlayInfo>}
      */
     async getPlayUrl(data) {
@@ -1121,8 +1272,8 @@ class Ali {
                 if (!saveFileId) return new PanPlayInfo('', '转存失败～')
                 this.saveFileIdCaches[fileId] = saveFileId
             }
-            let rawUrls = await this.getDownload(shareId, fileId)
-            let transcodingUrls = await this.getLiveTranscoding(shareId, fileId)
+            let rawUrls = await this.getDownload({ fileId: fileId })
+            let transcodingUrls = await this.getLiveTranscoding({ fileId: fileId })
             playData.urls = [...rawUrls, ...transcodingUrls]
             playData.urls.sort((a, b) => b.priority - a.priority)
             playData.url = playData.urls[0].url
@@ -1132,6 +1283,59 @@ class Ali {
         }
         this.clearSaveDir()
         return playData
+    }
+
+    /**
+     * 获取文件列表
+     * @param {PanMountListData?} args
+     * @param {boolean} isRoot
+     */
+    async getFileList({ args, isRoot }) {
+        const listData = await this.openApi(`openFile/list`, {
+            drive_id: this.userDriveId,
+            parent_file_id: isRoot ? 'root' : args?.data.file_id,
+            limit: 100,
+            order_by: 'updated_at',
+            order_direction: 'DESC',
+            marker: args?.data?.next_marker ?? '',
+        })
+
+        let list = []
+        let items = listData.items
+        for (let index = 0; index < items.length; index++) {
+            const element = items[index]
+
+            let size = (element?.size ?? 0) / 1024 / 1024 / 1024
+            let remark = ''
+            if (size > 0) {
+                let unit = 'GB'
+                if (size < 1) {
+                    size = size * 1024
+                    unit = 'MB'
+                }
+                size = size.toFixed(1)
+                remark = `[${size}${unit}]`
+            }
+
+            let dataType = PanDataType.Dir
+            if (element.category == 'video') {
+                dataType = PanDataType.Video
+            } else if (element.category) {
+                dataType = PanDataType.Unknown
+            }
+
+            list.push({
+                name: element.name,
+                panType: PanType.Ali,
+                dataType: dataType,
+                data: {
+                    file_id: element.file_id,
+                    next_marker: listData.next_marker ?? '',
+                },
+                remark: remark,
+            })
+        }
+        return list
     }
 }
 
@@ -1158,7 +1362,8 @@ class PanTools {
      */
     set uzTag(value) {
         this._uzTag = value
-
+        this.registerRefreshAllCookie()
+        this.getAllCookie()
         this.setSaveDirName()
     }
 
@@ -1204,6 +1409,42 @@ class PanTools {
      */
     async updateAliDataEnv(panType, token) {
         await setEnv(this.uzTag, panType + 'Token', token)
+    }
+
+    async registerRefreshAllCookie() {
+        //MARK: 1.1 请实现 refreshCookie
+        const that = this
+        /// 更新 Quark cookie
+        this.quark.updateCookie = function () {
+            that.updateQuarkUCCookie(PanType.Quark, this.cookie)
+        }
+        /// 更新 UC cookie
+        this.uc.updateCookie = function () {
+            that.updateQuarkUCCookie(PanType.UC, this.cookie)
+        }
+        /// 更新 Ali token
+        this.ali.updateToken = function () {
+            that.updateAliDataEnv(PanType.Ali, this.ali.token)
+        }
+    }
+
+    async getAllCookie() {
+        //MARK: 1.2 请给 cookie 赋值
+
+        // if (this.quark.cookie == '') {
+        const quarkCookie = (await this.getQuarkUCCookie(PanType.Quark)) ?? ''
+        this.quark.cookie = quarkCookie
+        // }
+
+        // if (this.uc.cookie == '') {
+        const ucCookie = (await this.getQuarkUCCookie(PanType.UC)) ?? ''
+        this.uc.cookie = ucCookie
+        // }
+
+        // if (this.ali.token == '') {
+        const aliCookie = (await this.getAliDataEnv(PanType.Ali)) ?? ''
+        this.ali.token = aliCookie
+        // }
     }
 
     /**
@@ -1266,11 +1507,6 @@ class PanTools {
         if (item.panType === PanType.Quark) {
             /// 如果需要 cookie 请在这里获取
             this.quark.cookie = await this.getQuarkUCCookie(PanType.Quark)
-            /// 更新 Quark cookie
-            const that = this
-            this.quark.updateCookie = function () {
-                that.updateQuarkUCCookie(PanType.Quark, this.cookie)
-            }
             if (this.quark.cookie === '') {
                 const data = new PanPlayInfo()
                 data.error = '获取 ' + PanType.Quark + ' cookie 失败~'
@@ -1281,11 +1517,6 @@ class PanTools {
         } else if (item.panType === PanType.UC) {
             /// 如果需要 cookie 请在这里获取
             this.uc.cookie = await this.getQuarkUCCookie(PanType.UC)
-            /// 更新 UC cookie
-            const that = this
-            this.uc.updateCookie = function () {
-                that.updateQuarkUCCookie(PanType.UC, this.cookie)
-            }
             if (this.uc.cookie === '') {
                 const data = new PanPlayInfo()
                 data.error = '获取 ' + PanType.UC + ' cookie 失败~'
@@ -1296,11 +1527,6 @@ class PanTools {
         } else if (item.panType === PanType.Ali) {
             /// 如果需要 data 请在这里获取
             this.ali.token = await this.getAliDataEnv(PanType.Ali)
-            /// 更新 token
-            const that = this
-            this.ali.updateToken = function () {
-                that.updateAliDataEnv(PanType.Ali, this.ali.token)
-            }
 
             if (this.ali.token === '') {
                 const data = new PanPlayInfo()
@@ -1314,6 +1540,140 @@ class PanTools {
         const data = new PanPlayInfo()
         data.error = '暂不支持 ' + item.panType + ' 网盘~'
         return JSON.stringify(data)
+    }
+
+    //MARK: - 伪挂载相关 以下暂未实现
+
+    /**
+     * 返回支持挂载的网盘
+     * @returns {@Promise<[PanMount]>}
+     */
+    async getSupportMountPan() {
+        await this.getAllCookie()
+        await this.ali.oneKeyReady()
+        let x = formatBackData([
+            new PanMount('UC', PanType.UC, this.uc.cookie !== ''),
+            new PanMount('Quark', PanType.Quark, this.quark.cookie !== ''),
+            new PanMount('阿里盘', PanType.Ali, this.ali.token !== ''),
+        ])
+
+        return x
+    }
+
+    /**
+     * 获取网盘根目录
+     * @param {PanType} panType
+     * @returns {@Promise<{data:[PanMountListData],error:string}>}
+     */
+    async getRootDir(panType) {
+        let list = []
+        try {
+            if (panType == PanType.Quark) {
+                list = await this.quark.getFileList({
+                    pdir_fid: '0',
+                    page: 1,
+                })
+            } else if (panType == PanType.UC) {
+                list = await this.uc.getFileList({
+                    pdir_fid: '0',
+                    page: 1,
+                })
+            } else if (panType == PanType.Ali) {
+                list = await this.ali.getFileList({
+                    args: null,
+                    isRoot: true,
+                })
+            }
+        } catch (error) {}
+        return formatBackData({ data: list, error: '' })
+    }
+
+    /**
+     * 获取网盘挂载子目录
+     * @param {object} args
+     * @param {PanMountListData} args.data
+     * @param {number} args.page
+     * @returns {@Promise<{data:[PanMountListData],error:string}>}
+     */
+    async getMountDir(args) {
+        let list = []
+        try {
+            if (args.data.panType == PanType.Quark) {
+                list = await this.quark.getFileList({
+                    pdir_fid: args.data.data.fid,
+                    page: args.page,
+                })
+            } else if (args.data.panType == PanType.UC) {
+                list = await this.uc.getFileList({
+                    pdir_fid: args.data.data.fid,
+                    page: args.page,
+                })
+            } else if (args.data.panType == PanType.Ali) {
+                list = await this.ali.getFileList({
+                    args: args.data,
+                    isRoot: false,
+                })
+            }
+        } catch (error) {}
+
+        return formatBackData({ data: list, error: '' })
+    }
+
+    /**
+     * 获取网盘挂载文件真实地址
+     * @param {PanMountListData} args
+     * @returns {@Promise<PanPlayInfo>}
+     */
+    async getMountFile(args) {
+        let playData = new PanPlayInfo()
+
+        try {
+            if (args.panType == PanType.Quark) {
+                if (args.dataType == PanDataType.Video) {
+                    const urls = await this.quark.getVideoPlayUrl({ fileId: args.data.fid, isMount: true })
+                    playData.urls = urls
+                } else if (args.dataType == PanDataType.Unknown) {
+                    const urls = await this.quark.getDownload({ fileId: args.data.fid, isMount: true })
+                    playData.urls = urls
+                }
+                playData.playHeaders = this.quark.playHeaders
+                playData.urls.sort((a, b) => {
+                    return b.priority - a.priority
+                })
+            } else if (args.panType == PanType.UC) {
+                if (args.dataType == PanDataType.Video) {
+                    const urls = await this.quark.getVideoPlayUrl({ fileId: args.data.fid, isMount: true })
+                    playData.urls = urls
+                } else if (args.dataType == PanDataType.Unknown) {
+                    const urls = await this.quark.getDownload({ fileId: args.data.fid, isMount: true })
+                    playData.urls = urls
+                }
+                playData.playHeaders = this.uc.playHeaders
+                playData.urls.sort((a, b) => {
+                    return b.priority - a.priority
+                })
+            } else if (args.panType == PanType.Ali) {
+                if (args.dataType == PanDataType.Video) {
+                    const rawUrls = await this.ali.getDownload({ fileId: args.data.file_id, isMount: true })
+                    const liveUrls = await this.ali.getLiveTranscoding({ fileId: args.data.file_id, isMount: true })
+                    playData.urls = [...rawUrls, ...liveUrls]
+                } else if (args.dataType == PanDataType.Unknown) {
+                    const urls = await this.ali.getDownload({ fileId: args.data.file_id, isMount: true })
+                    playData.urls = urls
+                }
+                playData.playHeaders = this.ali.playHeaders
+                playData.urls.sort((a, b) => {
+                    return b.priority - a.priority
+                })
+            }
+        } catch (error) {
+            playData.error = error.toString()
+        }
+        if (playData.urls.length > 0) {
+            playData.url = playData.urls[0].url
+        }
+
+        return formatBackData(playData)
     }
 }
 
