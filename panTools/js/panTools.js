@@ -280,11 +280,11 @@ class QuarkUC {
             const item = videos[index]
             // 复制 item
             const element = JSON.parse(JSON.stringify(item))
-            let size = element.size / 1024 / 1024 / 1024
-            let unit = 'GB'
-            if (size < 1) {
-                size = size * 1024
-                unit = 'MB'
+            let size = (element.size ?? 0) / 1024 / 1024
+            let unit = 'MB'
+            if (size >= 1000) {
+                size = size / 1024
+                unit = 'GB'
             }
             size = size.toFixed(1)
             const remark = `[${size}${unit}]`
@@ -355,6 +355,9 @@ class QuarkUC {
             fileId: fileId,
             isMount: isMount,
         })
+        if (transcodingUrls.length < 2 && rawUrls.length > 0) {
+            rawUrls[0].priority = 9999
+        }
         return [...rawUrls, ...transcodingUrls]
     }
 
@@ -515,7 +518,7 @@ class QuarkUC {
      */
     async clearSaveDir() {
         if (this.saveDirId == null) return
-        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
+        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,name:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null && listData.data.list.length > 0) {
             await this.api(`file/delete?${this.pr}`, {
                 action_type: 2,
@@ -532,7 +535,7 @@ class QuarkUC {
     async createSaveDir() {
         if (this.saveDirId != null) return
         await this.getVip()
-        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, null, 3, 'get')
+        const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,name:desc`, null, 3, 'get')
         if (listData.data != null && listData.data.list != null) {
             for (const item of listData.data.list) {
                 if (item.file_name === this.saveDirName) {
@@ -612,7 +615,7 @@ class QuarkUC {
             pdir_fid = pdir_fid || '0'
             page = page || 1
             const resData = await this.api(
-                `file/sort?${this.pr}&uc_param_str=&pdir_fid=${pdir_fid}&_page=${page}&_size=50&_fetch_total=1&_fetch_sub_dirs=0&_sort=file_type:asc,file_name:asc`,
+                `file/sort?${this.pr}&uc_param_str=&pdir_fid=${pdir_fid}&_page=${page}&_size=200&_fetch_total=1&_fetch_sub_dirs=0&_sort=file_type:asc,file_name:asc`,
                 null,
                 3,
                 'get'
@@ -624,12 +627,12 @@ class QuarkUC {
                 const element = list[index]
 
                 let remark = ''
-                let size = element.size / 1024 / 1024 / 1024
-                let unit = 'GB'
+                let size = (element.size ?? 0) / 1024 / 1024
+                let unit = 'MB'
                 if (size != 0) {
-                    if (size < 1) {
-                        size = size * 1024
-                        unit = 'MB'
+                    if (size >= 1000) {
+                        size = size / 1024
+                        unit = 'GB'
                     }
                     size = size.toFixed(1)
                     remark = `[${size}${unit}]`
@@ -865,6 +868,7 @@ class Ali {
                     this.user.expire_time = new Date().toISOString()
                     this.user.auth = `${loginResp.data.token_type} ${loginResp.data.access_token}`
                     this.user.token = loginResp.data.refresh_token
+
                     this.updateToken()
                 }
             } catch (e) {}
@@ -978,7 +982,7 @@ class Ali {
             drive_id: this.userDriveId,
             parent_file_id: this.saveDirId,
             limit: 100,
-            order_by: 'updated_at',
+            order_by: 'name',
             order_direction: 'DESC',
         })
         if (listData.items) {
@@ -1006,7 +1010,7 @@ class Ali {
                 drive_id: this.userDriveId,
                 parent_file_id: 'root',
                 limit: 100,
-                order_by: 'updated_at',
+                order_by: 'name',
                 order_direction: 'DESC',
             })
             if (listData.items) {
@@ -1116,7 +1120,7 @@ class Ali {
                 {
                     url: down.url,
                     name: '原画',
-                    priority: 0,
+                    priority: 9999,
                     headers: {},
                 },
             ]
@@ -1219,11 +1223,11 @@ class Ali {
         videos.forEach((item) => {
             // 复制 item
             const element = JSON.parse(JSON.stringify(item))
-            let size = element.size / 1024 / 1024 / 1024
-            let unit = 'GB'
-            if (size < 1) {
-                size = size * 1024
-                unit = 'MB'
+            let size = element.size / 1024 / 1024
+            let unit = 'MB'
+            if (size >= 1000) {
+                size = size / 1024
+                unit = 'GB'
             }
             size = size.toFixed(1)
             const remark = `[${size}${unit}]`
@@ -1285,6 +1289,8 @@ class Ali {
         return playData
     }
 
+    next_marker = ''
+
     /**
      * 获取文件列表
      * @param {PanMountListData?} args
@@ -1294,24 +1300,25 @@ class Ali {
         const listData = await this.openApi(`openFile/list`, {
             drive_id: this.userDriveId,
             parent_file_id: isRoot ? 'root' : args?.data.file_id,
-            limit: 100,
-            order_by: 'updated_at',
+            limit: 200,
+            order_by: 'name',
             order_direction: 'DESC',
-            marker: args?.data?.next_marker ?? '',
+            marker: this.next_marker ?? '',
         })
 
         let list = []
         let items = listData.items
+        this.next_marker = listData.next_marker
         for (let index = 0; index < items.length; index++) {
             const element = items[index]
 
-            let size = (element?.size ?? 0) / 1024 / 1024 / 1024
+            let size = (element?.size ?? 0) / 1024 / 1024
             let remark = ''
             if (size > 0) {
-                let unit = 'GB'
-                if (size < 1) {
-                    size = size * 1024
-                    unit = 'MB'
+                let unit = 'MB'
+                if (size >= 1000) {
+                    size = size / 1024
+                    unit = 'GB'
                 }
                 size = size.toFixed(1)
                 remark = `[${size}${unit}]`
@@ -1323,14 +1330,12 @@ class Ali {
             } else if (element.category) {
                 dataType = PanDataType.Unknown
             }
-
             list.push({
                 name: element.name,
                 panType: PanType.Ali,
                 dataType: dataType,
                 data: {
                     file_id: element.file_id,
-                    next_marker: listData.next_marker ?? '',
                 },
                 remark: remark,
             })
@@ -1542,7 +1547,7 @@ class PanTools {
         return JSON.stringify(data)
     }
 
-    //MARK: - 伪挂载相关 以下暂未实现
+    //MARK: - 伪挂载相关  分页大小建议为200
 
     /**
      * 返回支持挂载的网盘
@@ -1579,6 +1584,7 @@ class PanTools {
                     page: 1,
                 })
             } else if (panType == PanType.Ali) {
+                this.ali.next_marker = ''
                 list = await this.ali.getFileList({
                     args: null,
                     isRoot: true,
@@ -1609,6 +1615,9 @@ class PanTools {
                     page: args.page,
                 })
             } else if (args.data.panType == PanType.Ali) {
+                if (args.page == 1) {
+                    this.ali.next_marker = ''
+                }
                 list = await this.ali.getFileList({
                     args: args.data,
                     isRoot: false,
