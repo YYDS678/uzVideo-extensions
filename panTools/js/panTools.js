@@ -192,7 +192,7 @@ class QuarkClient {
 
 class UCClient {
     static apiUrl = 'https://pc-api.uc.cn/1/clouddrive/'
-    static pr = 'pr=UCBrowser&fr=pc'
+    static pr = 'pr=UCBrowser&fr=pc&sys=darwin&ve=1.8.6&ut=Nk27FcCv6q1eo6rXz8QHR/nIG6qLA3jh7KdL+agFgcOvww=='
     static httpHeaders = {
         'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
@@ -239,9 +239,32 @@ class QuarkUC {
         return headers
     }
     get playHeaders() {
+        var cookie = this.cookie
+        if (this.isQuark == false) {
+            const list = this.cookie.split(';')
+            const newList = []
+            for (const item of list) {
+                if (
+                    item.includes('_UP_A4A_11_') ||
+                    item.includes('tfstk') ||
+                    item.includes('__uid') ||
+                    item.includes('__pus') ||
+                    item.includes('__kp') ||
+                    item.includes('__puus')
+                ) {
+                    newList.push(item)
+                }
+            }
+
+            cookie = newList.join(';')
+        }
+
         return {
-            cookie: this.cookie,
+            cookie: cookie,
             Referer: this.isQuark ? 'https://pan.quark.cn/' : 'https://drive.uc.cn/',
+            'User-Agent': this.isQuark
+                ? ''
+                : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/1.8.6 Chrome/100.0.4896.160 Electron/18.3.5.16-b62cf9c50d Safari/537.36 Channel/ucpan_other_ch',
         }
     }
     /**
@@ -1289,26 +1312,41 @@ class Ali {
         return playData
     }
 
-    next_marker = ''
+    /**
+     * 下一次获取文件列表时使用的marker
+     * key: file_id
+     * value: marker
+     */
+    nextMap = new Map()
 
     /**
      * 获取文件列表
      * @param {PanMountListData?} args
      * @param {boolean} isRoot
+     * @param {number} page
      */
-    async getFileList({ args, isRoot }) {
+    async getFileList({ args, isRoot, page }) {
+        let list = []
+        let fid = isRoot ? 'root' : args?.data.file_id
+        let marker = this.nextMap[fid] ?? ''
+        if (page == 1) {
+            marker = ''
+        } else if (marker === '') {
+            return list
+        }
+
         const listData = await this.openApi(`openFile/list`, {
             drive_id: this.userDriveId,
-            parent_file_id: isRoot ? 'root' : args?.data.file_id,
+            parent_file_id: fid,
             limit: 200,
             order_by: 'name',
             order_direction: 'DESC',
-            marker: this.next_marker ?? '',
+            marker: marker,
         })
 
-        let list = []
         let items = listData.items
-        this.next_marker = listData.next_marker
+        this.nextMap[fid] = listData.next_marker
+
         for (let index = 0; index < items.length; index++) {
             const element = items[index]
 
@@ -1584,10 +1622,10 @@ class PanTools {
                     page: 1,
                 })
             } else if (panType == PanType.Ali) {
-                this.ali.next_marker = ''
                 list = await this.ali.getFileList({
                     args: null,
                     isRoot: true,
+                    page: 1,
                 })
             }
         } catch (error) {}
@@ -1615,12 +1653,10 @@ class PanTools {
                     page: args.page,
                 })
             } else if (args.data.panType == PanType.Ali) {
-                if (args.page == 1) {
-                    this.ali.next_marker = ''
-                }
                 list = await this.ali.getFileList({
                     args: args.data,
                     isRoot: false,
+                    page: args.page,
                 })
             }
         } catch (error) {}

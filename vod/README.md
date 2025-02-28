@@ -1,5 +1,7 @@
 # 视频源扩展 type:101
 
+[比较详细的 视频源扩展](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg.js)
+
 1. 新增扩展时，请补充 vod.json
 2. 请将 vod.json 复制到 uzAio.json 的 vod
 3. json 样例

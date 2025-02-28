@@ -218,6 +218,11 @@ class ProData {
          * @type {boolean} 是否成功
          */
         this.ok = () => this.code === 200
+
+        /**
+         * @type {object[]} 重定向列表 （v1.6.52 及以上版本）
+         */
+        this.redirects = []
     }
 }
 
@@ -249,6 +254,8 @@ const ReqAddressType = {
  * @param {object} options.queryParameters 查询参数（v1.6.3 及以上版本）
  * @param {ReqResponseType} options.responseType 响应类型
  * @param {ReqAddressType} options.addressType 地址类型
+ * @param {number} options.sendTimeout  发送超时时间 （v1.6.52 及以上版本）
+ * @param {number} options.receiveTimeout  接收超时时间 （v1.6.52 及以上版本）
  * @returns {Promise<ProData>}
  */
 async function req(url, options) {

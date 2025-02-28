@@ -7,6 +7,7 @@
 - [danMu(弹幕 type:400) 扩展运行说明](#danmu弹幕-type400-扩展运行说明)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.52](#v1652)
     - [v1.6.49](#v1649)
     - [v1.6.46](#v1646)
     - [v1.6.43](#v1643)
@@ -34,9 +35,10 @@
 
 # 模板
 1. [视频源扩展 type:101 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/vod101.js)
-2. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
-3. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
-4. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
+2. [比较详细的 视频源](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg.js)
+3. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
+4. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
+5. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
 
 
 ## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
@@ -188,6 +190,10 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+### v1.6.52
+1. 支持视频嗅探 `getVideoPlayUrl`  方法返回的 `RepVideoPlayUrl`  对象增加 `sniffer` 字段（如果不能成功嗅探，烦请将链接反馈给 https://t.me/uzVideoAppbot）
+2. `req` 支持 `receiveTimeout` `receiveTimeout`
+3. `ProData`  支持 `redirects`
 
 ### v1.6.49
 1. `PanPlayInfo` 和 `RepVideoPlayUrl` 新增 `urls` 字段，用于多线路播放

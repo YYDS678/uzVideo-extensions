@@ -219,11 +219,21 @@ class RepVideoPlayUrl {
          */
         this.urls = []
 
-        
         /**
          * 播放视频的请求header
          **/
         this.headers
+
+        /**
+        * 嗅探对象，headers 依然有效用于播放视频 （v1.6.52 及以上版本）
+        * 不一定能嗅探成功，如果嗅探失败请将链接发送给 https://t.me/uzVideoAppbot
+        * @type {object} 
+        * @property {string} url 嗅探的URL
+        * @property {string} ua 嗅探的UA
+        * @property {number} timeOut 单次嗅探超时时间 单位秒 默认 30s
+        * @property {number} retry 重试次数 默认 1 次
+        */
+        this.sniffer = {}
 
         /**
          * 弹幕数据
