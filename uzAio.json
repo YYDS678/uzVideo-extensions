@@ -21,10 +21,10 @@
         {
             "name": "综合弹幕",
             "url": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/js/danMu2.txt",
-            "codeID": "uLw1JV3TG3FcJbLXOymm6Xp8d4JC3NjR",
+            "codeID": "RkgRA9srEAgMgLcBJ78G2wlPRKTWWiwE",
             "remark": "别那么执着，搜不到就算了",
             "type": 400,
-            "version": 8
+            "version": 9
         },
         {
             "name": "dandanPlay 弹幕",
@@ -182,14 +182,12 @@
             "type": 100
         },
         {
-            "name": "囧次元",
-            "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/jcy.js",
-            "codeID": "iExLk0gfrJUJ5RPB",
-            "instance": "jcy20240823",
-            "webSite": "http://43.142.232.217:8090",
-            "remark": "",
-            "version": "5",
-            "type": 100
+            "name": "eacg",
+            "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/vod/js/eacg.js",
+            "webSite": "https://eacg1.com",
+            "remark": "v1.6.52 及以上版本可用",
+            "version": "1",
+            "type": 101
         },
         {
             "name": "奇優影院",
