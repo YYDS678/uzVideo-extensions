@@ -903,7 +903,7 @@ class Ali {
         if (!this.oauth.access_token || !this.verifyTimestamp(this.oauth.expire_time)) {
             try {
                 const openToken = this.oauth.token || (await this.getOpenToken())
-                const openResp = await req('https://api-cf.nn.ci/alist/ali_open/token', {
+                const openResp = await req('https://api.nn.ci/alist/ali_open/token', {
                     method: 'post',
                     headers: this.baseHeaders,
                     data: {
@@ -926,7 +926,7 @@ class Ali {
     async getOpenToken() {
         try {
             let code = await this.getOpenCode()
-            let openResp = await req('https://api-cf.nn.ci/alist/ali_open/code', {
+            let openResp = await req('https://api.nn.ci/alist/ali_open/code', {
                 method: 'post',
                 headers: this.baseHeaders,
                 data: {
