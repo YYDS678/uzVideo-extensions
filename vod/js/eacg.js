@@ -1,4 +1,11 @@
 // ignore
+//@name:eacg
+//@version:11
+//@webSite:https://eacg1.com
+//@remark:
+// ignore
+
+// ignore
 // 不支持导入，这里只是本地开发用于代码提示
 // 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
 import { } from '../../core/uzVideo.js'

@@ -1,3 +1,7 @@
+//@name:多盘
+//@version:11
+//@webSite:https://duopan.fun
+//@remark:
 const appConfig = {
     _webSite: 'https://duopan.fun',
     /**

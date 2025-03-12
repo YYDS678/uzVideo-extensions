@@ -1,4 +1,8 @@
 // ignore
+//@name:韩剧看看
+//@version:11
+//@webSite:https://www.hanjukankan.com
+//@remark:
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

@@ -1,3 +1,9 @@
+// ignore
+//@name:奥秘盘
+//@version:11
+//@webSite:https://vip.omii.top/
+//@remark:
+// ignore
 // 类名要特殊
 class Aomipan extends WebApiBase {
   constructor() {

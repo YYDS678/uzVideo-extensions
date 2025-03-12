@@ -1,3 +1,7 @@
+//@name:讴歌盘
+//@version:11
+//@webSite:https://woog.nxog.eu.org
+//@remark:
 const appConfig = {
     _webSite: 'https://woog.nxog.eu.org',
     /**

@@ -1,3 +1,7 @@
+//@name:老白听书
+//@version:11
+//@webSite:https://apk-lb-json.fodexin.com
+//@remark:
 class laobaiClass extends WebApiBase {
     constructor() {
         super()

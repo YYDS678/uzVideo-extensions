@@ -1,3 +1,9 @@
+// ignore
+//@name:91jav
+//@version:11
+//@webSite:https://041.bndmpsjx.com
+//@remark:
+// ignore
 const appConfig = {
     headers: {
         'User-Agent':

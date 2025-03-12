@@ -1,3 +1,10 @@
+// ignore
+//@name:eacg2
+//@version:11
+//@webSite:https://eacg1.com
+//@remark:
+// ignore
+
 // 适用于 把鼠标放在视频封面上 可以右键 复制正确链接的网站
 // 不能保证一定能用，不能用的欢迎反馈
 

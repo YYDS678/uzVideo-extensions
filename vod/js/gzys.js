@@ -1,4 +1,9 @@
 // ignore
+//@name:瓜子web
+//@version:11
+//@webSite:https://api.zaqohu.com
+//@remark:
+
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

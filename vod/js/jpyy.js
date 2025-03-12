@@ -1,3 +1,7 @@
+//@name:金牌影视
+//@version:11
+//@webSite:https://www.ghw9zwp5.com
+//@remark:
 class jpyyClass extends WebApiBase {
     constructor() {
         super()

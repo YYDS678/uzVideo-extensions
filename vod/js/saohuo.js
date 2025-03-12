@@ -1,4 +1,8 @@
 // ignore
+//@name:烧火
+//@version:11
+//@webSite:https://saohuo.tv
+//@remark:
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

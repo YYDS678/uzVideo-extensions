@@ -1,4 +1,8 @@
 // ignore
+//@name:素白白
+//@version:11
+//@webSite:https://www.subaibaiys.com
+//@remark:
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

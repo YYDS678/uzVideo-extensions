@@ -1,3 +1,7 @@
+//@name:木偶
+//@version:11
+//@webSite:http://www.muoupan.top
+//@remark:
 const appConfig = {
     _webSite: 'http://www.muoupan.top',
     /**

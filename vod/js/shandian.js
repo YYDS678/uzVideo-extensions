@@ -1,3 +1,7 @@
+//@name:闪电优汐
+//@version:11
+//@webSite:http://1.95.79.193/
+//@remark:
 const appConfig = {
     _webSite: 'http://1.95.79.193/',
     /**

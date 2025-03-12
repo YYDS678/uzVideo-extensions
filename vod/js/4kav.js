@@ -1,4 +1,9 @@
 // ignore
+//@name:4k-av
+//@version:11
+//@webSite:https://4k-av.com
+//@remark:
+
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

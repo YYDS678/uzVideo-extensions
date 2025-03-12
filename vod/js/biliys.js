@@ -1,3 +1,8 @@
+// ignore
+//@version:11
+//@webSite:https://www.xlys01.com
+//@remark:
+// ignore
 const appConfig = {
     _webSite: 'https://www.xlys01.com',
     /**

@@ -1,3 +1,7 @@
+//@name:小米盘
+//@version:11
+//@webSite:http://www.mucpan.cc
+//@remark:
 const appConfig = {
     _webSite: 'http://www.mucpan.cc',
     /**

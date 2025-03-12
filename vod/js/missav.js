@@ -1,4 +1,8 @@
 // ignore
+//@name:missav
+//@version:11
+//@webSite:https://missav.ai
+//@remark:
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

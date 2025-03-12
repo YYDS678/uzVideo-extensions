@@ -1,4 +1,8 @@
 // ignore
+//@name:厂长影视
+//@version:11
+//@webSite:https://www.czzy77.com
+//@remark:
 import {} from '../../core/uzVideo.js';
 import {} from '../../core/uzHome.js';
 import {} from '../../core/uz3lib.js';

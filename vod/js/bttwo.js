@@ -1,4 +1,8 @@
 // ignore
+//@name:两个bt
+//@version:11
+//@webSite:https://www.bttwoo.com
+//@remark:
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

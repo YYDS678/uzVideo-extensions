@@ -1,3 +1,7 @@
+//@version:11
+//@name:多多盘2
+//@webSite:https://tv.yydsys.top/
+//@remark:
 // 类名要特殊
 class Duopan extends WebApiBase {
   constructor() {

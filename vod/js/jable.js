@@ -1,4 +1,8 @@
 // ignore
+//@name:jable
+//@version:11
+//@webSite:https://jable.tv
+//@remark:
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

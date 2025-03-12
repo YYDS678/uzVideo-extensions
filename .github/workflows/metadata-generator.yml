@@ -1,0 +1,34 @@
+name: Metadata JSON Generator
+
+on:
+  push:
+    paths:
+      - 'danMu/js/**'
+      - 'panTools/js/**'
+      - 'recommend/js/**'
+      - 'vod/js/**'
+
+jobs:
+  generate-metadata:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Generate Metadata
+      run: |
+        node scripts/parse-metadata.js
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add *.json
+        git commit -m 'Auto-generated metadata files' || echo 'No changes to commit'
+        git push
