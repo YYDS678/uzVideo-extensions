@@ -24,7 +24,9 @@ const parseComments = (filePath) => {
   const relativePath = path.relative(process.cwd(), filePath);
   const dirPath = path.dirname(relativePath);
   metadata.type = TYPE_MAPPING[dirPath];
-  metadata.url = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/${relativePath}`;
+  // 获取当前分支名称，默认为 main
+  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main';
+  metadata.url = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/${branch}/${relativePath}`;
 
   return metadata;
 };
