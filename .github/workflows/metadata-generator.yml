@@ -11,10 +11,14 @@ on:
 jobs:
   generate-metadata:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write  # 确保 GITHUB_TOKEN 具有写入权限
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整的 Git 历史，避免 push 失败
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -31,4 +35,4 @@ jobs:
         git config --global user.email 'action@github.com'
         git add *.json
         git commit -m 'Auto-generated metadata files' || echo 'No changes to commit'
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
