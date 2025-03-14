@@ -7,6 +7,8 @@ on:
       - 'panTools/js/**'
       - 'recommend/js/**'
       - 'vod/js/**'
+      - 'cms/**'
+      - 'live/**'
 
 jobs:
   generate-metadata:
