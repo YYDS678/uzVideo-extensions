@@ -58,13 +58,6 @@
       "type": 101
     },
     {
-      "name": "奥秘盘",
-      "version": 11,
-      "webSite": "https://vip.omii.top/",
-      "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/aomipan.js",
-      "type": 101
-    },
-    {
       "name": "两个bt",
       "version": 11,
       "webSite": "https://www.bttwoo.com",
@@ -97,7 +90,7 @@
       "version": 11,
       "webSite": "https://duanjutt.tv",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/duanjutt.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "多多盘",
@@ -127,28 +120,28 @@
       "webSite": "https://api.9cec79d.com",
       "codeID": "ra5Z3wtXKshzSMK2",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzapp.txt",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "瓜子web",
       "version": 11,
       "webSite": "https://api.zaqohu.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzys.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "韩剧看看",
       "version": 11,
       "webSite": "https://www.hanjukankan.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hjkk.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "玩偶姐姐",
       "version": 11,
       "webSite": "https://hongkongdollvideo.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hkdoll.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "虎斑盘",
@@ -162,14 +155,14 @@
       "version": 11,
       "webSite": "https://jable.tv",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/jable.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "金牌影视",
       "version": 11,
       "webSite": "https://www.ghw9zwp5.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/jpyy.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "多盘",
@@ -183,7 +176,7 @@
       "version": 11,
       "webSite": "https://apk-lb-json.fodexin.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/laobai.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "六趣盘",
@@ -197,7 +190,7 @@
       "version": 11,
       "webSite": "https://madou.club",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/madou.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "米盘",
@@ -211,7 +204,7 @@
       "version": 11,
       "webSite": "https://missav.ai",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/missav.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "木偶",
@@ -232,14 +225,14 @@
       "version": 11,
       "webSite": "https://www.netflav.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/netflav.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "欧乐影视",
       "version": 11,
       "webSite": "https://www.olevod.tv",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/olevod.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "讴歌盘",
@@ -253,14 +246,14 @@
       "version": 11,
       "webSite": "https://res.yunpan.win",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/resyunpan.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "烧火",
       "version": 11,
       "webSite": "https://saohuo.tv",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/saohuo.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "闪电优汐",
@@ -274,7 +267,7 @@
       "version": 11,
       "webSite": "https://www.subaibaiys.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/subaibai.js",
-      "type": 101
+      "type": "100"
     },
     {
       "name": "玩偶哥哥",
@@ -309,7 +302,7 @@
       "version": 11,
       "webSite": "https://www.zxzja.com",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zxzj.js",
-      "type": 101
+      "type": "100"
     },
     {
       "api": "https://cj.rycjapi.com/api.php/provide/vod",
