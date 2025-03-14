@@ -2,6 +2,7 @@
 //@version:11
 //@webSite:https://www.ghw9zwp5.com
 //@remark:
+//@type:100
 class jpyyClass extends WebApiBase {
     constructor() {
         super()

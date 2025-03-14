@@ -10,20 +10,26 @@ const TYPE_MAPPING = {
 
 const parseComments = (filePath) => {
   const content = fs.readFileSync(filePath, 'utf8');
+  const deprecated = extractValue(content, '@deprecated:');
+  if (deprecated && parseInt(deprecated) == 1) return null;
+
   const metadata = {
     name: extractValue(content, '@name:'),
     webSite: extractValue(content, '@webSite:'),
     version: extractValue(content, '@version:'),
     remark: extractValue(content, '@remark:'),
     env: extractValue(content, '@env:'),
-    codeID:extractValue(content, '@codeID:'),
+    codeID: extractValue(content, '@codeID:'),
+    type: extractValue(content, '@type:'),
   };
 
   if (!metadata.name) return null;
 
   const relativePath = path.relative(process.cwd(), filePath);
   const dirPath = path.dirname(relativePath);
-  metadata.type = TYPE_MAPPING[dirPath];
+  if (!metadata.type?.trim()) {
+    metadata.type = TYPE_MAPPING[dirPath];
+  }
   // 获取当前分支名称，默认为 main
   const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main';
   metadata.url = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/${branch}/${relativePath}`;

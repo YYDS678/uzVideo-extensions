@@ -2,6 +2,7 @@
 //@version:11
 //@webSite:https://www.netflav.com
 //@remark:
+//@type:100
 class netflavClass extends WebApiBase {
     constructor() {
         super()

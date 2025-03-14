@@ -3,6 +3,7 @@
 //@version:11
 //@webSite:https://vip.omii.top/
 //@remark:
+//@deprecated:1
 // ignore
 // 类名要特殊
 class Aomipan extends WebApiBase {
