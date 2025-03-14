@@ -5,6 +5,7 @@
 - [uzHome(首页推荐 type:200) 扩展运行说明](#uzhome首页推荐-type200-扩展运行说明)
 - [panTools(网盘工具 type:300)扩展运行说明](#pantools网盘工具-type300扩展运行说明)
 - [danMu(弹幕 type:400) 扩展运行说明](#danmu弹幕-type400-扩展运行说明)
+- [请为扩展添加以下注释，用于自动更新 json](#请为扩展添加以下注释用于自动更新-json)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
     - [v1.6.53](#v1653)
@@ -46,29 +47,12 @@
 
 ## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
 
+
+
 # 视频源 type:101 扩展运行说明
 
 1. 执行每个方法都会为 `webSite` 进行赋值
-2. json 文件说明
-
-```
-{
-  "name": "名称",
-  "codeID": "如果选择了加密请填写，由 uz 生成",
-  "api": "扩展链接",
-  "webSite": "视频站地址。当加载代码时会赋值给对象的 webSite 属性，用户可自行在 app 内修改",
-  "remark": "备注",
-  "noHistory": false, // *不开启*历史记录 默认false(即开启历史记录)，用户可自行在 app 内修改
-  "userAgent": "", // 设置播放ua 优先级低于 getVideoPlayUrl 返回ua，用户可自行在 app 内修改
-  "isLock": false, // 是否上锁 默认false(即不上锁)，用户可自行在 app 内修改
-  "blockClassList": ["短剧"], // 屏蔽分类，用户可自行在 app 内修改
-  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
-  "version": 1, //扩展版本号
-  "type":101 // 视频扩展固定 101
-}
-```
-
-3. 流程图
+2. 流程图
 
 ```mermaid
 
@@ -100,24 +84,10 @@ graph TD
 # uzHome(首页推荐 type:200) 扩展运行说明
 
 1. 固定实例名称为 `uzHomeJs` （例如 const uzHomeJs = new UZHomeJS();）
-2. json 文件说明
-
-```
-{
-  "name": "名称",
-  "codeID": "如果选择了加密请填写，由 uz 生成",
-  "url": "扩展链接",
-  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
-  "version": 1, //扩展版本号
-  "type":200 //推荐扩展固定 200
-}
-```
-
-3. 如需添加更多 UI 类型，请联系[机器人](https://t.me/uzVideoAppbot)
-4. 流程图
+2. 如需添加更多 UI 类型，请联系[机器人](https://t.me/uzVideoAppbot)
+3. 流程图
 
 ```mermaid
-
 graph TD
 
   A[开始] --> A1[uz 调用 getHome 获取首页 tab 分类] -->|返回数据 RepHome| B[调用 getTab 获取 tab 页数据]
@@ -138,20 +108,7 @@ graph TD
 
 1. 固定实例名称为 `uzPanToolsInstance`
 2. uz 运行时仅存在一个网盘工具，请尽量整合所有的解析在 PanTools
-3. json 文件说明
-
-```
-{
-  "name": "名称",
-  "codeID": "如果选择了加密请填写，由 uz 生成",
-  "url": "扩展链接",
-  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
-  "version": 1, //扩展版本号
-  "type":300 // 网盘工具扩展固定 300
-}
-```
-
-4. 流程图
+3. 流程图
 
 ```mermaid
 graph TD
@@ -163,24 +120,32 @@ A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 get
 
 1. 请勿删减 `danMuEmpty.js` 原有代码
 2. `danMuEmpty.js` 代码为示例，您需要根据您的业务逻辑进行修改。参考 `danMu.js`
-3. json 文件说明
-
-```
-{
-  "name": "名称",
-  "codeID": "如果选择了加密请填写，由 uz 生成",
-  "url": "扩展链接",
-  "env":"",//环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2
-  "version": 1, //扩展版本号
-  "type":400 // 弹幕扩展固定 400
-}
-```
-
-4. 流程图
+3. 流程图
 
 ```mermaid
 graph TD
 A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
+
+```
+
+
+# 请为扩展添加以下注释，用于自动更新 json
+```
+// 如果扩展加密了要用成对的 //空格ignore 包裹
+
+// ignore
+
+//@name:扩展名称
+// 版本号纯数字
+//@version:1
+// 备注，没有的话就不填
+//@remark:这是备注
+// 加密 id，没有的话就不填
+//@codeID:
+// 使用的环境变量，没有的话就不填
+//@env:
+
+// ignore
 
 ```
 
