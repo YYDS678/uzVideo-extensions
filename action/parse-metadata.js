@@ -32,7 +32,7 @@ const parseComments = (filePath) => {
   }
   // 获取当前分支名称，默认为 main
   const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main';
-  metadata.url = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/${branch}/${relativePath}`;
+  metadata.api = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/${branch}/${relativePath}`;
 
   return metadata;
 };
