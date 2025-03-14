@@ -10,6 +10,7 @@
       "name": "弹幕扩展",
       "version": 11,
       "remark": "搜不到就算了，不要那么执着",
+      "codeID": "RkgRA9srEAgMgLcBJ78G2wlPRKTWWiwE",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
       "type": 400
     }
@@ -29,6 +30,7 @@
       "name": "豆瓣推荐",
       "version": 11,
       "remark": "iOS14 以上版本可用",
+      "codeID": "N7WRmLmOdB8FSh4M",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/recommend/js/douban.txt",
       "type": 200
     }
@@ -130,6 +132,7 @@
       "version": 11,
       "remark": "v1.6.53 及以上版本",
       "webSite": "https://api.9cec79d.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
       "url": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
       "type": 101
     },
