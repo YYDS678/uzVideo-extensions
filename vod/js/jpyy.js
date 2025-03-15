@@ -3,6 +3,8 @@
 //@webSite:https://www.ghw9zwp5.com
 //@remark:
 //@type:100
+//@instance:jpyy20240716
+
 class jpyyClass extends WebApiBase {
     constructor() {
         super()

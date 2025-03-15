@@ -4,6 +4,7 @@
 //@webSite:https://api.zaqohu.com
 //@remark:
 //@type:100
+//@instance:gzys20240822
 
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

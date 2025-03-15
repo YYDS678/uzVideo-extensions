@@ -4,6 +4,7 @@
 //@webSite:https://jable.tv
 //@remark:
 //@type:100
+//@instance:jable20240831
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

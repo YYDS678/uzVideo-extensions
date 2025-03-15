@@ -21,6 +21,7 @@ const parseComments = (filePath) => {
     env: extractValue(content, '@env:'),
     codeID: extractValue(content, '@codeID:'),
     type: extractValue(content, '@type:'),
+    instance: extractValue(content, '@instance:'),
   };
 
   if (!metadata.name) return null;
@@ -66,8 +67,9 @@ const main = () => {
           ...(metadata.env && { env: metadata.env }),
           ...(metadata.webSite && { webSite: metadata.webSite }),
           ...(metadata.codeID && { codeID: metadata.codeID }),
+          ...(metadata.instance && { instance: metadata.instance }),
           url: metadata.url,
-          type: metadata.type
+          type: parseInt(metadata.type)
         });
       }
     });

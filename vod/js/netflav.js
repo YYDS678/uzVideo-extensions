@@ -3,6 +3,8 @@
 //@webSite:https://www.netflav.com
 //@remark:
 //@type:100
+//@instance:netflav20240905
+
 class netflavClass extends WebApiBase {
     constructor() {
         super()
