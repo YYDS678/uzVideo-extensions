@@ -3,6 +3,7 @@
 //@version:11
 //@webSite:https://041.bndmpsjx.com
 //@remark:
+//@isAV:1
 // ignore
 const appConfig = {
     headers: {

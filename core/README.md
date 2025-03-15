@@ -38,16 +38,14 @@
 # 模板
 
 1. [视频源扩展 type:101 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/vod101.js)
-    1. [超简单嗅探模板 难度指数 🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/clicli.js)
-    2. [简单嗅探模板 难度指数 🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/aggl.js)
-    3. [嗅探模板 难度指数 🌟🌟🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg2.js)
+   1. [超简单嗅探模板 难度指数 🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/clicli.js)
+   2. [简单嗅探模板 难度指数 🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/aggl.js)
+   3. [嗅探模板 难度指数 🌟🌟🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg2.js)
 2. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
 3. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
 4. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
 
 ## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
-
-
 
 # 视频源 type:101 扩展运行说明
 
@@ -128,9 +126,10 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 
 ```
 
-
 # 请为扩展添加以下注释，用于自动更新 json
+
 ```
+
 // 如果扩展加密了要用成对的 //空格ignore 包裹
 
 // ignore
@@ -146,6 +145,8 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 //@codeID:
 // 使用的环境变量，没有的话就不填
 //@env:
+// 是否是AV 1是  0否
+//@isAV:0
 //是否弃用 1是  0否
 //@deprecated:0
 
@@ -185,7 +186,7 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 
 ### v1.6.43
 
-1. 新增`kLocale` 获取用户当前 语言-地区
+1. 新增 `kLocale` 获取用户当前 语言-地区
 2. 新增 `kAppVersion` 获取用户当前 app 版本号
 3. 新增弹幕扩展 `danMu.js` type:400
 

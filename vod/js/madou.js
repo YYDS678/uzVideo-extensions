@@ -5,6 +5,7 @@
 //@remark:
 //@type:100
 //@instance:madou20240626
+//@isAV:1
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

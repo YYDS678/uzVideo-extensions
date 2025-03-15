@@ -4,6 +4,7 @@
 //@remark:
 //@type:100
 //@instance:netflav20240905
+//@isAV:1
 
 class netflavClass extends WebApiBase {
     constructor() {

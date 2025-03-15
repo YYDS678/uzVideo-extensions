@@ -22,6 +22,7 @@ const parseComments = (filePath) => {
     codeID: extractValue(content, '@codeID:'),
     type: extractValue(content, '@type:'),
     instance: extractValue(content, '@instance:'),
+    isAV: extractValue(content, '@isAV:'),
   };
 
   if (!metadata.name) return null;
@@ -45,7 +46,8 @@ const extractValue = (content, tag) => {
 };
 const main = () => {
   const directories = ['danMu/js', 'panTools/js', 'recommend/js', 'vod/js'];
-  const result = {};
+  const allInOneResult = {};
+  const avResultList = [];
 
   directories.forEach(dir => {
     const fullPath = path.join(__dirname, '..', dir);
@@ -58,9 +60,7 @@ const main = () => {
       const filePath = path.join(fullPath, file);
       const metadata = parseComments(filePath);
       if (metadata) {
-        const category = dir.split('/')[0];
-        result[category] = result[category] || [];
-        result[category].push({
+        const item = {
           name: metadata.name,
           ...(metadata.version && { version: parseInt(metadata.version) }),
           ...(metadata.remark && { remark: metadata.remark }),
@@ -71,7 +71,15 @@ const main = () => {
 
           api: metadata.api,
           type: parseInt(metadata.type)
-        });
+        }
+        if (parseInt(metadata.isAV) === 1) {
+          avResultList.push(item);
+        } else {
+          const category = dir.split('/')[0];
+          allInOneResult[category] = allInOneResult[category] || [];
+          allInOneResult[category].push(item);
+        }
+
       }
     });
   });
@@ -79,16 +87,19 @@ const main = () => {
 
 
   const liveData = JSON.parse(fs.readFileSync('live/live.json', 'utf8'));
-  result.live = liveData;
+  allInOneResult.live = liveData;
 
   const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'));
-  result.vod.push(...cmsData);
+  allInOneResult.vod.push(...cmsData);
 
 
 
 
   // 写入整合后的uzAio.json
-  fs.writeFileSync('uzAio_auto.json', JSON.stringify(result, null, 2));
+  fs.writeFileSync('uzAio_auto.json', JSON.stringify(allInOneResult, null, 2));
+
+  // 写入整合后的uzAV.json
+  fs.writeFileSync('uzAV_auto.json', JSON.stringify(avResultList, null, 2));
 
 };
 

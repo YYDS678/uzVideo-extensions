@@ -5,6 +5,7 @@
 //@remark:
 //@type:100
 //@instance:missav20240627
+//@isAV:1
 
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
