@@ -9,6 +9,7 @@ on:
       - 'vod/js/**'
       - 'cms/**'
       - 'live/**'
+      - 'action/**'
 
 jobs:
   generate-metadata:

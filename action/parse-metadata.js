@@ -68,7 +68,8 @@ const main = () => {
           ...(metadata.webSite && { webSite: metadata.webSite }),
           ...(metadata.codeID && { codeID: metadata.codeID }),
           ...(metadata.instance && { instance: metadata.instance }),
-          url: metadata.url,
+
+          api: metadata.api,
           type: parseInt(metadata.type)
         });
       }
