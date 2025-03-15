@@ -44,13 +44,6 @@
       "type": 101
     },
     {
-      "name": "91jav",
-      "version": 11,
-      "webSite": "https://041.bndmpsjx.com",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/91jav.js",
-      "type": 101
-    },
-    {
       "name": "aggl",
       "version": 11,
       "webSite": "https://anime.girigirilove.com",
@@ -141,27 +134,11 @@
       "type": 100
     },
     {
-      "name": "玩偶姐姐",
-      "version": 11,
-      "webSite": "https://hongkongdollvideo.com",
-      "instance": "hkdoll20240705",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hkdoll.js",
-      "type": 100
-    },
-    {
       "name": "虎斑盘",
       "version": 11,
       "webSite": "http://103.45.162.207:20720",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/huban.js",
       "type": 101
-    },
-    {
-      "name": "jable",
-      "version": 11,
-      "webSite": "https://jable.tv",
-      "instance": "jable20240831",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/jable.js",
-      "type": 100
     },
     {
       "name": "金牌影视",
@@ -194,27 +171,11 @@
       "type": 101
     },
     {
-      "name": "麻豆",
-      "version": 11,
-      "webSite": "https://madou.club",
-      "instance": "madou20240626",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/madou.js",
-      "type": 100
-    },
-    {
       "name": "米盘",
       "version": 11,
       "webSite": "http://www.mifun.tw",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/mifun.js",
       "type": 101
-    },
-    {
-      "name": "missav",
-      "version": 11,
-      "webSite": "https://missav.ai",
-      "instance": "missav20240627",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/missav.js",
-      "type": 100
     },
     {
       "name": "木偶",
@@ -229,14 +190,6 @@
       "webSite": "https://www.nanf.cc",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/nanfdj.js",
       "type": 101
-    },
-    {
-      "name": "netflav",
-      "version": 11,
-      "webSite": "https://www.netflav.com",
-      "instance": "netflav20240905",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/netflav.js",
-      "type": 100
     },
     {
       "name": "欧乐影视",
