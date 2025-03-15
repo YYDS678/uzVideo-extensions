@@ -136,6 +136,8 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 // ignore
 
 //@name:扩展名称
+// 网站主页，只有视频源扩展需要
+//@webSite:网站主页
 // 版本号纯数字
 //@version:1
 // 备注，没有的话就不填
@@ -144,6 +146,8 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 //@codeID:
 // 使用的环境变量，没有的话就不填
 //@env:
+//是否弃用 1是  0否
+//@deprecated:0
 
 // ignore
 

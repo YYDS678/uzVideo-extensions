@@ -2,27 +2,25 @@
 
 1. 请尽量整合在 `danMu.js` 内
 2. 请为扩展编写单独的 `json` 文件
-3. 请将 json 添加到 uzAio.json 的 danMu
-4. json 样例
+
+
+# 请为扩展添加以下注释，用于自动更新 json
 
 ```
-{
-  "name": "扩展名称",
-  "codeID": "如果加密请填写，由 uz影视 生成",
-  "url": "扩展链接",
-  "env":"环境变量名称1##环境变量描述1&&环境变量名称2##环境变量描述2",
-  "remark": "",
-  "version":1,
-  "type":400
-}
+// 如果扩展加密了要用成对的 //空格ignore 包裹
+
+// ignore
+
+//@name:扩展名称
+// 版本号纯数字
+//@version:1
+// 备注，没有的话就不填
+//@remark:这是备注
+// 加密 id，没有的话就不填
+//@codeID:
+// 使用的环境变量，没有的话就不填
+//@env:
+
+// ignore
+
 ```
-
-# 订阅
-
-|   名称   |                                                      订阅链接                                                      |
-| :------: | :----------------------------------------------------------------------------------------------------------------: |
-| dandanPlay | https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/danMu/danMu.json |
-
-# 添加方式
-
-uz影视 -> 设置 -> 数据管理 -> 弹幕扩展 -> 小齿轮 -> 添加 -> 输入链接 ->确定
