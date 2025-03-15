@@ -19,8 +19,6 @@ https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-exten
 无代理
 https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/uzAio_raw.json
 
-直连(非官方) 
-https://gitee.com/woleigedouer/uzVideo-extensions/raw/main/uzAio_gitee.json
 
 # 添加方式
 
