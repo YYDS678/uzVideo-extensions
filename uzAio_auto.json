@@ -202,7 +202,7 @@
     },
     {
       "name": "讴歌盘",
-      "version": 11,
+      "version": 3,
       "webSite": "https://woog.nxog.eu.org",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/ouge.js",
       "type": 101
