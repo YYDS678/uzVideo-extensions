@@ -268,7 +268,7 @@
     },
     {
       "name": "在线之家",
-      "version": 11,
+      "version": 2,
       "webSite": "https://www.zxzja.com",
       "instance": "zxzj20240620",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/zxzj.js",
