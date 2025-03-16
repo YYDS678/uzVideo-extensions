@@ -1,5 +1,5 @@
 //@name:闪电优汐
-//@version:11
+//@version:1
 //@webSite:http://1.95.79.193/
 //@remark:
 const appConfig = {
