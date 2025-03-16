@@ -1,6 +1,6 @@
 // ignore
 //@name:奥秘盘
-//@version:11
+//@version:2
 //@webSite:https://vip.omii.top/
 //@remark:
 //@deprecated:1
