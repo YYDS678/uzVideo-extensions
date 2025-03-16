@@ -74,7 +74,7 @@
     },
     {
       "name": "蛋蛋剧",
-      "version": 11,
+      "version": 2,
       "webSite": "https://www.dandanju.tv",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/dandanju.js",
       "type": 101
