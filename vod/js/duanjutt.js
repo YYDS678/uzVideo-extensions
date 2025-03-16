@@ -1,6 +1,6 @@
 // ignore
 //@name:短剧天堂
-//@version:11
+//@version:2
 //@webSite:https://duanjutt.tv
 //@remark:
 //@type:100
