@@ -53,7 +53,7 @@
     },
     {
       "name": "两个bt",
-      "version": 11,
+      "version": 2,
       "webSite": "https://www.bttwoo.com",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/bttwo.js",
       "type": 101
