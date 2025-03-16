@@ -1,5 +1,5 @@
 // ignore
-//@version:11
+//@version:1
 //@webSite:https://www.xlys01.com
 //@remark:
 // ignore
