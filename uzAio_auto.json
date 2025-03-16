@@ -128,7 +128,7 @@
     },
     {
       "name": "韩剧看看",
-      "version": 11,
+      "version": 2,
       "webSite": "https://www.hanjukankan.com",
       "instance": "hjkk20240624",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/hjkk.js",
