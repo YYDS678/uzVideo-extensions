@@ -38,7 +38,7 @@
   "vod": [
     {
       "name": "4k-av",
-      "version": 11,
+      "version": 2,
       "webSite": "https://4k-av.com",
       "instance": "www4kav20240705",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/4kav.js",
