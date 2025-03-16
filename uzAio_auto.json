@@ -2,7 +2,7 @@
   "danMu": [
     {
       "name": "弹幕扩展",
-      "version": 11,
+      "version": 1,
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
       "type": 400
     },
