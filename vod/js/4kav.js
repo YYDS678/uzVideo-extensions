@@ -1,5 +1,5 @@
 //@name:4k-av
-//@version:11
+//@version:2
 //@webSite:https://4k-av.com
 //@remark:
 //@type:100
