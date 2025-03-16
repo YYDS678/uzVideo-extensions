@@ -1,6 +1,6 @@
 // ignore
 //@name:欧乐影视
-//@version:11
+//@version:2
 //@webSite:https://www.olevod.tv
 //@remark:
 //@type:100
