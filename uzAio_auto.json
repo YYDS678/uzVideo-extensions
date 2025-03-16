@@ -217,7 +217,7 @@
     },
     {
       "name": "烧火",
-      "version": 11,
+      "version": 2,
       "webSite": "https://saohuo.tv",
       "instance": "saohuo20240623",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/saohuo.js",
