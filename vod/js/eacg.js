@@ -1,6 +1,6 @@
 // ignore
 //@name:eacg
-//@version:11
+//@version:1
 //@webSite:https://eacg1.com
 //@remark:
 // ignore
