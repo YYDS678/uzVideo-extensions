@@ -158,7 +158,7 @@
     },
     {
       "name": "老白听书",
-      "version": 11,
+      "version": 2,
       "webSite": "https://apk-lb-json.fodexin.com",
       "instance": "laobai20240831",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/laobai.js",
