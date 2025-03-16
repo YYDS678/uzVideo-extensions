@@ -1,6 +1,6 @@
 // ignore
 //@name:素白白
-//@version:11
+//@version:2
 //@webSite:https://www.subaibaiys.com
 //@remark:
 //@type:100
