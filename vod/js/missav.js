@@ -1,6 +1,6 @@
 // ignore
 //@name:missav
-//@version:11
+//@version:2
 //@webSite:https://missav.ai
 //@remark:
 //@type:100
