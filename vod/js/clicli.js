@@ -1,6 +1,6 @@
 // ignore
 //@name:clicli
-//@version:11
+//@version:1
 //@webSite:https://www.clicli.pro
 //@remark:
 // ignore
