@@ -194,7 +194,7 @@
     },
     {
       "name": "欧乐影视",
-      "version": 11,
+      "version": 2,
       "webSite": "https://www.olevod.tv",
       "instance": "olevod20240620",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/olevod.js",
