@@ -172,8 +172,8 @@
       "type": 101
     },
     {
-      "name": "米盘",
-      "version": 11,
+      "name": "mifun",
+      "version": 1,
       "webSite": "http://www.mifun.tw",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/mifun.js",
       "type": 101
