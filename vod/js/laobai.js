@@ -1,5 +1,5 @@
 //@name:老白听书
-//@version:11
+//@version:2
 //@webSite:https://apk-lb-json.fodexin.com
 //@remark:
 //@type:100

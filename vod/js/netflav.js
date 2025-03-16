@@ -1,5 +1,5 @@
 //@name:netflav
-//@version:11
+//@version:2
 //@webSite:https://www.netflav.com
 //@remark:
 //@type:100

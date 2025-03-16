@@ -1,5 +1,5 @@
 //@name:金牌影视
-//@version:11
+//@version:2
 //@webSite:https://www.ghw9zwp5.com
 //@remark:
 //@type:100

@@ -1,6 +1,6 @@
 // ignore
 //@name:蛋蛋剧
-//@version:11
+//@version:2
 //@webSite:https://www.dandanju.tv
 //@remark:
 import { } from '../../core/uzVideo.js'

@@ -1,6 +1,6 @@
 // ignore
 //@name:弹幕扩展
-//@version:11
+//@version:9
 //@remark:搜不到就算了，不要那么执着
 //@codeID:RkgRA9srEAgMgLcBJ78G2wlPRKTWWiwE
 // ignore

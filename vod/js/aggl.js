@@ -1,6 +1,6 @@
 // ignore
 //@name:aggl
-//@version:11
+//@version:1
 //@webSite:https://anime.girigirilove.com
 //@remark:
 // ignore

@@ -1,6 +1,6 @@
 // ignore
 //@name:烧火
-//@version:11
+//@version:2
 //@webSite:https://saohuo.tv
 //@remark:
 //@type:100

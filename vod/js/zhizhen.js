@@ -1,5 +1,5 @@
 //@name:至臻盘
-//@version:11
+//@version:3
 //@webSite:https://mihdr.top
 //@remark:
 const appConfig = {

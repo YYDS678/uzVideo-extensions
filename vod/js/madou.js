@@ -1,6 +1,6 @@
 // ignore
 //@name:麻豆
-//@version:11
+//@version:2
 //@webSite:https://madou.club
 //@remark:
 //@type:100

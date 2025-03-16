@@ -1,5 +1,5 @@
 //@name:讴歌盘
-//@version:11
+//@version:3
 //@webSite:https://woog.nxog.eu.org
 //@remark:
 const appConfig = {

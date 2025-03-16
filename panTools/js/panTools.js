@@ -1,6 +1,6 @@
 // ignore
 //@name:UC、夸克、阿里 网盘解析工具
-//@version:11
+//@version:14
 //@remark:iOS14 以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称
 import {} from '../../core/uzVideo.js'

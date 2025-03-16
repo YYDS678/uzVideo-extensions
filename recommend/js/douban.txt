@@ -1,6 +1,6 @@
 // ignore
 //@name:豆瓣推荐
-//@version:11
+//@version:3
 //@remark:iOS14 以上版本可用
 //@codeID:N7WRmLmOdB8FSh4M
 // ignore

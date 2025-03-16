@@ -1,5 +1,5 @@
 //@name:弹幕扩展
-//@version:11
+//@version:1
 //@remark:
 // ignore
 import {} from '../../core/uz3lib.js'

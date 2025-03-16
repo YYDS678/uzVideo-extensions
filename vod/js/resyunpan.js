@@ -1,6 +1,6 @@
 // ignore
 //@name:云盘资源网
-//@version:11
+//@version:1
 //@webSite:https://res.yunpan.win
 //@remark:
 //@type:100

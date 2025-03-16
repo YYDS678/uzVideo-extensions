@@ -1,5 +1,5 @@
 //@name:小米盘
-//@version:11
+//@version:3
 //@webSite:http://www.mucpan.cc
 //@remark:
 const appConfig = {

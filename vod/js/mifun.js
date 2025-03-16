@@ -1,6 +1,6 @@
 // ignore
-//@name:米盘
-//@version:11
+//@name:mifun
+//@version:1
 //@webSite:http://www.mifun.tw
 //@remark:
 import { } from '../../core/uzVideo.js'
