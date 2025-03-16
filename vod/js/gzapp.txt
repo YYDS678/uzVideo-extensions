@@ -1,6 +1,6 @@
 // ignore
 //@name:瓜子 app
-//@version:11
+//@version:2
 //@webSite:https://api.9cec79d.com
 //@remark:v1.6.53 及以上版本
 //@codeID:ra5Z3wtXKshzSMK2
