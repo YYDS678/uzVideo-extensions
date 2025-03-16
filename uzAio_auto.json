@@ -120,7 +120,7 @@
     },
     {
       "name": "瓜子web",
-      "version": 11,
+      "version": 2,
       "webSite": "https://api.zaqohu.com",
       "instance": "gzys20240822",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzys.js",
