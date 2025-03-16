@@ -150,8 +150,8 @@
       "type": 100
     },
     {
-      "name": "多盘",
-      "version": 11,
+      "name": "蜡笔盘",
+      "version": 3,
       "webSite": "https://duopan.fun",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/labipan.js",
       "type": 101
