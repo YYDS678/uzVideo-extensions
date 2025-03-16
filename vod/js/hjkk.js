@@ -1,6 +1,6 @@
 // ignore
 //@name:韩剧看看
-//@version:11
+//@version:2
 //@webSite:https://www.hanjukankan.com
 //@remark:
 //@type:100
