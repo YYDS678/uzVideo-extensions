@@ -16,7 +16,7 @@
   },
   {
     "name": "jable",
-    "version": 11,
+    "version": 3,
     "webSite": "https://jable.tv",
     "instance": "jable20240831",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/jable.js",
