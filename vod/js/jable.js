@@ -1,6 +1,6 @@
 // ignore
 //@name:jable
-//@version:11
+//@version:3
 //@webSite:https://jable.tv
 //@remark:
 //@type:100
