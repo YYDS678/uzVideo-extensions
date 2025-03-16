@@ -96,7 +96,7 @@
     },
     {
       "name": "eacg",
-      "version": 11,
+      "version": 1,
       "webSite": "https://eacg1.com",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/eacg.js",
       "type": 101
