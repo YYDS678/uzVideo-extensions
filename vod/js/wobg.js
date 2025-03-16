@@ -1,5 +1,5 @@
 //@name:玩偶哥哥
-//@version:11
+//@version:3
 //@webSite:http://wogg.xxooo.cf
 //@remark:
 const appConfig = {
