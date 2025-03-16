@@ -1,6 +1,6 @@
 // ignore
 //@name:瓜子web
-//@version:11
+//@version:2
 //@webSite:https://api.zaqohu.com
 //@remark:
 //@type:100
