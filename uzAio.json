@@ -37,6 +37,13 @@
   ],
   "vod": [
     {
+      "name": "小米盘",
+      "version": 3,
+      "webSite": "http://www.mucpan.cc",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiaomi.js",
+      "type": 101
+    },
+    {
       "name": "至臻盘",
       "version": 3,
       "webSite": "https://mihdr.top",
@@ -133,13 +140,6 @@
       "type": 101
     },
     {
-      "name": "小米盘",
-      "version": 3,
-      "webSite": "http://www.mucpan.cc",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiaomi.js",
-      "type": 101
-    },
-    {
       "name": "韩剧看看",
       "version": 2,
       "webSite": "https://www.hanjukankan.com",
@@ -182,6 +182,13 @@
       "version": 1,
       "webSite": "https://wp.0v.fit",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/liuqu.js",
+      "type": 101
+    },
+    {
+      "name": "两个bt",
+      "version": 2,
+      "webSite": "https://www.bttwoo.com",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/bttwo.js",
       "type": 101
     },
     {
@@ -265,13 +272,6 @@
       "version": 1,
       "webSite": "https://anime.girigirilove.com",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/aggl.js",
-      "type": 101
-    },
-    {
-      "name": "两个bt",
-      "version": 2,
-      "webSite": "https://www.bttwoo.com",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/bttwo.js",
       "type": 101
     },
     {
