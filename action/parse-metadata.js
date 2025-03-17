@@ -71,7 +71,7 @@ const main = () => {
     const files = fs.readdirSync(fullPath)
       .filter(f => f.endsWith('.js') || f.endsWith('.txt'))
       .map(f => ({ file: f, stat: fs.statSync(path.join(fullPath, f)) }))
-      .sort((a, b) => b.stat.birthtimeMs - a.stat.birthtimeMs)
+      .sort((a, b) => b.stat.mtimeMs - a.stat.mtimeMs)
       .map(f => f.file);
 
     files.forEach(file => {
