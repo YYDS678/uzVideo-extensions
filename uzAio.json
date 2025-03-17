@@ -2,16 +2,16 @@
   "danMu": [
     {
       "name": "弹幕扩展",
-      "version": 1,
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
-      "type": 400
-    },
-    {
-      "name": "弹幕扩展",
       "version": 9,
       "remark": "搜不到就算了，不要那么执着",
       "codeID": "RkgRA9srEAgMgLcBJ78G2wlPRKTWWiwE",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
+      "type": 400
+    },
+    {
+      "name": "弹幕扩展",
+      "version": 1,
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
       "type": 400
     }
   ],
@@ -37,6 +37,20 @@
   ],
   "vod": [
     {
+      "name": "玩偶哥哥",
+      "version": 3,
+      "webSite": "http://wogg.xxooo.cf",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/wobg.js",
+      "type": 101
+    },
+    {
+      "name": "特下饭",
+      "version": 1,
+      "webSite": "http://www.xn--ghqy10g1w0a.xyz/",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiafan.js",
+      "type": 101
+    },
+    {
       "name": "小米盘",
       "version": 3,
       "webSite": "http://www.mucpan.cc",
@@ -57,6 +71,21 @@
       "instance": "zxzj20240620",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/zxzj.js",
       "type": 100
+    },
+    {
+      "name": "老白听书",
+      "version": 2,
+      "webSite": "https://apk-lb-json.fodexin.com",
+      "instance": "laobai20240831",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/laobai.js",
+      "type": 100
+    },
+    {
+      "name": "六趣盘",
+      "version": 1,
+      "webSite": "https://wp.0v.fit",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/liuqu.js",
+      "type": 101
     },
     {
       "name": "mifun",
@@ -126,18 +155,22 @@
       "type": 100
     },
     {
-      "name": "玩偶哥哥",
-      "version": 3,
-      "webSite": "http://wogg.xxooo.cf",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/wobg.js",
-      "type": 101
+      "name": "瓜子 app",
+      "version": 2,
+      "remark": "v1.6.53 及以上版本",
+      "webSite": "https://api.9cec79d.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
+      "instance": "gzapp20241001",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
+      "type": 100
     },
     {
-      "name": "特下饭",
-      "version": 1,
-      "webSite": "http://www.xn--ghqy10g1w0a.xyz/",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiafan.js",
-      "type": 101
+      "name": "瓜子web",
+      "version": 2,
+      "webSite": "https://api.zaqohu.com",
+      "instance": "gzys20240822",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzys.js",
+      "type": 100
     },
     {
       "name": "韩剧看看",
@@ -167,21 +200,6 @@
       "version": 3,
       "webSite": "https://duopan.fun",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/labipan.js",
-      "type": 101
-    },
-    {
-      "name": "老白听书",
-      "version": 2,
-      "webSite": "https://apk-lb-json.fodexin.com",
-      "instance": "laobai20240831",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/laobai.js",
-      "type": 100
-    },
-    {
-      "name": "六趣盘",
-      "version": 1,
-      "webSite": "https://wp.0v.fit",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/liuqu.js",
       "type": 101
     },
     {
@@ -240,24 +258,6 @@
       "webSite": "https://eacg1.com",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/eacg2.js",
       "type": 101
-    },
-    {
-      "name": "瓜子 app",
-      "version": 2,
-      "remark": "v1.6.53 及以上版本",
-      "webSite": "https://api.9cec79d.com",
-      "codeID": "ra5Z3wtXKshzSMK2",
-      "instance": "gzapp20241001",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
-      "type": 100
-    },
-    {
-      "name": "瓜子web",
-      "version": 2,
-      "webSite": "https://api.zaqohu.com",
-      "instance": "gzys20240822",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzys.js",
-      "type": 100
     },
     {
       "name": "4k-av",
