@@ -2,14 +2,6 @@ name: Metadata JSON Generator
 
 on:
   push:
-    paths:
-      - 'danMu/js/**'
-      - 'panTools/js/**'
-      - 'recommend/js/**'
-      - 'vod/js/**'
-      - 'cms/**'
-      - 'live/**'
-      - 'action/**'
 
 jobs:
   generate-metadata:

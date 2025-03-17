@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const child_process = require('child_process');
 
 const TYPE_MAPPING = {
   'danMu/js': 400,
@@ -34,7 +35,21 @@ const parseComments = (filePath) => {
   }
   // 获取当前分支名称，默认为 main
   const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main';
-  metadata.api = `https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/${branch}/${relativePath}`;
+  function getRepoInfo() {
+    if (process.env.GITHUB_REPOSITORY) {
+      return process.env.GITHUB_REPOSITORY.split('/');
+    }
+    try {
+      const gitUrl = child_process.execSync('git config --get remote.origin.url').toString().trim();
+      const matches = gitUrl.match(/github\.com[:\/](.+?)\/(.+?)(\.git)?$/);
+      if (!matches) throw new Error('无法解析Git远程URL');
+      return [matches[1], matches[2]];
+    } catch (error) {
+      throw new Error('获取仓库信息失败: ' + error.message);
+    }
+  }
+  const [owner, repo] = getRepoInfo();
+  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${relativePath}`;
 
   return metadata;
 };
@@ -95,14 +110,37 @@ const main = () => {
   const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'));
   allInOneResult.vod.push(...cmsData);
 
-
-
-
   // 写入整合后的uzAio.json
-  fs.writeFileSync('uzAio_auto.json', JSON.stringify(allInOneResult, null, 2));
+  fs.writeFileSync('uzAio_raw.json', JSON.stringify(allInOneResult, null, 2));
 
   // 写入整合后的uzAV.json
+  fs.writeFileSync('av_raw_auto.json', JSON.stringify(avResultList, null, 2));
+
+  const githubProxy = "https://github.moeyy.xyz/";
+  const githubRawHost = "https://raw.githubusercontent.com";
+  allInOneResult.vod.forEach(item => {
+    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  });
+  allInOneResult.panTools.forEach(item => {
+    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  });
+  allInOneResult.recommend.forEach(item => {
+    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  });
+  allInOneResult.danMu.forEach(item => {
+    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  });
+  allInOneResult.live.forEach(item => {
+    item.url = item.url.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  });
+
+  fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2));
+
+  avResultList.forEach(item => {
+    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`)
+  });
   fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2));
+
 
 };
 
