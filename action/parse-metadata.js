@@ -54,7 +54,10 @@ const main = () => {
     if (!fs.existsSync(fullPath)) return;
 
     const files = fs.readdirSync(fullPath)
-      .filter(f => f.endsWith('.js') || f.endsWith('.txt'));
+      .filter(f => f.endsWith('.js') || f.endsWith('.txt'))
+      .map(f => ({ file: f, stat: fs.statSync(path.join(fullPath, f)) }))
+      .sort((a, b) => b.stat.birthtimeMs - a.stat.birthtimeMs)
+      .map(f => f.file);
 
     files.forEach(file => {
       const filePath = path.join(fullPath, file);
@@ -99,7 +102,7 @@ const main = () => {
   fs.writeFileSync('uzAio_auto.json', JSON.stringify(allInOneResult, null, 2));
 
   // 写入整合后的uzAV.json
-  fs.writeFileSync('uzAV_auto.json', JSON.stringify(avResultList, null, 2));
+  fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2));
 
 };
 
