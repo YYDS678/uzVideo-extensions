@@ -23,6 +23,14 @@
       "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/panTools/js/panTools.js",
       "type": 300
+    },
+    {
+      "name": "夸克|123|189|UC 网盘解析工具",
+      "version": 14,
+      "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
+      "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/panTools/js/panTools2.js",
+      "type": 300
     }
   ],
   "recommend": [
@@ -36,6 +44,50 @@
     }
   ],
   "vod": [
+    {
+      "name": "至臻盘",
+      "version": 3,
+      "webSite": "https://mihdr.top",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zhizhen.js",
+      "type": 101
+    },
+    {
+      "name": "在线之家",
+      "version": 2,
+      "webSite": "https://www.zxzja.com",
+      "instance": "zxzj20240620",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zxzj.js",
+      "type": 100
+    },
+    {
+      "name": "木偶",
+      "version": 2,
+      "webSite": "http://www.muoupan.top",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/mogg.js",
+      "type": 101
+    },
+    {
+      "name": "南风短剧",
+      "version": 1,
+      "webSite": "https://www.nanf.cc",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/nanfdj.js",
+      "type": 101
+    },
+    {
+      "name": "欧乐影视",
+      "version": 2,
+      "webSite": "https://www.olevod.tv",
+      "instance": "olevod20240620",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/olevod.js",
+      "type": 100
+    },
+    {
+      "name": "讴歌盘",
+      "version": 3,
+      "webSite": "https://woog.nxog.eu.org",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/ouge.js",
+      "type": 101
+    },
     {
       "name": "云盘资源网",
       "version": 1,
@@ -89,18 +141,18 @@
       "type": 101
     },
     {
-      "name": "至臻盘",
-      "version": 3,
-      "webSite": "https://mihdr.top",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zhizhen.js",
+      "name": "虎斑盘",
+      "version": 1,
+      "webSite": "http://103.45.162.207:20720",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/huban.js",
       "type": 101
     },
     {
-      "name": "在线之家",
+      "name": "金牌影视",
       "version": 2,
-      "webSite": "https://www.zxzja.com",
-      "instance": "zxzj20240620",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zxzj.js",
+      "webSite": "https://www.ghw9zwp5.com",
+      "instance": "jpyy20240716",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/jpyy.js",
       "type": 100
     },
     {
@@ -130,97 +182,6 @@
       "version": 1,
       "webSite": "http://www.mifun.tw",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/mifun.js",
-      "type": 101
-    },
-    {
-      "name": "木偶",
-      "version": 2,
-      "webSite": "http://www.muoupan.top",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/mogg.js",
-      "type": 101
-    },
-    {
-      "name": "南风短剧",
-      "version": 1,
-      "webSite": "https://www.nanf.cc",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/nanfdj.js",
-      "type": 101
-    },
-    {
-      "name": "欧乐影视",
-      "version": 2,
-      "webSite": "https://www.olevod.tv",
-      "instance": "olevod20240620",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/olevod.js",
-      "type": 100
-    },
-    {
-      "name": "讴歌盘",
-      "version": 3,
-      "webSite": "https://woog.nxog.eu.org",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/ouge.js",
-      "type": 101
-    },
-    {
-      "name": "瓜子 app",
-      "version": 2,
-      "remark": "v1.6.53 及以上版本",
-      "webSite": "https://api.9cec79d.com",
-      "codeID": "ra5Z3wtXKshzSMK2",
-      "instance": "gzapp20241001",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzapp.txt",
-      "type": 100
-    },
-    {
-      "name": "瓜子web",
-      "version": 2,
-      "webSite": "https://api.zaqohu.com",
-      "instance": "gzys20240822",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzys.js",
-      "type": 100
-    },
-    {
-      "name": "韩剧看看",
-      "version": 2,
-      "webSite": "https://www.hanjukankan.com",
-      "instance": "hjkk20240624",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hjkk.js",
-      "type": 100
-    },
-    {
-      "name": "虎斑盘",
-      "version": 1,
-      "webSite": "http://103.45.162.207:20720",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/huban.js",
-      "type": 101
-    },
-    {
-      "name": "金牌影视",
-      "version": 2,
-      "webSite": "https://www.ghw9zwp5.com",
-      "instance": "jpyy20240716",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/jpyy.js",
-      "type": 100
-    },
-    {
-      "name": "aggl",
-      "version": 1,
-      "webSite": "https://anime.girigirilove.com",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/aggl.js",
-      "type": 101
-    },
-    {
-      "name": "两个bt",
-      "version": 2,
-      "webSite": "https://www.bttwoo.com",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/bttwo.js",
-      "type": 101
-    },
-    {
-      "name": "厂长影视",
-      "version": 2,
-      "webSite": "https://www.czzy77.com",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/changZhang20240614.js",
       "type": 101
     },
     {
@@ -267,12 +228,59 @@
       "type": 101
     },
     {
+      "name": "瓜子 app",
+      "version": 2,
+      "remark": "v1.6.53 及以上版本",
+      "webSite": "https://api.9cec79d.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
+      "instance": "gzapp20241001",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzapp.txt",
+      "type": 100
+    },
+    {
+      "name": "瓜子web",
+      "version": 2,
+      "webSite": "https://api.zaqohu.com",
+      "instance": "gzys20240822",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/gzys.js",
+      "type": 100
+    },
+    {
+      "name": "韩剧看看",
+      "version": 2,
+      "webSite": "https://www.hanjukankan.com",
+      "instance": "hjkk20240624",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hjkk.js",
+      "type": 100
+    },
+    {
       "name": "4k-av",
       "version": 2,
       "webSite": "https://4k-av.com",
       "instance": "www4kav20240705",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/4kav.js",
       "type": 100
+    },
+    {
+      "name": "aggl",
+      "version": 1,
+      "webSite": "https://anime.girigirilove.com",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/aggl.js",
+      "type": 101
+    },
+    {
+      "name": "两个bt",
+      "version": 2,
+      "webSite": "https://www.bttwoo.com",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/bttwo.js",
+      "type": 101
+    },
+    {
+      "name": "厂长影视",
+      "version": 2,
+      "webSite": "https://www.czzy77.com",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/changZhang20240614.js",
+      "type": 101
     },
     {
       "api": "https://cj.rycjapi.com/api.php/provide/vod",
