@@ -1,26 +1,10 @@
 [
   {
-    "name": "missav",
-    "version": 2,
-    "webSite": "https://missav.ai",
-    "instance": "missav20240627",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/missav.js",
-    "type": 100
-  },
-  {
     "name": "netflav",
     "version": 2,
     "webSite": "https://www.netflav.com",
     "instance": "netflav20240905",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/netflav.js",
-    "type": 100
-  },
-  {
-    "name": "玩偶姐姐",
-    "version": 2,
-    "webSite": "https://hongkongdollvideo.com",
-    "instance": "hkdoll20240705",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hkdoll.js",
     "type": 100
   },
   {
@@ -37,6 +21,22 @@
     "webSite": "https://madou.club",
     "instance": "madou20240626",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/madou.js",
+    "type": 100
+  },
+  {
+    "name": "missav",
+    "version": 2,
+    "webSite": "https://missav.ai",
+    "instance": "missav20240627",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/missav.js",
+    "type": 100
+  },
+  {
+    "name": "玩偶姐姐",
+    "version": 2,
+    "webSite": "https://hongkongdollvideo.com",
+    "instance": "hkdoll20240705",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hkdoll.js",
     "type": 100
   },
   {

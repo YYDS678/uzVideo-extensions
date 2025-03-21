@@ -45,21 +45,6 @@
   ],
   "vod": [
     {
-      "name": "至臻盘",
-      "version": 3,
-      "webSite": "https://mihdr.top",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zhizhen.js",
-      "type": 101
-    },
-    {
-      "name": "在线之家",
-      "version": 2,
-      "webSite": "https://www.zxzja.com",
-      "instance": "zxzj20240620",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zxzj.js",
-      "type": 100
-    },
-    {
       "name": "木偶",
       "version": 2,
       "webSite": "http://www.muoupan.top",
@@ -141,11 +126,19 @@
       "type": 101
     },
     {
-      "name": "虎斑盘",
-      "version": 1,
-      "webSite": "http://103.45.162.207:20720",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/huban.js",
+      "name": "至臻盘",
+      "version": 3,
+      "webSite": "https://mihdr.top",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zhizhen.js",
       "type": 101
+    },
+    {
+      "name": "在线之家",
+      "version": 2,
+      "webSite": "https://www.zxzja.com",
+      "instance": "zxzj20240620",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/zxzj.js",
+      "type": 100
     },
     {
       "name": "金牌影视",
@@ -252,6 +245,13 @@
       "instance": "hjkk20240624",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/hjkk.js",
       "type": 100
+    },
+    {
+      "name": "虎斑盘",
+      "version": 1,
+      "webSite": "http://103.45.162.207:20720",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/huban.js",
+      "type": 101
     },
     {
       "name": "4k-av",
