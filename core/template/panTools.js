@@ -1,11 +1,64 @@
 // ignore
+//@name:扩展名称
+// 版本号纯数字
+//@version:1
+// 备注，没有的话就不填
+//@remark:这是备注
+// 加密 id，没有的话就不填
+//@codeID:
+// 使用的环境变量，没有的话就不填
+//@env:
+// 是否是AV 1是  0否
+//@isAV:0
+//是否弃用 1是  0否
+//@deprecated:0
+// ignore
+
+
+
+// ignore
 // 不支持导入，这里只是本地开发用于代码提示
 // 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
-import {} from '../uzVideo.js'
-import {} from './uzHome.js'
-import {} from '../uz3lib.js'
-import {} from '../uzUtils.js'
+import {
+    FilterLabel,
+    FilterTitle,
+    VideoClass,
+    VideoSubclass,
+    VideoDetail,
+    RepVideoClassList,
+    RepVideoSubclassList,
+    RepVideoList,
+    RepVideoDetail,
+    RepVideoPlayUrl,
+    UZArgs,
+    UZSubclassVideoListArgs,
+} from '../core/uzVideo.js'
+
+import {
+    UZUtils,
+    ProData,
+    ReqResponseType,
+    ReqAddressType,
+    req,
+    getEnv,
+    setEnv,
+    goToVerify,
+    openWebToBindEnv,
+    toast,
+    kIsDesktop,
+    kIsAndroid,
+    kIsIOS,
+    kIsWindows,
+    kIsMacOS,
+    kIsTV,
+    kLocale,
+    kAppVersion,
+    formatBackData,
+} from '../core/uzUtils.js'
+
+import { cheerio, Crypto, Encrypt, JSONbig } from '../core/uz3lib.js'
 // ignore
+
 
 /**
  * 网盘类型
@@ -163,10 +216,10 @@ class PanMountListData {
 }
 
 //MARK: - 夸克 UC 相关实现
-class QuarkUC {}
+class QuarkUC { }
 
 //MARK: - 阿里 相关实现
-class Ali {}
+class Ali { }
 
 //MARK: 网盘扩展统一入口
 /**
@@ -369,21 +422,21 @@ class PanTools {
      * @param {PanType} panType
      * @returns {@Promise<{data:[PanMountListData],error:string}>}
      */
-    async getRootDir(panType) {}
+    async getRootDir(panType) { }
 
     /**
      * 获取网盘挂载子目录
      * @param {PanMountListData} item
      * @returns {@Promise<{data:[PanMountListData],error:string}>}
      */
-    async getMountDir(item) {}
+    async getMountDir(item) { }
 
     /**
      * 获取网盘挂载文件真实地址
      * @param {PanMountListData} item
      * @returns {@Promise<PanPlayInfo>}
      */
-    async getMountFile(item) {}
+    async getMountFile(item) { }
 }
 
 // 固定实例名称

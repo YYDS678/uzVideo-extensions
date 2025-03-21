@@ -1,0 +1,7 @@
+{
+  "name": "uzvideo-extensions",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "uzVideo extensions",
+  "private": true
+}

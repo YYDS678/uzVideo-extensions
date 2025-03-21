@@ -1,5 +1,6 @@
 - [扩展说明](#扩展说明)
 - [模板](#模板)
+  - [本地开发测试](#本地开发测试)
   - [uzUtils.js 提供网络、存储、toast 等功能](#uzutilsjs-提供网络存储toast-等功能)
 - [视频源 type:101 扩展运行说明](#视频源-type101-扩展运行说明)
 - [uzHome(首页推荐 type:200) 扩展运行说明](#uzhome首页推荐-type200-扩展运行说明)
@@ -8,6 +9,7 @@
 - [请为扩展添加以下注释，用于自动更新 json](#请为扩展添加以下注释用于自动更新-json)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.54](#v1654)
     - [v1.6.53](#v1653)
     - [v1.6.52](#v1652)
     - [v1.6.49](#v1649)
@@ -44,6 +46,12 @@
 2. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
 3. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
 4. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
+
+## 本地开发测试
+ 1. 下载本仓库
+ 2. 在 `template` 文件夹内选择要开发扩展类型
+ 3. 修改文件顶部 //@  相关内容
+ 4. 右键 Debug File
 
 ## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
 
@@ -164,6 +172,10 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+
+### v1.6.54
+1. 添加 `Buffer` `JSONbig`  库
+2. `req` 支持控制重定向 `maxRedirects`
 
 ### v1.6.53
 

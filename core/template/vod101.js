@@ -1,11 +1,68 @@
 // ignore
-// 不支持导入，这里只是本地开发用于代码提示
-// 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
-import {} from '../uzVideo.js'
-import {} from '../uzUtils.js'
-import {} from '../uz3lib.js'
+
+//@name:扩展名称
+// 网站主页，只有视频源扩展需要
+//@webSite:网站主页
+// 版本号纯数字
+//@version:1
+// 备注，没有的话就不填
+//@remark:这是备注
+// 加密 id，没有的话就不填
+//@codeID:
+// 使用的环境变量，没有的话就不填
+//@env:
+// 是否是AV 1是  0否
+//@isAV:0
+//是否弃用 1是  0否
+//@deprecated:0
 
 // ignore
+
+
+
+// ignore
+// 不支持导入，这里只是本地开发用于代码提示
+// 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
+import {
+    FilterLabel,
+    FilterTitle,
+    VideoClass,
+    VideoSubclass,
+    VideoDetail,
+    RepVideoClassList,
+    RepVideoSubclassList,
+    RepVideoList,
+    RepVideoDetail,
+    RepVideoPlayUrl,
+    UZArgs,
+    UZSubclassVideoListArgs,
+} from '../core/uzVideo.js'
+
+import {
+    UZUtils,
+    ProData,
+    ReqResponseType,
+    ReqAddressType,
+    req,
+    getEnv,
+    setEnv,
+    goToVerify,
+    openWebToBindEnv,
+    toast,
+    kIsDesktop,
+    kIsAndroid,
+    kIsIOS,
+    kIsWindows,
+    kIsMacOS,
+    kIsTV,
+    kLocale,
+    kAppVersion,
+    formatBackData,
+} from '../core/uzUtils.js'
+
+import { cheerio, Crypto, Encrypt, JSONbig } from '../core/uz3lib.js'
+// ignore
+
 
 //MARK: 注意
 // 直接复制该文件进行扩展开发
