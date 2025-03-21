@@ -1519,6 +1519,20 @@ class qs {
 
     return pairs.join('&')
   }
+
+  static toObject(str) {
+    if (typeof str !== 'string' || str.length === 0) {
+      return {}
+    }
+    str = str.replace(/&/g, ',').replace(/=/g, ':')
+    const obj = {}
+    const pairs = str.split(',')
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i].split(':')
+      obj[pair[0]] = pair[1]
+    }
+    return obj
+  }
 }
 
 //123盘
@@ -1727,72 +1741,87 @@ class Pan123 {
   }
 
   async getDownload(shareKey, FileId, S3KeyFlag, Size, Etag) {
-    await this.init()
-    let data = JSON.stringify({
-      ShareKey: shareKey,
-      FileID: FileId,
-      S3KeyFlag: S3KeyFlag,
-      Size: Size,
-      Etag: Etag,
-    })
-    let config = {
-      method: 'POST',
-      url: `${this.api}download/info`,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-        Authorization: `Bearer ${this.auth}`,
-        'Content-Type': 'application/json;charset=UTF-8',
-        platform: 'android',
-      },
-      data: data,
-    }
-    const resp = await axios.request(config)
-    let down = resp?.data?.data
-    let url = down?.DownloadURL
-    if (url.length < 1) {
+    try {
+      await this.init()
+      let data = JSON.stringify({
+        ShareKey: shareKey,
+        FileID: FileId,
+        S3KeyFlag: S3KeyFlag,
+        Size: Size,
+        Etag: Etag,
+      })
+
+      let config = {
+        method: 'POST',
+        url: `${this.api}download/info`,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+          Authorization: `Bearer ${this.auth}`,
+          'Content-Type': 'application/json;charset=UTF-8',
+          platform: 'android',
+        },
+        data: data,
+      }
+      const resp = await axios.request(config)
+
+      let down = resp?.data?.data
+      let url = down?.DownloadURL
+
+      if (url.length < 1) {
+        return []
+      }
+
+      const query = qs.toObject(url.split('?')[1])
+
+      url = base64Decode(query.params)
+      return [
+        {
+          url: url,
+          name: '原画',
+          priority: 9999,
+          headers: {},
+        },
+      ]
+    } catch (error) {
       return []
-    }
-    let params = url.split('params=')[1]
-    url = base64Decode(params)
-    return {
-      url: url,
-      name: '原画',
-      priority: 9999,
-      headers: {},
     }
   }
 
   async getLiveTranscoding(shareKey, FileId, S3KeyFlag, Size, Etag) {
-    await this.init()
-    let config = {
-      method: 'GET',
-      url: `https://www.123684.com/b/api/video/play/info`,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-        Authorization: `Bearer ${this.auth}`,
-        'Content-Type': 'application/json;charset=UTF-8',
-        platform: 'android',
-      },
-      params: {
-        etag: Etag,
-        size: Size,
-        from: '1',
-        shareKey: shareKey,
-      },
-    }
-    let down = (await axios.request(config))?.data?.data?.video_play_info
-    let videoinfo = []
-    down?.forEach((item) => {
-      if (item.url !== '') {
-        videoinfo.push({
-          name: item.resolution,
-          url: item.url,
-          priority: item.height,
-        })
+    try {
+      await this.init()
+      let config = {
+        method: 'GET',
+        url: `https://www.123684.com/b/api/video/play/info`,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+          Authorization: `Bearer ${this.auth}`,
+          'Content-Type': 'application/json;charset=UTF-8',
+          platform: 'android',
+        },
+        params: {
+          etag: Etag,
+          size: Size,
+          from: '1',
+          shareKey: shareKey,
+        },
       }
-    })
+      let down = (await axios.request(config))?.data?.data?.video_play_info
+      let videoinfo = []
+      down?.forEach((item) => {
+        if (item.url !== '') {
+          videoinfo.push({
+            name: item.resolution,
+            url: item.url,
+            priority: item.height,
+          })
+        }
+      })
 
-    return videoinfo
+      return videoinfo
+    } catch (error) {
+      return []
+    }
   }
 
   async getPlayUrl(data) {
@@ -1805,7 +1834,7 @@ class Pan123 {
     const raw = await this.getDownload(data.ShareKey, data.FileId, data.S3KeyFlag, data.Size, data.Etag)
 
     const transcoding = await this.getLiveTranscoding(data.ShareKey, data.FileId, data.S3KeyFlag, data.Size, data.Etag)
-    const urls = [raw, ...transcoding]
+    const urls = [...raw, ...transcoding]
 
     return {
       urls: urls,
