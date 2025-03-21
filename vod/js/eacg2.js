@@ -18,7 +18,7 @@ const webSite = 'https://eacg1.com'
 // 网站搜索
 // https://eacg1.com/vodsearch/海----------2---.html
 // 把网站主页变成 @{webSite} 把搜索词变成 @{searchWord}  把页码变成 @{page}
-const searchUrl = '@{webSite}/vodsearch/@{searchWord}----------@{page}---.html'
+const searchUrl = '@{webSite}/vodsearch/@{searchWord}-------------.html'
 // 当前网站任意视频详情页
 // https://eacg1.com/voddetails-55797.html
 const videoDetailPage = '@{webSite}/voddetails-55797.html'
