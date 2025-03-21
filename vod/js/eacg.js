@@ -65,7 +65,7 @@ const appConfig = {
   // MARK: 2.1 不带筛选的
   // 如果不写筛选那么只需要 @{webSite}  @{mainId}  @{page} 这三个参数
   // 我们这个例子里剧场版的链接 https://eacg1.com/vodshow/24--------2---.html
-  mainListUrl: '@{webSite}/vodshow/@{mainId}--------@{page}---.html',
+  mainListUrl: '@{webSite}/vodshow/@{mainId}-----------.html',
 
   firstClass: [
     {
