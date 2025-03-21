@@ -22,7 +22,7 @@ jobs:
 
     - name: Generate Metadata
       run: |
-        node action/parse-metadata.js
+        node action/parse-metadata.cjs
 
     - name: Commit changes
       run: |
