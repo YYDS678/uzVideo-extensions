@@ -1617,51 +1617,64 @@ class Pan123 {
 
   fileName = ''
   async getFilesByShareUrl(shareUrl) {
-    const shareKey = this.getShareData(shareUrl)
-    this.fileName = ''
-    let file = {}
-    let cate = await this.getShareInfo(shareKey, this.SharePwd, 0, 0)
-    if (cate && Array.isArray(cate)) {
-      await Promise.all(
-        cate.map(async (item) => {
-          if (!(item.filename in file)) {
-            file[item.filename] = []
-          }
-          const fileData = await this.getShareList(item.shareKey, item.SharePwd, item.next, item.fileId)
-          if (fileData && fileData.length > 0) {
-            file[item.filename].push(...fileData)
-          }
-        })
-      )
-    }
+    try {
+      const shareKey = this.getShareData(shareUrl)
+      this.fileName = ''
+      let file = {}
+      let cate = await this.getShareInfo(shareKey, this.SharePwd, 0, 0)
 
-    let videos = []
-    // 过滤掉空数组
-    for (let key in file) {
-      if (file[key].length > 0) {
-        for (let i = 0; i < file[key].length; i++) {
-          const element = file[key][i]
-          let size = element.Size / 1024 / 1024
-          let unit = 'MB'
-          if (size >= 1000) {
-            size = size / 1024
-            unit = 'GB'
-          }
-          size = size.toFixed(1)
-          videos.push({
-            name: element.FileName,
-            remark: `[${size}${unit}]`,
-            panType: PanType.Pan123,
-            data: element,
-            fromName: key,
+      if (cate && Array.isArray(cate)) {
+        await Promise.all(
+          cate.map(async (item) => {
+            if (!(item.filename in file)) {
+              file[item.filename] = []
+            }
+
+            const fileData = await this.getShareList(item.shareKey, item.SharePwd, item.next, item.fileId)
+
+            if (fileData && fileData.length > 0) {
+              file[item.filename].push(...fileData)
+            }
           })
+        )
+      }
+
+      let videos = []
+
+      // 过滤掉空数组
+      for (let key in file) {
+        if (file[key].length > 0) {
+          for (let i = 0; i < file[key].length; i++) {
+            const element = file[key][i]
+            let size = element.Size / 1024 / 1024
+            let unit = 'MB'
+            if (size >= 1000) {
+              size = size / 1024
+              unit = 'GB'
+            }
+            size = size.toFixed(1)
+            videos.push({
+              name: element.FileName,
+              remark: `[${size}${unit}]`,
+              panType: PanType.Pan123,
+              data: element,
+              fromName: key,
+            })
+          }
         }
       }
-    }
-    return {
-      videos: videos,
-      fileName: this.fileName,
-      error: '',
+
+      return {
+        videos: videos,
+        fileName: this.fileName,
+        error: '',
+      }
+    } catch (error) {
+      return {
+        videos: [],
+        fileName: '',
+        error: error.toString(),
+      }
     }
   }
 
@@ -1684,6 +1697,9 @@ class Pan123 {
       if (list.data.code === 5103) {
       } else {
         let info = list.data.data
+        if (info == null) {
+          return []
+        }
         let next = info.Next
         let infoList = info.InfoList
 
@@ -1709,35 +1725,39 @@ class Pan123 {
   }
 
   async getShareList(shareKey, SharePwd, next, ParentFileId) {
-    let video = []
-    let infoList = (
-      await axios.get(this.api + 'get', {
-        headers: {},
-        params: {
-          limit: '100',
-          next: next,
-          orderBy: 'file_name',
-          orderDirection: 'asc',
-          shareKey: shareKey,
-          SharePwd: SharePwd ?? '',
-          ParentFileId: ParentFileId,
-          Page: '1',
-        },
-      })
-    ).data.data.InfoList
-    infoList.forEach((it) => {
-      if (it.Category === 2) {
-        video.push({
-          ShareKey: shareKey,
-          FileId: it.FileId,
-          S3KeyFlag: it.S3KeyFlag,
-          Size: it.Size,
-          Etag: it.Etag,
-          FileName: it.FileName,
+    try {
+      let video = []
+      let infoList = (
+        await axios.get(this.api + 'get', {
+          headers: {},
+          params: {
+            limit: '100',
+            next: next,
+            orderBy: 'file_name',
+            orderDirection: 'asc',
+            shareKey: shareKey,
+            SharePwd: SharePwd ?? '',
+            ParentFileId: ParentFileId,
+            Page: '1',
+          },
         })
-      }
-    })
-    return video
+      ).data?.data?.InfoList
+      infoList?.forEach((it) => {
+        if (it.Category === 2) {
+          video.push({
+            ShareKey: shareKey,
+            FileId: it.FileId,
+            S3KeyFlag: it.S3KeyFlag,
+            Size: it.Size,
+            Etag: it.Etag,
+            FileName: it.FileName,
+          })
+        }
+      })
+      return video
+    } catch (error) {
+      return []
+    }
   }
 
   async getDownload(shareKey, FileId, S3KeyFlag, Size, Etag) {
