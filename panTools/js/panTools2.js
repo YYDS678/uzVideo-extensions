@@ -1,5 +1,5 @@
 //@name:夸克|123|189|UC 网盘解析工具
-//@version:14
+//@version:15
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频
 // ignore
@@ -16,7 +16,7 @@ import {
   RepVideoPlayUrl,
   UZArgs,
   UZSubclassVideoListArgs,
-} from './core/uzVideo.js'
+} from '../../core/core/uzVideo.js'
 
 import {
   UZUtils,
@@ -38,9 +38,9 @@ import {
   kLocale,
   kAppVersion,
   formatBackData,
-} from './core/uzUtils.js'
+} from '../../core/core/uzUtils.js'
 
-import { cheerio, Crypto, Encrypt, JSONbig } from './core/uz3lib.js'
+import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // ignore
 
 /**
@@ -501,10 +501,10 @@ class QuarkUC {
         passcode: shareData.sharePwd || '',
       })
       if (this.fileName.length < 1) {
-        this.fileName = shareToken.data.title
+        this.fileName = shareToken?.data?.title
       }
-      if (shareToken.data != null && shareToken.data.stoken != null) {
-        this.shareTokenCache[shareData.shareId] = shareToken.data
+      if (shareToken?.data != null && shareToken?.data?.stoken != null) {
+        this.shareTokenCache[shareData.shareId] = shareToken?.data
       }
     }
   }
@@ -2001,95 +2001,111 @@ class Pan189 {
   }
 
   async getShareID(url, accessCode) {
-    const matches = this.regex.exec(url)
-    if (matches && matches[1]) {
-      this.shareCode = matches[1]
-      const accessCodeMatch = this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
-      this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
-    } else {
-      const matches_ = url.match(/https:\/\/cloud\.189\.cn\/t\/([^&]+)/)
-      this.shareCode = matches_ ? matches_[1] : null
-      const accessCodeMatch = this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
-      this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
-    }
-    if (accessCode) {
-      this.accessCode = accessCode
+    try {
+      const matches = this.regex.exec(url)
+      if (matches && matches[1]) {
+        this.shareCode = matches[1]
+        const accessCodeMatch = this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
+        this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
+      } else {
+        const matches_ = url.match(/https:\/\/cloud\.189\.cn\/t\/([^&]+)/)
+        this.shareCode = matches_ ? matches_[1] : null
+        const accessCodeMatch = this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
+        this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
+      }
+      if (accessCode) {
+        this.accessCode = accessCode
+      }
+    } catch (error) {
+
+
     }
   }
 
   fileName = ''
   async getShareData(shareUrl, accessCode) {
-    let file = {}
-    let fileData = []
-    this.fileName = ''
-    let fileId = await this.getShareInfo(shareUrl, accessCode)
-    if (fileId) {
-      let fileList = await this.getShareList(fileId)
-      if (fileList && Array.isArray(fileList)) {
-        await Promise.all(
-          fileList.map(async (item) => {
-            if (!(item.name in file)) {
-              file[item.name] = []
-            }
-            const fileData = await this.getShareFile(item.id)
-            if (fileData && fileData.length > 0) {
-              file[item.name].push(...fileData)
-            }
-          })
-        )
-      } else {
-        file['root'] = await this.getShareFile(fileId)
-      }
-    }
-    // 过滤掉空数组
-    for (let key in file) {
-      if (file[key].length === 0) {
-        delete file[key]
-      }
-    }
-    // 如果 file 对象为空，重新获取 root 数据并过滤空数组
-    if (Object.keys(file).length === 0) {
-      file['root'] = await this.getShareFile(fileId)
-      if (file['root'] && Array.isArray(file['root'])) {
-        file['root'] = file['root'].filter((item) => item && Object.keys(item).length > 0)
-      }
-    }
+    try {
+      let file = {}
+      let fileData = []
+      this.fileName = ''
+      let fileId = await this.getShareInfo(shareUrl, accessCode)
 
-    let videos = []
-    for (let key in file) {
-      for (let i = 0; i < file[key].length; i++) {
-        const element = file[key][i]
-        let size = element.size / 1024 / 1024
-        let unit = 'MB'
-        if (size >= 1000) {
-          size = size / 1024
-          unit = 'GB'
+
+      if (fileId) {
+        let fileList = await this.getShareList(fileId)
+        if (fileList && Array.isArray(fileList)) {
+          await Promise.all(
+            fileList.map(async (item) => {
+              if (!(item.name in file)) {
+                file[item.name] = []
+              }
+              const fileData = await this.getShareFile(item.id)
+              if (fileData && fileData.length > 0) {
+                file[item.name].push(...fileData)
+              }
+            })
+          )
+        } else {
+          file['root'] = await this.getShareFile(fileId)
         }
-        size = size.toFixed(1)
-        videos.push({
-          name: element.name,
-          remark: `[${size}${unit}]`,
-          panType: PanType.Pan189,
-          data: element,
-          fromName: key,
-        })
       }
-    }
+      // 过滤掉空数组
+      for (let key in file) {
+        if (file[key].length === 0) {
+          delete file[key]
+        }
+      }
+      // 如果 file 对象为空，重新获取 root 数据并过滤空数组
+      if (Object.keys(file).length === 0) {
+        file['root'] = await this.getShareFile(fileId)
+        if (file['root'] && Array.isArray(file['root'])) {
+          file['root'] = file['root'].filter((item) => item && Object.keys(item).length > 0)
+        }
+      }
 
-    return {
-      videos: videos,
-      fileName: this.fileName,
-      error: '',
+      let videos = []
+      for (let key in file) {
+        for (let i = 0; i < file[key]?.length; i++) {
+          const element = file[key][i]
+          let size = element.size / 1024 / 1024
+          let unit = 'MB'
+          if (size >= 1000) {
+            size = size / 1024
+            unit = 'GB'
+          }
+          size = size.toFixed(1)
+          videos.push({
+            name: element.name,
+            remark: `[${size}${unit}]`,
+            panType: PanType.Pan189,
+            data: element,
+            fromName: key,
+          })
+        }
+      }
+
+      return {
+        videos: videos,
+        fileName: this.fileName,
+        error: '',
+      }
+    } catch (error) {
+
+      return {
+        videos: [],
+        error: ""
+      }
     }
   }
 
   async getShareInfo(shareUrl, accessCode) {
-    if (shareUrl.startsWith('http')) {
-      await this.getShareID(shareUrl, accessCode)
-    } else {
-      this.shareCode = shareUrl
-    }
+
     try {
+      if (shareUrl.startsWith('http')) {
+        await this.getShareID(shareUrl, accessCode)
+      } else {
+        this.shareCode = shareUrl
+      }
       if (accessCode) {
         let check = await axios.get(`${this.api}/open/share/checkAccessCode.action?shareCode=${this.shareCode}&accessCode=${this.accessCode}`, {
           headers: {
@@ -2160,7 +2176,7 @@ class Pan189 {
 
       let resp = await req(url, options)
 
-      const text = resp.data
+      const text = resp?.data ?? ""
       const json = JSONbig.parse(text)
 
       const data = json?.fileListAO
@@ -2183,11 +2199,18 @@ class Pan189 {
         result = result.filter((item) => item !== undefined && item !== null)
         return [...videos, ...result.flat()]
       }
-    } catch (e) { }
+    } catch (e) {
+
+
+    }
   }
 
   async getShareFile(fileId) {
+
     try {
+      if (!fileId) {
+        return null
+      }
       const headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
         Accept: 'application/json;charset=UTF-8',
@@ -2208,7 +2231,7 @@ class Pan189 {
         return null
       }
 
-      let json = JSONbig.parse(resp.data)
+      let json = JSONbig.parse(resp.data ?? "")
 
       let videos = []
       const data = json?.fileListAO
@@ -2228,7 +2251,10 @@ class Pan189 {
         }
       }
       return videos
-    } catch (e) { }
+    } catch (e) {
+
+
+    }
   }
 
   async getPlayUrl(data) {
