@@ -2,34 +2,34 @@
   "danMu": [
     {
       "name": "弹幕扩展",
-      "version": 1,
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
+      "version": 10,
+      "remark": "搜不到就算了，不要那么执着",
+      "codeID": "HyplMQ00pLZipW1jy1e9qTsjZbznKjq2",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
       "type": 400
     },
     {
       "name": "弹幕扩展",
-      "version": 9,
-      "remark": "搜不到就算了，不要那么执着",
-      "codeID": "RkgRA9srEAgMgLcBJ78G2wlPRKTWWiwE",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
+      "version": 1,
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
       "type": 400
     }
   ],
   "panTools": [
+    {
+      "name": "夸克|123|189|UC 网盘解析工具",
+      "version": 15,
+      "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
+      "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools2.js",
+      "type": 300
+    },
     {
       "name": "UC、夸克、阿里 网盘解析工具",
       "version": 14,
       "remark": "iOS14 以上版本可用",
       "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools.js",
-      "type": 300
-    },
-    {
-      "name": "夸克|123|189|UC 网盘解析工具",
-      "version": 14,
-      "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
-      "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools2.js",
       "type": 300
     }
   ],
@@ -45,27 +45,6 @@
   ],
   "vod": [
     {
-      "name": "玩偶哥哥",
-      "version": 3,
-      "webSite": "http://wogg.xxooo.cf",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/wobg.js",
-      "type": 101
-    },
-    {
-      "name": "特下饭",
-      "version": 1,
-      "webSite": "http://www.xn--ghqy10g1w0a.xyz/",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiafan.js",
-      "type": 101
-    },
-    {
-      "name": "小米盘",
-      "version": 3,
-      "webSite": "http://www.mucpan.cc",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiaomi.js",
-      "type": 101
-    },
-    {
       "name": "至臻盘",
       "version": 3,
       "webSite": "https://mihdr.top",
@@ -79,13 +58,6 @@
       "instance": "zxzj20240620",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/zxzj.js",
       "type": 100
-    },
-    {
-      "name": "mifun",
-      "version": 1,
-      "webSite": "http://www.mifun.tw",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/mifun.js",
-      "type": 101
     },
     {
       "name": "木偶",
@@ -148,14 +120,25 @@
       "type": 100
     },
     {
-      "name": "瓜子 app",
-      "version": 2,
-      "remark": "v1.6.53 及以上版本",
-      "webSite": "https://api.9cec79d.com",
-      "codeID": "ra5Z3wtXKshzSMK2",
-      "instance": "gzapp20241001",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
-      "type": 100
+      "name": "玩偶哥哥",
+      "version": 3,
+      "webSite": "http://wogg.xxooo.cf",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/wobg.js",
+      "type": 101
+    },
+    {
+      "name": "特下饭",
+      "version": 1,
+      "webSite": "http://www.xn--ghqy10g1w0a.xyz/",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiafan.js",
+      "type": 101
+    },
+    {
+      "name": "小米盘",
+      "version": 3,
+      "webSite": "http://www.mucpan.cc",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiaomi.js",
+      "type": 101
     },
     {
       "name": "瓜子web",
@@ -208,6 +191,13 @@
       "version": 1,
       "webSite": "https://wp.0v.fit",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/liuqu.js",
+      "type": 101
+    },
+    {
+      "name": "mifun",
+      "version": 1,
+      "webSite": "http://www.mifun.tw",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/mifun.js",
       "type": 101
     },
     {
@@ -266,6 +256,16 @@
       "webSite": "https://eacg1.com",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/eacg2.js",
       "type": 101
+    },
+    {
+      "name": "瓜子 app",
+      "version": 2,
+      "remark": "v1.6.53 及以上版本",
+      "webSite": "https://api.9cec79d.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
+      "instance": "gzapp20241001",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
+      "type": 100
     },
     {
       "name": "4k-av",
