@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const child_process = require('child_process');
+const archiver = require('archiver');
+const { on } = require('events');
+
+
 
 const TYPE_MAPPING = {
   'danMu/js': 400,
@@ -8,6 +12,9 @@ const TYPE_MAPPING = {
   'recommend/js': 200,
   'vod/js': 101
 };
+
+
+const kLocalPathTAG = "_localPathTAG_"
 
 const parseComments = (filePath) => {
   const content = fs.readFileSync(filePath, 'utf8');
@@ -49,8 +56,7 @@ const parseComments = (filePath) => {
     }
   }
   const [owner, repo] = getRepoInfo();
-  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${relativePath}`;
-
+  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${kLocalPathTAG}${relativePath}`;
   return metadata;
 };
 
@@ -59,7 +65,7 @@ const extractValue = (content, tag) => {
   const match = content.match(regex);
   return match ? match[1].trim() : '';
 };
-const main = () => {
+const main = async () => {
   const directories = ['danMu/js', 'panTools/js', 'recommend/js', 'vod/js'];
   const allInOneResult = {};
   const avResultList = [];
@@ -110,37 +116,127 @@ const main = () => {
   const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'));
   allInOneResult.vod.push(...cmsData);
 
+
+
   // 写入整合后的uzAio.json
-  fs.writeFileSync('uzAio_raw.json', JSON.stringify(allInOneResult, null, 2));
+  fs.writeFileSync('uzAio_raw.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ""));
 
   // 写入整合后的uzAV.json
-  fs.writeFileSync('av_raw_auto.json', JSON.stringify(avResultList, null, 2));
+  fs.writeFileSync('av_raw_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ""));
+
+  let sources = [...allInOneResult.vod, ...allInOneResult.panTools, ...allInOneResult.recommend, ...allInOneResult.danMu, ...allInOneResult.live, ...avResultList];
 
   const githubProxy = "https://github.moeyy.xyz/";
   const githubRawHost = "https://raw.githubusercontent.com";
-  allInOneResult.vod.forEach(item => {
+  sources.forEach(item => {
     item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
   });
-  allInOneResult.panTools.forEach(item => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
-  });
-  allInOneResult.recommend.forEach(item => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
-  });
-  allInOneResult.danMu.forEach(item => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
-  });
-  allInOneResult.live.forEach(item => {
-    item.url = item.url.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`);
+  fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ""));
+  fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ""));
+
+
+
+
+  let sourcesCopy = JSON.parse(JSON.stringify(sources));
+  let envList = []
+  sourcesCopy.forEach(item => {
+    if (item.api.includes(kLocalPathTAG)) {
+      item.api = item.api.split(kLocalPathTAG)[1];
+    }
+    if (item.env?.length > 0) {
+      const longList = item.env.split("&&")
+      longList.forEach(env => {
+        const oneEnv = env.split("##")
+        envList.push({
+          name: oneEnv[0],
+          desc: oneEnv[1],
+          value: ""
+        })
+      })
+    }
   });
 
-  fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2));
+  fs.writeFileSync('local.json', JSON.stringify(sourcesCopy, null, 2));
+  fs.writeFileSync('env.json', JSON.stringify(envList, null, 2));
+  const includePaths = {
+    directories: ['danMu', 'panTools', 'recommend', 'vod', 'live', 'cms'],
+    files: ['local.json', 'env.json']
+  };
 
-  avResultList.forEach(item => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`)
+
+  const shouldInclude = (filePath) => {
+    const relativePath = path.relative(process.cwd(), filePath);
+    // 检查是否是指定的文件
+    if (includePaths.files.includes(relativePath)) {
+      return true;
+    }
+
+    // 检查是否在指定的目录下
+    return includePaths.directories.some(dir => relativePath.startsWith(dir));
+  };
+
+  // Create a zip archive
+  const output = fs.createWriteStream('uzAio.zip');
+  const archive = archiver('zip', {
+    zlib: { level: 9 } // Set the compression level
   });
-  fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2));
 
+  output.on('close', () => {
+    console.log(archive.pointer() + ' total bytes');
+    console.log('uzAio.zip has been created');
+  });
+
+
+  archive.on('error', (err) => {
+    throw err;
+  });
+
+  archive.on('warning', (err) => {
+    if (err.code === 'ENOENT') {
+      console.warn('Warning:', err);
+    } else {
+      throw err;
+    }
+  });
+
+
+  archive.pipe(output);
+
+  try {
+
+    const walk = (directoryPath) => {
+      const files = fs.readdirSync(directoryPath);
+
+      files.forEach((file) => {
+        try {
+          const filePath = path.join(directoryPath, file);
+          const stats = fs.statSync(filePath);
+
+          // 只处理包含的文件和目录
+          if (!shouldInclude(filePath)) {
+            return;
+          }
+
+          if (stats.isDirectory()) {
+            walk(filePath);
+          } else {
+            archive.file(filePath, { name: path.relative(process.cwd(), filePath) });
+          }
+        } catch (err) {
+          console.error(`Error processing ${file}:`, err);
+        }
+      });
+    };
+
+
+    walk(process.cwd());
+
+    // Finalize the archive
+    await archive.finalize();
+  } catch (err) {
+    console.error('Error creating archive:', err);
+    throw err;
+  }
 
 };
 
