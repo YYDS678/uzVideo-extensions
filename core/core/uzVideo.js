@@ -230,7 +230,7 @@ class RepVideoPlayUrl {
          * @type {object}
          * @property {string} url 嗅探的URL
          * @property {string} ua 嗅探的UA
-         * @property {number} timeOut 单次嗅探超时时间 单位秒 默认 30s
+         * @property {number} timeOut 单次嗅探超时时间 单位秒 默认 12s
          * @property {number} retry 重试次数 默认 1 次
          */
         this.sniffer = {}
