@@ -1,43 +1,5 @@
 [
   {
-    "name": "在线之家",
-    "version": 2,
-    "webSite": "https://www.zxzja.com",
-    "instance": "zxzj20240620",
-    "api": "vod/js/zxzj.js",
-    "type": 100
-  },
-  {
-    "name": "南风短剧",
-    "version": 1,
-    "webSite": "https://www.nanf.cc",
-    "api": "vod/js/nanfdj.js",
-    "type": 101
-  },
-  {
-    "name": "欧乐影视",
-    "version": 2,
-    "webSite": "https://www.olevod.tv",
-    "instance": "olevod20240620",
-    "api": "vod/js/olevod.js",
-    "type": 100
-  },
-  {
-    "name": "讴歌盘",
-    "version": 3,
-    "webSite": "https://woog.nxog.eu.org",
-    "api": "vod/js/ouge.js",
-    "type": 101
-  },
-  {
-    "name": "云盘资源网",
-    "version": 1,
-    "webSite": "https://res.yunpan.win",
-    "instance": "resYunPan20241120",
-    "api": "vod/js/resyunpan.js",
-    "type": 100
-  },
-  {
     "name": "烧火",
     "version": 2,
     "webSite": "https://saohuo.tv",
@@ -89,12 +51,12 @@
     "type": 101
   },
   {
-    "name": "囧次元",
-    "version": 1,
-    "webSite": "http://yhhy.zshtys888.com",
-    "codeID": "KwdXRAgsew9EnmShYGEAl3nnHnhyDjgp",
-    "api": "vod/js/jocy.js",
-    "type": 101
+    "name": "在线之家",
+    "version": 2,
+    "webSite": "https://www.zxzja.com",
+    "instance": "zxzj20240620",
+    "api": "vod/js/zxzj.js",
+    "type": 100
   },
   {
     "name": "金牌影视",
@@ -141,6 +103,36 @@
     "type": 101
   },
   {
+    "name": "南风短剧",
+    "version": 1,
+    "webSite": "https://www.nanf.cc",
+    "api": "vod/js/nanfdj.js",
+    "type": 101
+  },
+  {
+    "name": "欧乐影视",
+    "version": 2,
+    "webSite": "https://www.olevod.tv",
+    "instance": "olevod20240620",
+    "api": "vod/js/olevod.js",
+    "type": 100
+  },
+  {
+    "name": "讴歌盘",
+    "version": 3,
+    "webSite": "https://woog.nxog.eu.org",
+    "api": "vod/js/ouge.js",
+    "type": 101
+  },
+  {
+    "name": "云盘资源网",
+    "version": 1,
+    "webSite": "https://res.yunpan.win",
+    "instance": "resYunPan20241120",
+    "api": "vod/js/resyunpan.js",
+    "type": 100
+  },
+  {
     "name": "瓜子 app",
     "version": 2,
     "remark": "v1.6.53 及以上版本",
@@ -171,6 +163,14 @@
     "version": 1,
     "webSite": "http://103.45.162.207:20720",
     "api": "vod/js/huban.js",
+    "type": 101
+  },
+  {
+    "name": "囧次元",
+    "version": 1,
+    "webSite": "http://yhhy.zshtys888.com",
+    "codeID": "KwdXRAgsew9EnmShYGEAl3nnHnhyDjgp",
+    "api": "vod/js/jocy.js",
     "type": 101
   },
   {
@@ -317,14 +317,6 @@
     "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
   },
   {
-    "name": "netflav",
-    "version": 2,
-    "webSite": "https://www.netflav.com",
-    "instance": "netflav20240905",
-    "api": "vod/js/netflav.js",
-    "type": 100
-  },
-  {
     "name": "麻豆",
     "version": 2,
     "webSite": "https://madou.club",
@@ -338,6 +330,14 @@
     "webSite": "https://missav.ai",
     "instance": "missav20240627",
     "api": "vod/js/missav.js",
+    "type": 100
+  },
+  {
+    "name": "netflav",
+    "version": 2,
+    "webSite": "https://www.netflav.com",
+    "instance": "netflav20240905",
+    "api": "vod/js/netflav.js",
     "type": 100
   },
   {
