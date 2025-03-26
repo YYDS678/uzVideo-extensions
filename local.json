@@ -1,36 +1,5 @@
 [
   {
-    "name": "云盘资源网",
-    "version": 1,
-    "webSite": "https://res.yunpan.win",
-    "instance": "resYunPan20241120",
-    "api": "vod/js/resyunpan.js",
-    "type": 100
-  },
-  {
-    "name": "烧火",
-    "version": 2,
-    "webSite": "https://saohuo.tv",
-    "instance": "saohuo20240623",
-    "api": "vod/js/saohuo.js",
-    "type": 100
-  },
-  {
-    "name": "闪电优汐",
-    "version": 1,
-    "webSite": "http://1.95.79.193/",
-    "api": "vod/js/shandian.js",
-    "type": 101
-  },
-  {
-    "name": "素白白",
-    "version": 2,
-    "webSite": "https://www.subaibaiys.com",
-    "instance": "sbb20240624",
-    "api": "vod/js/subaibai.js",
-    "type": 100
-  },
-  {
     "name": "玩偶哥哥",
     "version": 3,
     "webSite": "http://wogg.xxooo.cf",
@@ -64,6 +33,73 @@
     "webSite": "https://www.zxzja.com",
     "instance": "zxzj20240620",
     "api": "vod/js/zxzj.js",
+    "type": 100
+  },
+  {
+    "name": "mifun",
+    "version": 1,
+    "webSite": "http://www.mifun.tw",
+    "api": "vod/js/mifun.js",
+    "type": 101
+  },
+  {
+    "name": "木偶",
+    "version": 2,
+    "webSite": "http://www.muoupan.top",
+    "api": "vod/js/mogg.js",
+    "type": 101
+  },
+  {
+    "name": "南风短剧",
+    "version": 1,
+    "webSite": "https://www.nanf.cc",
+    "api": "vod/js/nanfdj.js",
+    "type": 101
+  },
+  {
+    "name": "欧乐影视",
+    "version": 2,
+    "webSite": "https://www.olevod.tv",
+    "instance": "olevod20240620",
+    "api": "vod/js/olevod.js",
+    "type": 100
+  },
+  {
+    "name": "讴歌盘",
+    "version": 3,
+    "webSite": "https://woog.nxog.eu.org",
+    "api": "vod/js/ouge.js",
+    "type": 101
+  },
+  {
+    "name": "云盘资源网",
+    "version": 1,
+    "webSite": "https://res.yunpan.win",
+    "instance": "resYunPan20241120",
+    "api": "vod/js/resyunpan.js",
+    "type": 100
+  },
+  {
+    "name": "烧火",
+    "version": 2,
+    "webSite": "https://saohuo.tv",
+    "instance": "saohuo20240623",
+    "api": "vod/js/saohuo.js",
+    "type": 100
+  },
+  {
+    "name": "闪电优汐",
+    "version": 1,
+    "webSite": "http://1.95.79.193/",
+    "api": "vod/js/shandian.js",
+    "type": 101
+  },
+  {
+    "name": "素白白",
+    "version": 2,
+    "webSite": "https://www.subaibaiys.com",
+    "instance": "sbb20240624",
+    "api": "vod/js/subaibai.js",
     "type": 100
   },
   {
@@ -105,40 +141,29 @@
     "type": 101
   },
   {
-    "name": "mifun",
+    "name": "虎斑盘",
     "version": 1,
-    "webSite": "http://www.mifun.tw",
-    "api": "vod/js/mifun.js",
+    "webSite": "http://103.45.162.207:20720",
+    "api": "vod/js/huban.js",
     "type": 101
   },
   {
-    "name": "木偶",
+    "name": "瓜子 app",
     "version": 2,
-    "webSite": "http://www.muoupan.top",
-    "api": "vod/js/mogg.js",
-    "type": 101
-  },
-  {
-    "name": "南风短剧",
-    "version": 1,
-    "webSite": "https://www.nanf.cc",
-    "api": "vod/js/nanfdj.js",
-    "type": 101
-  },
-  {
-    "name": "欧乐影视",
-    "version": 2,
-    "webSite": "https://www.olevod.tv",
-    "instance": "olevod20240620",
-    "api": "vod/js/olevod.js",
+    "remark": "v1.6.53 及以上版本",
+    "webSite": "https://api.9cec79d.com",
+    "codeID": "ra5Z3wtXKshzSMK2",
+    "instance": "gzapp20241001",
+    "api": "vod/js/gzapp.txt",
     "type": 100
   },
   {
-    "name": "讴歌盘",
-    "version": 3,
-    "webSite": "https://woog.nxog.eu.org",
-    "api": "vod/js/ouge.js",
-    "type": 101
+    "name": "瓜子web",
+    "version": 2,
+    "webSite": "https://api.zaqohu.com",
+    "instance": "gzys20240822",
+    "api": "vod/js/gzys.js",
+    "type": 100
   },
   {
     "name": "韩剧看看",
@@ -149,10 +174,24 @@
     "type": 100
   },
   {
-    "name": "虎斑盘",
+    "name": "两个bt",
+    "version": 2,
+    "webSite": "https://www.bttwoo.com",
+    "api": "vod/js/bttwo.js",
+    "type": 101
+  },
+  {
+    "name": "厂长影视",
+    "version": 2,
+    "webSite": "https://www.czzy77.com",
+    "api": "vod/js/changZhang20240614.js",
+    "type": 101
+  },
+  {
+    "name": "clicli",
     "version": 1,
-    "webSite": "http://103.45.162.207:20720",
-    "api": "vod/js/huban.js",
+    "webSite": "https://www.clicli.pro",
+    "api": "vod/js/clicli.js",
     "type": 101
   },
   {
@@ -192,24 +231,6 @@
     "type": 101
   },
   {
-    "name": "瓜子 app",
-    "version": 2,
-    "remark": "v1.6.53 及以上版本",
-    "webSite": "https://api.9cec79d.com",
-    "codeID": "ra5Z3wtXKshzSMK2",
-    "instance": "gzapp20241001",
-    "api": "vod/js/gzapp.txt",
-    "type": 100
-  },
-  {
-    "name": "瓜子web",
-    "version": 2,
-    "webSite": "https://api.zaqohu.com",
-    "instance": "gzys20240822",
-    "api": "vod/js/gzys.js",
-    "type": 100
-  },
-  {
     "name": "4k-av",
     "version": 2,
     "webSite": "https://4k-av.com",
@@ -222,27 +243,6 @@
     "version": 1,
     "webSite": "https://anime.girigirilove.com",
     "api": "vod/js/aggl.js",
-    "type": 101
-  },
-  {
-    "name": "两个bt",
-    "version": 2,
-    "webSite": "https://www.bttwoo.com",
-    "api": "vod/js/bttwo.js",
-    "type": 101
-  },
-  {
-    "name": "厂长影视",
-    "version": 2,
-    "webSite": "https://www.czzy77.com",
-    "api": "vod/js/changZhang20240614.js",
-    "type": 101
-  },
-  {
-    "name": "clicli",
-    "version": 1,
-    "webSite": "https://www.clicli.pro",
-    "api": "vod/js/clicli.js",
     "type": 101
   },
   {
@@ -261,19 +261,19 @@
     "type": 0
   },
   {
+    "name": "夸克|123|189|UC 网盘解析工具",
+    "version": 15,
+    "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
+    "env": "UCCookie##用于播放UC网盘视频&&UC_UT##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
+    "api": "panTools/js/panTools2.js",
+    "type": 300
+  },
+  {
     "name": "UC、夸克、阿里 网盘解析工具",
     "version": 14,
     "remark": "iOS14 以上版本可用",
     "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
     "api": "panTools/js/panTools.js",
-    "type": 300
-  },
-  {
-    "name": "夸克|123|189|UC 网盘解析工具",
-    "version": 15,
-    "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
-    "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
-    "api": "panTools/js/panTools2.js",
     "type": 300
   },
   {
@@ -286,16 +286,16 @@
   },
   {
     "name": "弹幕扩展",
-    "version": 1,
-    "api": "danMu/js/danMu.js",
-    "type": 400
-  },
-  {
-    "name": "弹幕扩展",
     "version": 10,
     "remark": "搜不到就算了，不要那么执着",
     "codeID": "HyplMQ00pLZipW1jy1e9qTsjZbznKjq2",
     "api": "danMu/js/danMu2.txt",
+    "type": 400
+  },
+  {
+    "name": "弹幕扩展",
+    "version": 1,
+    "api": "danMu/js/danMu.js",
     "type": 400
   },
   {
