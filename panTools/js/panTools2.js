@@ -483,6 +483,15 @@ class QuarkUC {
     if (url.includes(kUC_UTKeyWord)) {
       if (this.ut.length < 1) {
         this.ut = await getEnv(this.uzTag, 'UC_UT')
+        if (this.ut.length < 1) {
+          const data = await req(UCClient.apiUrl + 'file', {
+            responseType: ReqResponseType.plain,
+          })
+          if (data.data?.length > 0) {
+            this.ut = data.data
+            await setEnv(this.uzTag, 'UC_UT', this.ut)
+          }
+        }
       }
       if (this.ut.length > 0) {
         url = url.replace(kUC_UTKeyWord, this.ut)
