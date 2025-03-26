@@ -36,6 +36,21 @@
     "type": 100
   },
   {
+    "name": "老白听书",
+    "version": 2,
+    "webSite": "https://apk-lb-json.fodexin.com",
+    "instance": "laobai20240831",
+    "api": "vod/js/laobai.js",
+    "type": 100
+  },
+  {
+    "name": "六趣盘",
+    "version": 1,
+    "webSite": "https://wp.0v.fit",
+    "api": "vod/js/liuqu.js",
+    "type": 101
+  },
+  {
     "name": "mifun",
     "version": 1,
     "webSite": "http://www.mifun.tw",
@@ -126,25 +141,10 @@
     "type": 101
   },
   {
-    "name": "老白听书",
-    "version": 2,
-    "webSite": "https://apk-lb-json.fodexin.com",
-    "instance": "laobai20240831",
-    "api": "vod/js/laobai.js",
-    "type": 100
-  },
-  {
-    "name": "六趣盘",
+    "name": "eacg2",
     "version": 1,
-    "webSite": "https://wp.0v.fit",
-    "api": "vod/js/liuqu.js",
-    "type": 101
-  },
-  {
-    "name": "虎斑盘",
-    "version": 1,
-    "webSite": "http://103.45.162.207:20720",
-    "api": "vod/js/huban.js",
+    "webSite": "https://eacg1.com",
+    "api": "vod/js/eacg2.js",
     "type": 101
   },
   {
@@ -172,6 +172,20 @@
     "instance": "hjkk20240624",
     "api": "vod/js/hjkk.js",
     "type": 100
+  },
+  {
+    "name": "虎斑盘",
+    "version": 1,
+    "webSite": "http://103.45.162.207:20720",
+    "api": "vod/js/huban.js",
+    "type": 101
+  },
+  {
+    "name": "aggl",
+    "version": 1,
+    "webSite": "https://anime.girigirilove.com",
+    "api": "vod/js/aggl.js",
+    "type": 101
   },
   {
     "name": "两个bt",
@@ -224,26 +238,12 @@
     "type": 101
   },
   {
-    "name": "eacg2",
-    "version": 1,
-    "webSite": "https://eacg1.com",
-    "api": "vod/js/eacg2.js",
-    "type": 101
-  },
-  {
     "name": "4k-av",
     "version": 2,
     "webSite": "https://4k-av.com",
     "instance": "www4kav20240705",
     "api": "vod/js/4kav.js",
     "type": 100
-  },
-  {
-    "name": "aggl",
-    "version": 1,
-    "webSite": "https://anime.girigirilove.com",
-    "api": "vod/js/aggl.js",
-    "type": 101
   },
   {
     "api": "https://cj.rycjapi.com/api.php/provide/vod",
@@ -261,19 +261,19 @@
     "type": 0
   },
   {
-    "name": "夸克|123|189|UC 网盘解析工具",
-    "version": 15,
-    "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
-    "env": "UCCookie##用于播放UC网盘视频&&UC_UT##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
-    "api": "panTools/js/panTools2.js",
-    "type": 300
-  },
-  {
     "name": "UC、夸克、阿里 网盘解析工具",
     "version": 14,
     "remark": "iOS14 以上版本可用",
     "env": "UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称",
     "api": "panTools/js/panTools.js",
+    "type": 300
+  },
+  {
+    "name": "夸克|123|189|UC 网盘解析工具",
+    "version": 15,
+    "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
+    "env": "UCCookie##用于播放UC网盘视频&&UC_UT##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频",
+    "api": "panTools/js/panTools2.js",
     "type": 300
   },
   {
@@ -341,19 +341,19 @@
     "type": 100
   },
   {
-    "name": "玩偶姐姐",
-    "version": 2,
-    "webSite": "https://hongkongdollvideo.com",
-    "instance": "hkdoll20240705",
-    "api": "vod/js/hkdoll.js",
-    "type": 100
-  },
-  {
     "name": "jable",
     "version": 3,
     "webSite": "https://jable.tv",
     "instance": "jable20240831",
     "api": "vod/js/jable.js",
+    "type": 100
+  },
+  {
+    "name": "玩偶姐姐",
+    "version": 2,
+    "webSite": "https://hongkongdollvideo.com",
+    "instance": "hkdoll20240705",
+    "api": "vod/js/hkdoll.js",
     "type": 100
   },
   {
