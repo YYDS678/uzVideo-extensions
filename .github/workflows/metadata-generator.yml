@@ -33,5 +33,5 @@ jobs:
         git config --global user.email 'action@github.com'
         git add *.json
         git add *.zip
-        git commit -m 'Auto-generated metadata files' || echo 'No changes to commit'
+        git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
         git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git

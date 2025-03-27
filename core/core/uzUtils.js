@@ -262,9 +262,10 @@ const ReqAddressType = {
  * @param {string} options.method 请求方法
  * @param {object} options.data 请求数据
  * @param {object} options.queryParameters 查询参数（v1.6.3 及以上版本）
- * @param {object} options.maxRedirects 最大重定向次数 （v1.6.54 及以上版本）
  * @param {number} options.sendTimeout  发送超时时间 （v1.6.52 及以上版本）
  * @param {number} options.receiveTimeout  接收超时时间 （v1.6.52 及以上版本）
+ * @param {object} options.maxRedirects 最大重定向次数 （v1.6.54 及以上版本）
+ * @param {boolean} options.useHttp2  是否使用HTTP2 （v1.6.55 及以上版本）
  * @param {ReqResponseType} options.responseType 响应类型
  * @param {ReqAddressType} options.addressType 地址类型
  * @returns {Promise<ProData>}
@@ -275,26 +276,26 @@ async function req(url, options) {
     const proData = new ProData()
 
     try {
-        if (options?.queryParameters) {
+        if (options.queryParameters) {
             const queryString = new URLSearchParams(options.queryParameters).toString()
             url = queryString ? `${url}${url.includes('?') ? '&' : '?'}${queryString}` : url
         }
 
         const fetchOptions = {
-            method: options?.method || 'GET',
+            method: options.method || 'GET',
             headers: {
-                ...(options?.headers || {}),
-                ...(options?.data && options?.method !== 'GET' ? { 'Content-Type': 'application/json' } : {}),
+                ...(options.headers || {}),
+                ...(options.data && options.method !== 'GET' ? { 'Content-Type': 'application/json' } : {}),
             },
         }
 
-        if (options?.data && options?.method !== 'GET') {
-            fetchOptions.body = JSON.stringify(options?.data)
+        if (options.data && options.method !== 'GET') {
+            fetchOptions.body = JSON.stringify(options.data)
         }
 
         const controller = new AbortController()
-        const sendTimeout = options?.sendTimeout || 30000
-        const receiveTimeout = options?.receiveTimeout || 30000
+        const sendTimeout = options.sendTimeout || 30000
+        const receiveTimeout = options.receiveTimeout || 30000
 
         const sendTimeoutId = setTimeout(() => controller.abort(), sendTimeout)
         fetchOptions.signal = controller.signal
@@ -332,7 +333,7 @@ async function req(url, options) {
                 actualResponseType = ReqResponseType.bytes
             }
 
-            const effectiveType = options?.responseType || actualResponseType
+            const effectiveType = options.responseType || actualResponseType
 
             switch (effectiveType) {
                 case ReqResponseType.json:

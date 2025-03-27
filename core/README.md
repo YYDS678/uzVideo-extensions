@@ -9,6 +9,7 @@
 - [请为扩展添加以下注释，用于自动更新 json](#请为扩展添加以下注释用于自动更新-json)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.55](#v1655)
     - [v1.6.54](#v1654)
     - [v1.6.53](#v1653)
     - [v1.6.52](#v1652)
@@ -40,18 +41,19 @@
 # 模板
 
 1. [视频源扩展 type:101 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/vod101.js)
-   1. [超简单嗅探模板 难度指数 🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/clicli.js)
-   2. [简单嗅探模板 难度指数 🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/aggl.js)
-   3. [嗅探模板 难度指数 🌟🌟🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg2.js)
-2. [ 推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
+    1. [超简单嗅探模板 难度指数 🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/clicli.js)
+    2. [简单嗅探模板 难度指数 🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/aggl.js)
+    3. [嗅探模板 难度指数 🌟🌟🌟🌟🌟](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg2.js)
+2. [推荐页扩展 type:200 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/uzHome.js)
 3. [网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
 4. [弹幕扩展 type:400 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/danMu.js)
 
 ## 本地开发测试
- 1. 下载本仓库
- 2. 在 `template` 文件夹内选择要开发扩展类型
- 3. 修改文件顶部 //@  相关内容
- 4. 右键 Debug File
+
+1. 下载本仓库
+2. 在 `template` 文件夹内选择要开发扩展类型
+3. 修改文件顶部 //@ 相关内容
+4. 右键 Debug File
 
 ## [uzUtils.js 提供网络、存储、toast 等功能](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/uzUtils.js)
 
@@ -173,8 +175,14 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 
 # 修改记录
 
+### v1.6.55
+
+1. `req` 支持 `http2`. 使用:`options.useHttp2 = true`
+2. `RepVideoPlayUrl.urls` 和 `PanPlayInfo.urls` 支持嗅探
+
 ### v1.6.54
-1. 添加 `Buffer` `JSONbig`  库
+
+1. 添加 `Buffer` `JSONbig` 库
 2. `req` 支持控制重定向 `maxRedirects`
 
 ### v1.6.53
@@ -183,7 +191,7 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 
 ### v1.6.52
 
-1. 支持视频嗅探 `getVideoPlayUrl` 方法返回的 `RepVideoPlayUrl` 对象增加 `sniffer` 字段（如果不能成功嗅探，烦请将链接反馈给 https://t.me/uzVideoAppbot）
+1. 支持视频嗅探 `getVideoPlayUrl` 方法返回的 `RepVideoPlayUrl` 对象增加 `sniffer` 字段（如果不能成功嗅探，烦请将链接反馈给 <https://t.me/uzVideoAppbot）>
 2. `req` 支持 `receiveTimeout` `receiveTimeout`
 3. `ProData` 支持 `redirects`
 
