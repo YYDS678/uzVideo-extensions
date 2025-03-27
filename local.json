@@ -1,28 +1,5 @@
 [
   {
-    "name": "烧火",
-    "version": 2,
-    "webSite": "https://saohuo.tv",
-    "instance": "saohuo20240623",
-    "api": "vod/js/saohuo.js",
-    "type": 100
-  },
-  {
-    "name": "闪电优汐",
-    "version": 1,
-    "webSite": "http://1.95.79.193/",
-    "api": "vod/js/shandian.js",
-    "type": 101
-  },
-  {
-    "name": "素白白",
-    "version": 2,
-    "webSite": "https://www.subaibaiys.com",
-    "instance": "sbb20240624",
-    "api": "vod/js/subaibai.js",
-    "type": 100
-  },
-  {
     "name": "玩偶哥哥",
     "version": 3,
     "webSite": "http://wogg.xxooo.cf",
@@ -57,21 +34,6 @@
     "instance": "zxzj20240620",
     "api": "vod/js/zxzj.js",
     "type": 100
-  },
-  {
-    "name": "金牌影视",
-    "version": 2,
-    "webSite": "https://www.ghw9zwp5.com",
-    "instance": "jpyy20240716",
-    "api": "vod/js/jpyy.js",
-    "type": 100
-  },
-  {
-    "name": "蜡笔盘",
-    "version": 3,
-    "webSite": "https://duopan.fun",
-    "api": "vod/js/labipan.js",
-    "type": 101
   },
   {
     "name": "老白听书",
@@ -133,37 +95,27 @@
     "type": 100
   },
   {
-    "name": "瓜子 app",
+    "name": "烧火",
     "version": 2,
-    "remark": "v1.6.53 及以上版本",
-    "webSite": "https://api.9cec79d.com",
-    "codeID": "ra5Z3wtXKshzSMK2",
-    "instance": "gzapp20241001",
-    "api": "vod/js/gzapp.txt",
+    "webSite": "https://saohuo.tv",
+    "instance": "saohuo20240623",
+    "api": "vod/js/saohuo.js",
     "type": 100
   },
   {
-    "name": "瓜子web",
-    "version": 2,
-    "webSite": "https://api.zaqohu.com",
-    "instance": "gzys20240822",
-    "api": "vod/js/gzys.js",
-    "type": 100
-  },
-  {
-    "name": "韩剧看看",
-    "version": 2,
-    "webSite": "https://www.hanjukankan.com",
-    "instance": "hjkk20240624",
-    "api": "vod/js/hjkk.js",
-    "type": 100
-  },
-  {
-    "name": "虎斑盘",
+    "name": "闪电优汐",
     "version": 1,
-    "webSite": "http://103.45.162.207:20720",
-    "api": "vod/js/huban.js",
+    "webSite": "http://1.95.79.193/",
+    "api": "vod/js/shandian.js",
     "type": 101
+  },
+  {
+    "name": "素白白",
+    "version": 2,
+    "webSite": "https://www.subaibaiys.com",
+    "instance": "sbb20240624",
+    "api": "vod/js/subaibai.js",
+    "type": 100
   },
   {
     "name": "囧次元",
@@ -174,24 +126,18 @@
     "type": 101
   },
   {
-    "name": "两个bt",
+    "name": "金牌影视",
     "version": 2,
-    "webSite": "https://www.bttwoo.com",
-    "api": "vod/js/bttwo.js",
-    "type": 101
+    "webSite": "https://www.ghw9zwp5.com",
+    "instance": "jpyy20240716",
+    "api": "vod/js/jpyy.js",
+    "type": 100
   },
   {
-    "name": "厂长影视",
-    "version": 2,
-    "webSite": "https://www.czzy77.com",
-    "api": "vod/js/changZhang20240614.js",
-    "type": 101
-  },
-  {
-    "name": "clicli",
-    "version": 1,
-    "webSite": "https://www.clicli.pro",
-    "api": "vod/js/clicli.js",
+    "name": "蜡笔盘",
+    "version": 3,
+    "webSite": "https://duopan.fun",
+    "api": "vod/js/labipan.js",
     "type": 101
   },
   {
@@ -231,6 +177,39 @@
     "type": 101
   },
   {
+    "name": "瓜子 app",
+    "version": 2,
+    "remark": "v1.6.53 及以上版本",
+    "webSite": "https://api.9cec79d.com",
+    "codeID": "ra5Z3wtXKshzSMK2",
+    "instance": "gzapp20241001",
+    "api": "vod/js/gzapp.txt",
+    "type": 100
+  },
+  {
+    "name": "瓜子web",
+    "version": 2,
+    "webSite": "https://api.zaqohu.com",
+    "instance": "gzys20240822",
+    "api": "vod/js/gzys.js",
+    "type": 100
+  },
+  {
+    "name": "韩剧看看",
+    "version": 2,
+    "webSite": "https://www.hanjukankan.com",
+    "instance": "hjkk20240624",
+    "api": "vod/js/hjkk.js",
+    "type": 100
+  },
+  {
+    "name": "虎斑盘",
+    "version": 1,
+    "webSite": "http://103.45.162.207:20720",
+    "api": "vod/js/huban.js",
+    "type": 101
+  },
+  {
     "name": "4k-av",
     "version": 2,
     "webSite": "https://4k-av.com",
@@ -243,6 +222,27 @@
     "version": 1,
     "webSite": "https://anime.girigirilove.com",
     "api": "vod/js/aggl.js",
+    "type": 101
+  },
+  {
+    "name": "两个bt",
+    "version": 2,
+    "webSite": "https://www.bttwoo.com",
+    "api": "vod/js/bttwo.js",
+    "type": 101
+  },
+  {
+    "name": "厂长影视",
+    "version": 2,
+    "webSite": "https://www.czzy77.com",
+    "api": "vod/js/changZhang20240614.js",
+    "type": 101
+  },
+  {
+    "name": "clicli",
+    "version": 1,
+    "webSite": "https://www.clicli.pro",
+    "api": "vod/js/clicli.js",
     "type": 101
   },
   {
@@ -341,19 +341,19 @@
     "type": 100
   },
   {
-    "name": "玩偶姐姐",
-    "version": 2,
-    "webSite": "https://hongkongdollvideo.com",
-    "instance": "hkdoll20240705",
-    "api": "vod/js/hkdoll.js",
-    "type": 100
-  },
-  {
     "name": "jable",
     "version": 3,
     "webSite": "https://jable.tv",
     "instance": "jable20240831",
     "api": "vod/js/jable.js",
+    "type": 100
+  },
+  {
+    "name": "玩偶姐姐",
+    "version": 2,
+    "webSite": "https://hongkongdollvideo.com",
+    "instance": "hkdoll20240705",
+    "api": "vod/js/hkdoll.js",
     "type": 100
   },
   {
