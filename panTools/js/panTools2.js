@@ -1,7 +1,7 @@
 //@name:夸克|123|189|UC 网盘解析工具
-//@version:16
+//@version:17
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
-//@env:UCCookie##用于播放UC网盘视频&&UC_UT##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频
+//@env:UCCookie##用于播放UC网盘视频&&UC_UT##自动获取，不可用时点击删除再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频
 // ignore
 import {
     FilterLabel,
@@ -587,13 +587,13 @@ class QuarkUC {
 
     async listFile(shareData, videos, subtitles, shareId, folderId, page) {
         if (page == null) page = 1
-        const prePage = 200
+        const pageSize = 100
         const listData = await this.api(
             `share/sharepage/detail?${
                 this.pr
             }&pwd_id=${shareId}&stoken=${encodeURIComponent(
                 this.shareTokenCache[shareId].stoken
-            )}&pdir_fid=${folderId}&force=0&_page=${page}&_size=${prePage}&_sort=file_type:asc,file_name:asc`,
+            )}&pdir_fid=${folderId}&force=0&_page=${page}&_size=${pageSize}&_sort=file_type:asc,file_name:asc`,
             null,
             3,
             'get'
@@ -640,7 +640,8 @@ class QuarkUC {
                 })
             }
         }
-        if (page < Math.ceil(listData.metadata._total / prePage)) {
+
+        if (page < Math.ceil(listData.metadata._total / pageSize)) {
             const nextItems = await this.listFile(
                 shareData,
                 videos,
@@ -2562,6 +2563,11 @@ class Pan189 {
                     headers: headers,
                 }
             )
+            if (resp.status !== 200 && this.index < 2) {
+                this.cookie = ''
+                this.index += 1
+                return await this.getShareUrl(fileId, shareId)
+            }
 
             let location = await axios.get(resp.data.normal.url, {
                 maxRedirects: 0, // 禁用自动重定向
@@ -2577,6 +2583,7 @@ class Pan189 {
             } else {
                 link = resp.data.normal.url
             }
+            this.index = 0
             return link
         } catch (error) {
             if (
