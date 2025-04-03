@@ -1,4 +1,5 @@
 // ignore
+//@deprecated:1
 //@name:UC、夸克、阿里 网盘解析工具
 //@version:14
 //@remark:iOS14 以上版本可用
