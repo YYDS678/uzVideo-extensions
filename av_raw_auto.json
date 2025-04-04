@@ -1,38 +1,13 @@
 [
   {
-    "name": "missav",
-    "version": 2,
-    "webSite": "https://missav.ai",
-    "instance": "missav20240627",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/missav.js",
-    "type": 100
+    "name": "[直|18]91jav",
+    "version": 3,
+    "webSite": "https://041.bndmpsjx.com",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/91jav.js",
+    "type": 101
   },
   {
-    "name": "netflav",
-    "version": 2,
-    "webSite": "https://www.netflav.com",
-    "instance": "netflav20240905",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/netflav.js",
-    "type": 100
-  },
-  {
-    "name": "麻豆",
-    "version": 2,
-    "webSite": "https://madou.club",
-    "instance": "madou20240626",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/madou.js",
-    "type": 100
-  },
-  {
-    "name": "玩偶姐姐",
-    "version": 2,
-    "webSite": "https://hongkongdollvideo.com",
-    "instance": "hkdoll20240705",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/hkdoll.js",
-    "type": 100
-  },
-  {
-    "name": "jable",
+    "name": "[直|18]jable",
     "version": 3,
     "webSite": "https://jable.tv",
     "instance": "jable20240831",
@@ -40,10 +15,35 @@
     "type": 100
   },
   {
-    "name": "91jav",
-    "version": 3,
-    "webSite": "https://041.bndmpsjx.com",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/91jav.js",
-    "type": 101
+    "name": "[直|18]missav",
+    "version": 2,
+    "webSite": "https://missav.ai",
+    "instance": "missav20240627",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/missav.js",
+    "type": 100
+  },
+  {
+    "name": "[直|18]netflav",
+    "version": 2,
+    "webSite": "https://www.netflav.com",
+    "instance": "netflav20240905",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/netflav.js",
+    "type": 100
+  },
+  {
+    "name": "[直|18]玩偶姐姐",
+    "version": 2,
+    "webSite": "https://hongkongdollvideo.com",
+    "instance": "hkdoll20240705",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/hkdoll.js",
+    "type": 100
+  },
+  {
+    "name": "[直|18]麻豆",
+    "version": 2,
+    "webSite": "https://madou.club",
+    "instance": "madou20240626",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/madou.js",
+    "type": 100
   }
 ]
