@@ -77,7 +77,7 @@ const main = async () => {
     const files = fs.readdirSync(fullPath)
       .filter(f => f.endsWith('.js') || f.endsWith('.txt'))
       .map(f => ({ file: f, stat: fs.statSync(path.join(fullPath, f)) }))
-      .sort((a, b) => b.stat.mtimeMs - a.stat.mtimeMs)
+      // .sort((a, b) => b.stat.mtimeMs - a.stat.mtimeMs)
       .map(f => f.file);
 
     files.forEach(file => {
@@ -107,6 +107,12 @@ const main = async () => {
       }
     });
   });
+
+
+  // allInOneResult.vod 按 name 排序
+  allInOneResult.vod.sort((a, b) => b.name.localeCompare(a.name));
+  // avResultList 按 name 排序
+  avResultList.sort((a, b) => a.name.localeCompare(b.name));
 
 
 
