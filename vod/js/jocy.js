@@ -1,5 +1,5 @@
 // ignore
-//@name:囧次元
+//@name:[直]囧次元
 //@version:1
 //@webSite:http://yhhy.zshtys888.com
 //@remark:

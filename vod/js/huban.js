@@ -1,4 +1,4 @@
-//@name:虎斑盘
+//@name:[直]虎斑盘
 //@version:1
 //@webSite:http://103.45.162.207:20720
 //@remark:

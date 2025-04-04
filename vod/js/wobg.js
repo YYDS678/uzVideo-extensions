@@ -1,4 +1,4 @@
-//@name:玩偶哥哥
+//@name:[盘]玩偶哥哥
 //@version:3
 //@webSite:http://wogg.xxooo.cf
 //@remark:

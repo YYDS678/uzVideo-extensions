@@ -1,4 +1,4 @@
-//@name:小米盘
+//@name:[盘]小米盘
 //@version:3
 //@webSite:http://www.mucpan.cc
 //@remark:

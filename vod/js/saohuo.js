@@ -1,5 +1,5 @@
 // ignore
-//@name:烧火
+//@name:[直]烧火
 //@version:2
 //@webSite:https://saohuo.tv
 //@remark:

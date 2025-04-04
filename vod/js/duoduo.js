@@ -1,5 +1,5 @@
 //@version:3
-//@name:多多盘
+//@name:[盘]多多盘
 //@webSite:https://tv.yydsys.top
 //@remark:
 const appConfig = {

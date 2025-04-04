@@ -1,4 +1,4 @@
-//@name:老白听书
+//@name:[直]老白听书
 //@version:2
 //@webSite:https://apk-lb-json.fodexin.com
 //@remark:

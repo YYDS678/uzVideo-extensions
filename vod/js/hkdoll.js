@@ -1,5 +1,5 @@
 // ignore
-//@name:玩偶姐姐
+//@name:[直|18]玩偶姐姐
 //@version:2
 //@webSite:https://hongkongdollvideo.com
 //@remark:

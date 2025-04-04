@@ -1,5 +1,5 @@
 // ignore
-//@name:奥秘盘
+//@name:[盘]奥秘盘
 //@version:2
 //@webSite:https://vip.omii.top/
 //@remark:

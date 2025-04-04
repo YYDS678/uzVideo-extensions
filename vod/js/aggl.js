@@ -1,5 +1,5 @@
 // ignore
-//@name:aggl
+//@name:[嗅]aggl
 //@version:1
 //@webSite:https://anime.girigirilove.com
 //@remark:

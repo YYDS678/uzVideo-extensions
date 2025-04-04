@@ -1,5 +1,5 @@
 // ignore
-//@name:瓜子web
+//@name:[直]瓜子web
 //@version:2
 //@webSite:https://api.zaqohu.com
 //@remark:

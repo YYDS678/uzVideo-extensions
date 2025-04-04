@@ -1,9 +1,9 @@
-//@name:木偶
+//@name:[盘]木偶
 //@version:2
-//@webSite:http://www.muoupan.top
+//@webSite:https://mo.91muou.icu
 //@remark:
 const appConfig = {
-    _webSite: 'http://www.muoupan.top',
+    _webSite: 'https://mo.91muou.icu',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量

@@ -1,4 +1,4 @@
-//@name:金牌影视
+//@name:[直]金牌影视
 //@version:2
 //@webSite:https://www.ghw9zwp5.com
 //@remark:

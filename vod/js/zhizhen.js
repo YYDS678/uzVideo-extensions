@@ -1,4 +1,4 @@
-//@name:至臻盘
+//@name:[盘]至臻盘
 //@version:3
 //@webSite:https://mihdr.top
 //@remark:

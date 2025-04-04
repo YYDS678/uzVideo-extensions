@@ -1,5 +1,5 @@
 // ignore
-//@name:欧乐影视
+//@name:[直]欧乐影视
 //@version:2
 //@webSite:https://www.olevod.tv
 //@remark:

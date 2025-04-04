@@ -1,15 +1,15 @@
 [{
   "api": "https://cj.rycjapi.com/api.php/provide/vod",
-  "name": "🐝如意",
+  "name": "[采]如意",
   "type": 0
 },
 {
   "api": "https://json.heimuer.xyz/api.php/provide/vod/",
-  "name": "🐝黑木耳",
+  "name": "[采]黑木耳",
   "type": 0
 },
 {
   "api": "https://cjhwba.com/api.php/provide/vod/",
-  "name": "🐝华为吧",
+  "name": "[采]华为吧",
   "type": 0
 }]

@@ -1,4 +1,4 @@
-//@name:蜡笔盘
+//@name:[盘]蜡笔盘
 //@version:3
 //@webSite:https://duopan.fun
 //@remark:

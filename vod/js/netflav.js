@@ -1,4 +1,4 @@
-//@name:netflav
+//@name:[直|18]netflav
 //@version:2
 //@webSite:https://www.netflav.com
 //@remark:

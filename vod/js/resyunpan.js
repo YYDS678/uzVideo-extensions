@@ -1,5 +1,5 @@
 // ignore
-//@name:云盘资源网
+//@name:[盘]云盘资源网
 //@version:1
 //@webSite:https://res.yunpan.win
 //@remark:

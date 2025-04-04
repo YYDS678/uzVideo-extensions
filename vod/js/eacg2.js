@@ -1,5 +1,5 @@
 // ignore
-//@name:eacg2
+//@name:[嗅]eacg2
 //@version:1
 //@webSite:https://eacg1.com
 //@remark:
