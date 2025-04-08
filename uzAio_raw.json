@@ -60,13 +60,6 @@
       "type": 101
     },
     {
-      "name": "[直]虎斑盘",
-      "version": 1,
-      "webSite": "http://103.45.162.207:20720",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/huban.js",
-      "type": 101
-    },
-    {
       "name": "[直]老白听书",
       "version": 2,
       "webSite": "https://apk-lb-json.fodexin.com",
@@ -189,6 +182,13 @@
       "version": 3,
       "webSite": "https://duopan.fun",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/labipan.js",
+      "type": 101
+    },
+    {
+      "name": "[盘]虎斑盘",
+      "version": 1,
+      "webSite": "http://103.45.162.207:20720",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/huban.js",
       "type": 101
     },
     {
