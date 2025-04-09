@@ -277,6 +277,7 @@ async function req(url, options) {
     const proData = new ProData()
 
     try {
+        options = options || {}
         if (options.queryParameters) {
             const queryString = new URLSearchParams(options.queryParameters).toString()
             url = queryString ? `${url}${url.includes('?') ? '&' : '?'}${queryString}` : url
@@ -393,7 +394,7 @@ async function req(url, options) {
  */
 async function getEnv(uzTag, key) {
     // ignore
-    return debugStore[uzTag + key]
+    return debugStore[uzTag + key] ?? ''
     // ignore
 
     let res = await sendMessage('getEnv', JSON.stringify({ uzTag: uzTag, key: key }))

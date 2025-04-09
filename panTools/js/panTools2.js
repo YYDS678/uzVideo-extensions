@@ -1,7 +1,7 @@
-//@name:夸克|123|189|UC 网盘解析工具
-//@version:17
+//@name:夸克|123|189|UC|解析 网盘解析工具
+//@version:18
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
-//@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频
+//@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 // ignore
 import {
     FilterLabel,
@@ -76,7 +76,7 @@ const PanType = {
     /**
      *  解析
      */
-    JieXi: '解析',
+    JieXi: '采集解析',
 }
 
 /**
@@ -2620,7 +2620,6 @@ class JieXi {
     uzTag = ''
 
     static isJieXiUrl(url) {
-        return false
         return (
             url.includes('v.qq.com') ||
             url.includes('iqiyi.com') ||
@@ -2630,13 +2629,31 @@ class JieXi {
         )
     }
 
+    getTypeName(url) {
+        if (url.includes('v.qq.com')) {
+            return 'TX'
+        } else if (url.includes('iqiyi.com')) {
+            return 'IQY'
+        } else if (url.includes('youku.com')) {
+            return 'YK'
+        } else if (url.includes('mgtv.com')) {
+            return 'MGTV'
+        } else if (url.includes('bilibili.com')) {
+            return 'Bili'
+        } else {
+            return '未知'
+        }
+    }
+
     async getVideoList(url) {
         // 第一集$第一集的视频详情链接#第二集$第二集的视频详情链接$$$第一集$第一集的视频详情链接#第二集$第二集的视频详情链接
         let list = url.split('$$$')
         let videos = []
         for (let i = 0; i < list.length; i++) {
             const oneFrom = list[i]
+            const fromName = this.getTypeName(oneFrom)
             let videoList = oneFrom.split('#')
+
             for (let j = 0; j < videoList.length; j++) {
                 const element = videoList[j]
                 let video = element.split('$')
@@ -2645,17 +2662,16 @@ class JieXi {
                     let url = video[1]
                     videos.push({
                         name: title,
-                        fromName: `线路${i + 1}`,
+                        fromName: fromName,
                         panType: PanType.JieXi,
                         data: {
                             url: url,
                         },
                     })
                 } else if (video[0] === url) {
-                    //TODO: 获取名字
                     videos.push({
-                        name: 'title',
-                        fromName: `线路${i + 1}`,
+                        name: '解析',
+                        fromName: fromName,
                         panType: PanType.JieXi,
                         data: {
                             url: url,
@@ -2667,6 +2683,7 @@ class JieXi {
 
         return {
             videos: videos,
+            //TODO: 推送只有一个链接的 获取视频名称 给 fileName
             fileName: this.fileName,
             error: '',
         }
@@ -2674,10 +2691,53 @@ class JieXi {
 
     async getPlayUrl(data) {
         let url = data.url
+        // 格式：名称1@地址1;名称2@地址2
+        let allUrls = await getEnv(this.uzTag, '采集解析地址')
+        if (allUrls.length < 1) {
+            allUrls =
+                '钓鱼@http://8.129.30.117:8117/diaoyu.php?url=;乌贼@http://jx.dedyn.io/?url='
+            await setEnv(this.uzTag, '采集解析地址', allUrls)
+        }
+        const jxLinks = allUrls.split(';')
+        const urls = []
+        for (let index = 0; index < jxLinks.length; index++) {
+            const element = jxLinks[index]
+            const name = element.split('@')[0]
+            const api = element.split('@')[1]
+            const response = await req(api + url)
 
+            if (response.code === 200) {
+                let item
+                try {
+                    item = JSON.parse(response.data)
+                } catch (error) {
+                    item = response.data
+                }
+                if (item) {
+                    for (let key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            let value = item[key]
+                            if (value && typeof value === 'string') {
+                                if (
+                                    value.includes('http') &&
+                                    (value.includes('m3u8') ||
+                                        value.includes('mp4'))
+                                ) {
+                                    urls.push({
+                                        url: value,
+                                        name: name,
+                                    })
+                                    continue
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return {
-            //   urls: [xm],
-            //   headers: {},
+            urls: urls,
+            headers: {},
         }
     }
 }
@@ -2713,6 +2773,7 @@ class PanTools {
         this.ali.uzTag = value
         this.pan123.uzTag = value
         this.pan189.uzTag = value
+        this.jieXi.uzTag = value
 
         this.registerRefreshAllCookie()
         this.getAllCookie()
