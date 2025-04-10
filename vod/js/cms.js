@@ -1,5 +1,5 @@
-//@name:[采集|解析]通用官方采集
-//@version:1
+//@name:[解]通用官方采集
+//@version:2
 //@webSite:https://zy.hls.one/api.php/provide/vod
 //@remark:官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。
 
@@ -71,7 +71,7 @@ const appConfig = {
         this._uzTag = value
     },
 
-    ignoreClassName: ['vip', 'qq', '免费', '群'],
+    ignoreClassName: ['vip', 'qq', '免费', '群', '公告'],
 }
 
 /**
@@ -119,7 +119,7 @@ async function getVideoList(args) {
     var backData = new RepVideoList()
     try {
         let response = await req(
-            `${appConfig.webSite}?ac=detail&t=${args.url}&page=${args.page}`
+            `${appConfig.webSite}?ac=detail&t=${args.url}&pg=${args.page}`
         )
         let data = JSON.parse(response.data)
         backData.data = data.list
@@ -188,7 +188,7 @@ async function searchVideo(args) {
     var backData = new RepVideoList()
     try {
         const response = await req(
-            `${appConfig.webSite}?ac=search&wd=${args.keyword}&page=${args.page}`
+            `${appConfig.webSite}?ac=detail&wd=${args.searchWord}&pg=${args.page}`
         )
         const data = JSON.parse(response.data)
         backData.data = data.list
