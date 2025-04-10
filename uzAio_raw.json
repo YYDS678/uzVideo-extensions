@@ -37,8 +37,8 @@
   ],
   "vod": [
     {
-      "name": "[采集|解析]通用官方采集",
-      "version": 1,
+      "name": "[解]通用官方采集",
+      "version": 2,
       "remark": "官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。",
       "webSite": "https://zy.hls.one/api.php/provide/vod",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cms.js",
