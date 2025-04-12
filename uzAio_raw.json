@@ -143,9 +143,11 @@
     },
     {
       "name": "[直]囧次元",
-      "version": 1,
-      "webSite": "http://yhhy.zshtys888.com",
-      "codeID": "KwdXRAgsew9EnmShYGEAl3nnHnhyDjgp",
+      "version": 2,
+      "remark": "网站填写[https://jocy.app]会自动获取最新网址，也可以在环境变量修改[囧次元更新网址]的值为1",
+      "env": "囧次元更新网址##填写1,然后在首页源列表重新切换到囧次元,可更新手动更新网址",
+      "webSite": "https://jocy.app",
+      "codeID": "cm7OBqdp0KChaJ7bg2OhuAyTgt8ufeyJ",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/jocy.js",
       "type": 101
     },
