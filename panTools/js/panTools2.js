@@ -1,5 +1,5 @@
 //@name:夸克|123|189|UC|解析 网盘解析工具
-//@version:18
+//@version:19
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 // ignore
@@ -279,7 +279,7 @@ class QuarkUC {
         this.saveDirId = null
         this.saveDirName = 'uz影视'
         this.isVip = false
-        this.updateCookie = function () {}
+        this.updateCookie = function () { }
     }
     uzTag = ''
     ut = ''
@@ -524,7 +524,7 @@ class QuarkUC {
                     }
                 }
                 return resp
-            } catch (e) {}
+            } catch (e) { }
             leftRetry--
             await new Promise((resolve) => setTimeout(resolve, 1000))
         }
@@ -589,8 +589,7 @@ class QuarkUC {
         if (page == null) page = 1
         const pageSize = 100
         const listData = await this.api(
-            `share/sharepage/detail?${
-                this.pr
+            `share/sharepage/detail?${this.pr
             }&pwd_id=${shareId}&stoken=${encodeURIComponent(
                 this.shareTokenCache[shareId].stoken
             )}&pdir_fid=${folderId}&force=0&_page=${page}&_size=${pageSize}&_sort=file_type:asc,file_name:asc`,
@@ -842,7 +841,7 @@ class QuarkUC {
                 })
             }
             return mountList
-        } catch (e) {}
+        } catch (e) { }
         return []
     }
 
@@ -932,7 +931,7 @@ class QuarkUC {
                     },
                 ]
             }
-        } catch (error) {}
+        } catch (error) { }
         return []
     }
 }
@@ -943,14 +942,14 @@ class Ali {
         this.shareTokenCache = {}
         this.saveFileIdCaches = {}
         this.saveDirId = null
-        ;(this.userDriveId = null), (this.saveDirName = 'uz影视')
+            ; (this.userDriveId = null), (this.saveDirName = 'uz影视')
         this.user = {}
         this.oauth = {}
         this.isSVip = true
         this.token = ''
         this.apiUrl = 'https://api.aliyundrive.com/'
         this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/'
-        this.updateToken = () => {}
+        this.updateToken = () => { }
         this.baseHeaders = {
             'User-Agent':
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
@@ -1003,7 +1002,7 @@ class Ali {
                 }
                 const resp = response.data
                 return resp
-            } catch (e) {}
+            } catch (e) { }
             leftRetry--
             await this.delay(1000)
         }
@@ -1030,7 +1029,7 @@ class Ali {
                 }
                 const resp = response.data
                 return resp
-            } catch (e) {}
+            } catch (e) { }
             leftRetry--
             await this.delay(1000)
         }
@@ -1074,7 +1073,7 @@ class Ali {
 
                     this.updateToken()
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
     }
 
@@ -1105,7 +1104,7 @@ class Ali {
                     this.oauth.auth = `${openResp.data.token_type} ${openResp.data.access_token}`
                     this.oauth.token = openResp.data.refresh_token
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
     }
 
@@ -1123,7 +1122,7 @@ class Ali {
             })
             let openToken = openResp.data.refresh_token
             return openToken
-        } catch (e) {}
+        } catch (e) { }
     }
 
     //用户授权，获取授权码code
@@ -1149,7 +1148,7 @@ class Ali {
             let matches = regex.exec(uri)
             let code = matches[1]
             return code
-        } catch (e) {}
+        } catch (e) { }
     }
 
     /**
@@ -1684,8 +1683,8 @@ class qs {
             } else {
                 pairs.push(
                     encodeURIComponent(fullKey) +
-                        '=' +
-                        encodeURIComponent(value)
+                    '=' +
+                    encodeURIComponent(value)
                 )
             }
         }
@@ -1749,7 +1748,7 @@ class Pan123 {
             } else {
                 await this.loin()
             }
-        } catch (error) {}
+        } catch (error) { }
     }
 
     async loin() {
@@ -1786,20 +1785,29 @@ class Pan123 {
     }
 
     getShareData(url) {
-        url = decodeURIComponent(url.trim())
-        const matches = this.regex.exec(url)
-        this.SharePwd = ''
-        if (url.indexOf('?') > 0) {
-            this.SharePwd = url.slice(-4)
+        let panUrl = decodeURIComponent(url.trim())
+        const matches = this.regex.exec(panUrl)
+        if (!matches) {
+            return null
         }
-        if (matches) {
-            if (matches[2].indexOf('?') > 0) {
-                return matches[2].split('?')[0]
-            } else {
-                return matches[2].match(/www/g) ? matches[1] : matches[2]
+        this.SharePwd = ''
+        if (panUrl.indexOf('?') > 0) {
+            this.SharePwd = panUrl.slice(-4)
+            panUrl = panUrl.split('?')[0]
+        } else if (panUrl.indexOf('码') > 0) {
+            this.SharePwd = panUrl.slice(-4)
+            const firstChinese = panUrl.match(/[\u4e00-\u9fa5]/)
+            if (firstChinese) {
+                panUrl = panUrl.slice(0, firstChinese.index)
             }
         }
-        return null
+        panUrl = panUrl.replace(/[.,，/]$/, '')
+        panUrl = panUrl.trim()
+        const shareKey = panUrl.split('/').pop()
+        if (!shareKey) {
+            return null
+        }
+        return shareKey
     }
 
     fileName = ''
@@ -2210,9 +2218,9 @@ class Pan189 {
 
                 cookies +=
                     '; ' +
-                        resp.headers?.['set-cookie']
-                            ?.map((it) => it.split(';')[0])
-                            .join(';') ?? ''
+                    resp.headers?.['set-cookie']
+                        ?.map((it) => it.split(';')[0])
+                        .join(';') ?? ''
                 this.cookie = cookies
 
                 await UZUtils.setStorage({
@@ -2259,7 +2267,7 @@ class Pan189 {
             if (accessCode) {
                 this.accessCode = accessCode
             }
-        } catch (error) {}
+        } catch (error) { }
     }
 
     fileName = ''
@@ -2380,11 +2388,9 @@ class Pan189 {
                 }
                 return fileId
             } else {
-                const url = `${
-                    this.api
-                }/open/share/getShareInfoByCodeV2.action?noCache=${Math.random()}&shareCode=${
-                    this.shareCode
-                }`
+                const url = `${this.api
+                    }/open/share/getShareInfoByCodeV2.action?noCache=${Math.random()}&shareCode=${this.shareCode
+                    }`
                 let resp = await axios.get(url, {
                     headers: {
                         // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
@@ -2453,7 +2459,7 @@ class Pan189 {
                 )
                 return [...videos, ...result.flat()]
             }
-        } catch (e) {}
+        } catch (e) { }
     }
 
     async getShareFile(fileId, pageNum = 1, retry = 0) {
@@ -2473,15 +2479,11 @@ class Pan189 {
                 responseType: ReqResponseType.plain,
             }
             const pageSize = 60
-            const url = `${
-                this.api
-            }/open/share/listShareDir.action?key=noCache&pageNum=${pageNum}&pageSize=${pageSize}&fileId=${fileId}&shareDirFileId=${fileId}&isFolder=${
-                this.isFolder
-            }&shareId=${this.shareId}&shareMode=${
-                this.shareMode
-            }&iconOption=5&orderBy=filename&descending=false&accessCode=${
-                this.accessCode
-            }&noCache=${Math.random()}`
+            const url = `${this.api
+                }/open/share/listShareDir.action?key=noCache&pageNum=${pageNum}&pageSize=${pageSize}&fileId=${fileId}&shareDirFileId=${fileId}&isFolder=${this.isFolder
+                }&shareId=${this.shareId}&shareMode=${this.shareMode
+                }&iconOption=5&orderBy=filename&descending=false&accessCode=${this.accessCode
+                }&noCache=${Math.random()}`
 
             let resp = await req(url, options)
 
@@ -2516,7 +2518,7 @@ class Pan189 {
                 }
             }
             return videos
-        } catch (e) {}
+        } catch (e) { }
     }
 
     async getPlayUrl(data) {
@@ -3020,7 +3022,7 @@ class PanTools {
                     page: 1,
                 })
             }
-        } catch (error) {}
+        } catch (error) { }
         return formatBackData({ data: list, error: '' })
     }
 
@@ -3051,7 +3053,7 @@ class PanTools {
                     page: args.page,
                 })
             }
-        } catch (error) {}
+        } catch (error) { }
 
         return formatBackData({ data: list, error: '' })
     }
