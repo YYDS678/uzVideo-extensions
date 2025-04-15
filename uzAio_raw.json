@@ -266,6 +266,13 @@
       "type": 100
     },
     {
+      "name": "[嗅]木白",
+      "version": 1,
+      "webSite": "https://m.mubai.link/index",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/mubai.js",
+      "type": 101
+    },
+    {
       "name": "[嗅]mifun",
       "version": 1,
       "webSite": "http://www.mifun.tw",
