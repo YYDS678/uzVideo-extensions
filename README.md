@@ -13,10 +13,9 @@
 
 # 订阅
 
-https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/uzAio_raw.json
-
-v1.6.55 及以上版本
+```
 https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/refs/heads/main/uzAio.zip
+```
 
 # 添加方式
 
