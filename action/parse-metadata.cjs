@@ -245,9 +245,9 @@ const updateMarkdownFiles = async () => {
   const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
   console.log(process.env.GITHUB_REF)
   const cur = `${owner}/${repo}/refs/heads/${branch}`
-  readmeContent.replaceAll('YYDS678/uzVideo-extensions/refs/heads/main', cur)
+  const updatedContent = readmeContent.replaceAll('YYDS678/uzVideo-extensions/refs/heads/main', cur)
   // 写入 README.md 文件
-  fs.writeFileSync('README.md', readmeContent)
+  fs.writeFileSync('README.md', updatedContent)
 }
 
 main()
