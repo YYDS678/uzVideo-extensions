@@ -1,6 +1,6 @@
 //@name:[解]通用官方采集
-//@version:2
-//@webSite:https://zy.hls.one/api.php/provide/vod
+//@version:3
+//@webSite:http://zy.xiaomaomi.cc/api.php/provide/vod/
 //@remark:官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。
 
 // ignore
@@ -47,7 +47,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // ignore
 
 const appConfig = {
-    _webSite: 'https://zy.hls.one/api.php/provide/vod',
+    _webSite: 'http://zy.xiaomaomi.cc/api.php/provide/vod/',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -71,7 +71,7 @@ const appConfig = {
         this._uzTag = value
     },
 
-    ignoreClassName: ['vip', 'qq', '免费', '群', '公告'],
+    ignoreClassName: ['短剧', '资讯', '明星资讯', '影视资讯', '演员', '内地', '港台', '欧美', '日韩'],
 }
 
 /**
