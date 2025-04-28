@@ -1,7 +1,8 @@
-//@name:[解]通用官方采集
-//@version:3
+//@name:[解]通用官方采集2
+//@version:1
 //@webSite:https://zy.hls.one/api.php/provide/vod
-//@remark:官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。每次消耗所有解析次数！
+//@remark:官方采集扩展，在环境变量配置 采集解析地址。如采集服务不可用，请自行寻找更换采集地址。
+//@env:采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
@@ -72,6 +73,9 @@ const appConfig = {
     },
 
     ignoreClassName: ['vip', 'qq', '免费', '群', '公告'],
+
+
+    jiexiMap:{}
 }
 
 /**
@@ -143,6 +147,9 @@ async function getSubclassVideoList(args) {
     return JSON.stringify(backData)
 }
 
+
+
+
 /**
  * 获取视频详情
  * @param {UZArgs} args
@@ -156,8 +163,33 @@ async function getVideoDetail(args) {
         )
         let data = JSON.parse(response.data)
         let video = data.list[0]
-        video.panUrls = video.vod_play_url.split('$$$')
-        video.vod_play_url = ''
+        let allUrls = await getEnv(appConfig.uzTag, '采集解析地址')
+        if (allUrls.length < 1) {
+            allUrls =
+                '钓鱼@http://8.129.30.117:8117/diaoyu.php?url=;乌贼@http://jx.dedyn.io/?url='
+            await setEnv(appConfig.uzTag, '采集解析地址', allUrls)
+        }
+        const jxLinks = allUrls.split(';')
+
+        const singleFrom = video.vod_play_url.replace(/\${3}/g, '#')
+        let allFrom = ""
+        let fromNames = ""
+        for (let i = 0; i < jxLinks.length; i++) {
+            allFrom += singleFrom + "$$$"
+            const fromName = jxLinks[i].split('@')[0]
+            const fromUrl = jxLinks[i].split('@')[1]
+            fromNames += fromName + "$$$"
+            appConfig.jiexiMap[fromName] = fromUrl
+        }
+        if (allFrom.endsWith('$$$')) {
+            allFrom = allFrom.slice(0, -3)
+        }
+        if (fromNames.endsWith('$$$')) {
+            fromNames = fromNames.slice(0, -3)
+        }
+
+        video.vod_play_url = allFrom
+        video.vod_play_from = fromNames
         backData.data = video
     } catch (error) {
         backData.error = error.toString()
@@ -173,6 +205,36 @@ async function getVideoDetail(args) {
 async function getVideoPlayUrl(args) {
     var backData = new RepVideoPlayUrl()
     try {
+        const api = appConfig.jiexiMap[args.flag]
+        const response = await req(api + args.url)
+
+            if (response.code === 200) {
+                let item
+                try {
+                    item = JSON.parse(response.data)
+                } catch (error) {
+                    item = response.data
+                }
+                if (item) {
+                    for (let key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            let value = item[key]
+                            if (value && typeof value === 'string') {
+                                if (
+                                    value.includes('http') &&
+                                    (value.includes('m3u8') ||
+                                        value.includes('mp4'))
+                                ) {
+                                    backData.data = value
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
     } catch (error) {
         backData.error = error.toString()
     }
