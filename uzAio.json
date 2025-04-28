@@ -37,9 +37,18 @@
   ],
   "vod": [
     {
+      "name": "[解]通用官方采集2",
+      "version": 1,
+      "remark": "官方采集扩展，在环境变量配置 采集解析地址。如采集服务不可用，请自行寻找更换采集地址。",
+      "env": "采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
+      "webSite": "https://zy.hls.one/api.php/provide/vod",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/cms2.js",
+      "type": 101
+    },
+    {
       "name": "[解]通用官方采集",
       "version": 2,
-      "remark": "官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。",
+      "remark": "官方采集扩展，需配合网盘解析工具使用。如采集服务不可用，请自行寻找更换采集地址。每次消耗所有解析次数！",
       "webSite": "https://zy.hls.one/api.php/provide/vod",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/cms.js",
       "type": 101
@@ -264,14 +273,6 @@
       "instance": "resYunPan20241120",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/resyunpan.js",
       "type": 100
-    },
-    {
-      "name": "[盘]revohd",
-      "version": 1,
-      "remark": "v1.6.57及以上版本可用",
-      "webSite": "https://www.revohd.com",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/test/vod/js/revohd.js",
-      "type": 101
     },
     {
       "name": "[嗅]mifun",
