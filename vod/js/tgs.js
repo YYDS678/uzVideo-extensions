@@ -129,7 +129,7 @@ async function getVideoList(args) {
         if(args.page == 1) {
             _videoListPageMap[args.url] = ""
         }else {
-            const nextPage = _videoListPageMap[element] ?? ""
+            const nextPage = _videoListPageMap[args.url] ?? ""
             if(nextPage.length == 0 || nextPage == "0") {
                 return JSON.stringify(backData)
             }
