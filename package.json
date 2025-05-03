@@ -5,6 +5,8 @@
   "description": "uzVideo extensions",
   "private": true,
   "dependencies": {
-    "archiver": "^7.0.1"
+    "archiver": "^7.0.1",
+    "https-proxy-agent": "^7.0.6",
+    "node-fetch": "^3.3.2"
   }
 }

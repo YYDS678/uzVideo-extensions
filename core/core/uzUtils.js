@@ -1,3 +1,12 @@
+// ignore
+import fetch from 'node-fetch'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+// 视自己网络情况修改代理地址，仅本地开发测试时使用
+// const proxyAgent = new HttpsProxyAgent('http://127.0.0.1:7890')
+const proxyAgent = null
+// ignore
+
+
 /**
  * @file 工具类
  */
@@ -305,7 +314,11 @@ async function req(url, options) {
         let receiveTimeoutId
 
         try {
-            const fetchPromise = fetch(url, fetchOptions)
+            const fetchPromise = fetch(url, {
+                ...fetchOptions,
+                // 视自己网络情况修改代理地址，仅本地开发测试时使用
+                agent: proxyAgent,
+            })
 
             const timeoutPromise = new Promise((_, reject) => {
                 receiveTimeoutId = setTimeout(() => reject(new Error('Receive Timeout')), receiveTimeout)
