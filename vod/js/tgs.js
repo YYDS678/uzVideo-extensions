@@ -1,6 +1,6 @@
 //@name:[盘]tg搜
 //@version:1
-//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶uc@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 
 // ignore
@@ -52,7 +52,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&木偶uc@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
