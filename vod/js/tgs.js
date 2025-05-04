@@ -1,6 +1,6 @@
 //@name:[盘]tg搜
 //@version:1
-//@webSite:123云盘@zyfb123&豆儿盘@douerpan
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶uc@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 
 // ignore
@@ -52,7 +52,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '123云盘@zyfb123&豆儿盘@douerpan',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&木偶uc@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -78,6 +78,29 @@ const appConfig = {
         this._uzTag = value
     },
 }
+
+// --- Global Constants/Configuration ---
+const providerMap = [
+    { name: '天翼', keywords: ['189.cn'] },
+    { name: '夸克', keywords: ['pan.quark.cn'] },
+    { name: 'UC', keywords: ['drive.uc.cn'] },
+    { name: '阿里', keywords: ['alipan.com'] },
+    { name: '123', keywords: ['123684.com', '123865.com', '123912.com', '123pan.com', '123pan.cn'] }
+];
+
+const panUrlsExt = [
+    '189.cn', //天翼
+    '123684.com', // 123
+    '123865.com',
+    '123912.com',
+    '123pan.com',
+    '123pan.cn',
+    '123592.com',
+    'pan.quark.cn', // 夸克
+    'drive.uc.cn', // uc
+    'alipan.com', // 阿里
+];
+// --- End Global Constants ---
 
 /**
  * 异步获取分类列表的方法。
@@ -135,8 +158,9 @@ async function getVideoList(args) {
             }
             endUrl += nextPage
         }
-        const res = await getTGList(endUrl)
-        backData.data = res.videoList
+        const res = await getTGList(endUrl, false)
+        // Deduplicate results before returning
+        backData.data = deduplicateVideoListByLinks(res.videoList);
         _videoListPageMap[args.url] = res.nextPage
     } catch (error) {
         backData.error = error.toString()
@@ -145,9 +169,28 @@ async function getVideoList(args) {
 }
 
 
-async function getTGList(url){
+async function getTGList(url, isSearchContext = false){
     let videoList = []
     let nextPage = ""
+
+    // --- Extract Channel ID and Name ---
+    let currentChannelId = null;
+    const urlMatch = url.match(/\/s\/([^/?]+)/);
+    if (urlMatch && urlMatch[1]) {
+        currentChannelId = urlMatch[1];
+    }
+
+    const channelMap = new Map();
+    appConfig.webSite.split('&').forEach(item => {
+        const parts = item.split('@');
+        if (parts.length === 2) {
+            channelMap.set(parts[1], parts[0]); // key: id, value: name
+        }
+    });
+
+    const currentChannelName = currentChannelId ? (channelMap.get(currentChannelId) || '未知频道') : '未知频道';
+    // --- End Extract ---
+
     try {
         const res = await req(url)
         const $ = cheerio.load(res.data)
@@ -158,6 +201,11 @@ async function getTGList(url){
             const message = messageList[i]
             const aList = $(message).find('a')
             const video = new VideoDetail()
+
+            // --- Extract Message ID ---
+            const postIdStr = $(message).attr('data-post')?.split('/')?.[1];
+            video.message_id = parseInt(postIdStr) || 0; // Store message ID
+            // --- End Extract Message ID ---
 
             for (let j = 0; j < aList.length; j++) {
                 const a = aList[j]
@@ -178,32 +226,93 @@ async function getTGList(url){
             const date = new Date(time)
             const formattedDate = date
                 .toLocaleString('zh-CN', {
-                    year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
                 })
                 .replace(/\//g, '-')
-            video.vod_remarks = formattedDate
+
             const htmlContent = $('div.tgme_widget_message_text').html()
             // 取到第一个 <br> 之前的内容
-            const titles = htmlContent
+            const cleanedTitle = htmlContent
                 .split('<br>')[0]
                 ?.replace(/<[^>]+>/g, "")
                 ?.trim()
-                ?.substring(3)
+                ?.replace(/^(名称[：:])/, '')
                 ?.trim()
-                ?.split(' ')
-            video.vod_name = titles[0]
-            if (titles.length > 1) {
-                // 最后一项为备注
-                video.vod_remarks = titles[titles.length - 1]
-            }
+
+            // Assign initial cleaned title first
+            video.vod_name = cleanedTitle ?? '';
             const ids = _getAllPanUrls(message)
             video.vod_id = JSON.stringify(ids)
-            videoList.push(video)
+
+            // --- New Remark Logic: Determine provider from URLs --- 
+            let providers = new Set();
+
+            if (ids && ids.length > 0) {
+                for (const url of ids) {
+                    for (const provider of providerMap) {
+                        for (const keyword of provider.keywords) {
+                            if (url.includes(keyword)) {
+                                providers.add(provider.name);
+                                // Optional: break inner loop if one keyword match is enough per provider
+                                break; 
+                            }
+                        }
+                        // Optional: if providers set already contains this provider, maybe break outer loop too?
+                        // Depends on whether we need to check all URLs even if provider is known.
+                        // Let's keep checking all URLs for now.
+                    }
+                }
+            }
+
+            // --- Try to extract episode/season info from title --- (Moved here)
+            // Define separate regex for Arabic and Chinese numerals
+            const regexArabicEpisodes = /((?:更新至|全|第)\s*\d+\s*集)/; // Must end in 集
+            const regexChineseEpisodes = /((?:更新至|全|第)\s*[一二三四五六七八九十百千万亿]+\s*集)/; // Must end in 集
+            const regexEpNumbers = /((?:更至|更)\s*(?:EP)?\s*\d+)/; // EP numbering, no suffix needed
+
+            let episodeMatch = cleanedTitle.match(regexArabicEpisodes); // Try Arabic Episodes first
+            if (!episodeMatch) { // If Arabic Episodes fails, try Chinese Episodes
+                episodeMatch = cleanedTitle.match(regexChineseEpisodes);
+            }
+            if (!episodeMatch) { // If Chinese Episodes also fails, try EP Numbers
+                episodeMatch = cleanedTitle.match(regexEpNumbers);
+            }
+            const extractedEpisodeInfo = episodeMatch ? episodeMatch[0] : null;
+            // --- End extraction ---
+
+            // --- Adjust vod_name if episode info was extracted ---
+            if (extractedEpisodeInfo) {
+                video.vod_name = cleanedTitle.replace(extractedEpisodeInfo, '').trim();
+            }
+            // --- End Adjustment ---
+
+            // --- Build remark dynamically based on available info ---
+            const remarkParts = [];
+            if (providers.size > 0) {
+                remarkParts.push(Array.from(providers).join('/'));
+            }
+            // Only add channel name if in search context and it's not the default '未知频道'
+            if (isSearchContext && currentChannelName !== '未知频道') {
+                remarkParts.push(currentChannelName);
+            }
+            if (extractedEpisodeInfo) {
+                remarkParts.push(extractedEpisodeInfo);
+            }
+
+            if (remarkParts.length > 0) {
+                video.vod_remarks = remarkParts.join('|');
+            } else {
+                // Fallback to timestamp only if NO other info was available
+                video.vod_remarks = formattedDate;
+            }
+            // --- End building remark ---
+
+            // --- Only push video if it contains valid pan URLs ---
+            if (ids && ids.length > 0) { // Check if ids array is not empty
+                videoList.push(video);
+            }
+            // --- End check ---
         }
     } catch (error) {
         
@@ -221,18 +330,6 @@ function _getAllPanUrls(html) {
     const $ = cheerio.load(html)
     const aList = $('a')
     let results = []
-    const panUrlsExt = [
-        '189.cn', //天翼
-        '123684.com', // 123
-        '123865.com',
-        '123912.com',
-        '123pan.com',
-        '123pan.cn',
-        '123592.com',
-        'pan.quark.cn', // 夸克
-        'drive.uc.cn', // uc
-        'alipan.com', // 阿里
-    ]
 
     for (let i = 0; i < aList.length; i++) {
         const element = aList[i]
@@ -321,14 +418,42 @@ async function searchVideo(args) {
             }
             endUrl += nextPage
         }
-        const res = await getTGList(endUrl)
-        backData.data.push(...res.videoList)
+        const res = await getTGList(endUrl, true)
+        // Deduplicate the results for the current page of this channel
+        const deduplicatedPageVideos = deduplicateVideoListByLinks(res.videoList);
+        backData.data.push(...deduplicatedPageVideos); // Add deduplicated results
         _searchListPageMap[element] = res.nextPage
         }
-        
         
     } catch (error) {
         backData.error = error.toString()
     }
     return JSON.stringify(backData)
 }
+
+// --- Deduplication Function ---
+function deduplicateVideoListByLinks(videoList) {
+    const map = new Map();
+    for (const video of videoList) {
+        let ids;
+        try {
+            // video.vod_id is a stringified array, parse it back
+            ids = JSON.parse(video.vod_id || '[]');
+            if (!Array.isArray(ids)) {
+                ids = []; // Ensure it's an array
+            }
+        } catch (e) {
+            ids = []; // Handle parsing errors
+        }
+
+        // Create a stable key by sorting the IDs before stringifying
+        const key = JSON.stringify(ids.sort());
+
+        // If the key doesn't exist, or if the current video's message_id is greater
+        if (!map.has(key) || (video.message_id > (map.get(key)?.message_id || 0))) {
+            map.set(key, video);
+        }
+    }
+    return Array.from(map.values());
+}
+// --- End Deduplication Function ---
