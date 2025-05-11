@@ -125,8 +125,13 @@ const main = async () => {
         return aOrderChar.localeCompare(bOrderChar);
       }
       
-      // 如果分类字母相同，按名称长度从短到长排序
-      return a.name.length - b.name.length;
+      // 如果分类字母相同，先按名称长度从短到长排序
+      if (a.name.length !== b.name.length) {
+        return a.name.length - b.name.length;
+      }
+      
+      // 如果名称长度也相同，按完整order值排序
+      return a.order.localeCompare(b.order);
     }
     // 如果只有一个有order，有order的排前面
     if (a.order) return -1;
