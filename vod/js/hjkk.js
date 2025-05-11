@@ -1,10 +1,11 @@
 // ignore
-//@name:[直]韩剧看看
+//@name:「直」 韩剧看看
 //@version:2
 //@webSite:https://www.hanjukankan.com
 //@remark:
 //@type:100
 //@instance:hjkk20240624
+//@order: C
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

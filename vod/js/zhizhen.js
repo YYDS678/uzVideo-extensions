@@ -1,7 +1,8 @@
-//@name:[盘]至臻盘
+//@name:「盘」 至臻
 //@version:3
 //@webSite:https://mihdr.top
 //@remark:
+//@order: B
 const appConfig = {
     _webSite: 'https://mihdr.top',
     /**
@@ -57,13 +58,18 @@ async function getClassList(args) {
             hasSubclass: false,
         },
         {
-            type_id: '25',
-            type_name: '至臻视觉',
+            type_id: '5',
+            type_name: '至臻短剧',
             hasSubclass: false,
         },
         {
-            type_id: '5',
-            type_name: '至臻短剧',
+            type_id: '24',
+            type_name: '至臻老剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '26',
+            type_name: '至臻严选',
             hasSubclass: false,
         },
     ]

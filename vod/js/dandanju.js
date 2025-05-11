@@ -1,8 +1,9 @@
 // ignore
-//@name:[直]蛋蛋剧
+//@name:「直」 蛋蛋剧
 //@version:2
 //@webSite:https://www.dandanju.tv
 //@remark:
+//@order: C
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

@@ -1,7 +1,8 @@
 // ignore
-//@name:[直]厂长影视
+//@name:「直」 厂长影视
 //@version:2
 //@webSite:https://www.czzy77.com
+//@order: C
 //@remark:
 import { } from '../../core/uzVideo.js';
 import { } from '../../core/uzHome.js';

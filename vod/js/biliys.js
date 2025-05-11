@@ -1,7 +1,9 @@
 // ignore
+//@name:「直」 修罗影视
 //@version:1
 //@webSite:https://www.xlys01.com
 //@remark:
+//@order: C
 // ignore
 const appConfig = {
     _webSite: 'https://www.xlys01.com',

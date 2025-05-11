@@ -1,9 +1,9 @@
 // ignore
-//@name:[盘]奥秘盘
+//@name:「盘」 奥秘
 //@version:2
 //@webSite:https://vip.omii.top/
 //@remark:
-//@deprecated:1
+//@order: B
 // ignore
 // 类名要特殊
 class Aomipan extends WebApiBase {

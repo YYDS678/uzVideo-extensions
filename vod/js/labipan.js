@@ -1,9 +1,10 @@
-//@name:[盘]蜡笔盘
+//@name:「盘」 蜡笔
 //@version:3
-//@webSite:https://duopan.fun
+//@webSite:http://feimaoai.site
 //@remark:
+//@order: B
 const appConfig = {
-    _webSite: 'https://duopan.fun',
+    _webSite: 'http://feimaoai.site',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -58,12 +59,12 @@ async function getClassList(args) {
         },
         {
             type_id: '24',
-            type_name: '肥猫4K',
+            type_name: '臻彩4K',
             hasSubclass: false,
         },
         {
             type_id: '29',
-            type_name: '臻彩4K',
+            type_name: '蜡笔臻彩',
             hasSubclass: false,
         },
         {

@@ -1,10 +1,10 @@
-//@name:[直]4k-av
+//@name:「直」 4k-av 
 //@version:2
 //@webSite:https://4k-av.com
 //@remark:
 //@type:100
 //@instance:www4kav20240705
-
+//@order: C
 // ignore
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
