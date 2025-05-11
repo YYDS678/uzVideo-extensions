@@ -2,18 +2,18 @@
   "danMu": [
     {
       "name": "弹幕扩展",
+      "version": 1,
+      "order": "A02",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu.js",
+      "type": 400
+    },
+    {
+      "name": "弹幕扩展",
       "version": 10,
       "remark": "搜不到就算了，不要那么执着",
       "codeID": "HyplMQ00pLZipW1jy1e9qTsjZbznKjq2",
       "order": "A01",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu2.txt",
-      "type": 400
-    },
-    {
-      "name": "弹幕扩展",
-      "version": 1,
-      "order": "A02",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu.js",
       "type": 400
     }
   ],
@@ -84,14 +84,6 @@
       "type": 101
     },
     {
-      "name": "「盘」 大玩ou",
-      "version": 1,
-      "webSite": "http://149.88.87.18:6688",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/dawanou.js",
-      "type": 101
-    },
-    {
       "name": "「盘」 多多",
       "version": 3,
       "webSite": "https://tv.yydsys.top",
@@ -106,17 +98,6 @@
       "order": "B",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/erxiao.js",
       "type": 101
-    },
-    {
-      "name": "「盘」 趣盘搜",
-      "version": 3,
-      "remark": "来自proversion2024，仅搜索",
-      "webSite": "https://pan.funletu.com",
-      "codeID": "LO5aQSJYBZLrRD1g",
-      "instance": "funletu20241124",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/funletu.txt",
-      "type": 100
     },
     {
       "name": "「盘」 虎斑",
@@ -162,40 +143,12 @@
       "type": 101
     },
     {
-      "name": "「盘」 南风短剧",
-      "version": 1,
-      "webSite": "https://www.nanf.cc",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/nanfdj.js",
-      "type": 101
-    },
-    {
       "name": "「盘」 欧歌",
       "version": 3,
       "webSite": "https://woog.nxog.eu.org",
       "order": "B",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/ouge.js",
       "type": 101
-    },
-    {
-      "name": "「盘」 PanSearch",
-      "version": 1,
-      "remark": "来自proversion2024，仅搜索",
-      "webSite": "https://www.pansearch.me",
-      "codeID": "UM9WK6x3sPm3mbUgJB2dJNs59vTyNynm",
-      "instance": "leiJing20241126",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/pansearch.txt",
-      "type": 101
-    },
-    {
-      "name": "「盘」 云盘资源网",
-      "version": 1,
-      "webSite": "https://res.yunpan.win",
-      "instance": "resYunPan20241120",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/resyunpan.js",
-      "type": 100
     },
     {
       "name": "「盘」 清影",
@@ -213,26 +166,6 @@
       "order": "B",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/shandian.js",
       "type": 101
-    },
-    {
-      "name": "「盘」 TG搜",
-      "version": 1,
-      "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
-      "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/tgs.js",
-      "type": 101
-    },
-    {
-      "name": "「盘」 天逸搜",
-      "version": 3,
-      "remark": "来自proversion2024，仅搜索",
-      "webSite": "https://www.tianyiso.com",
-      "codeID": "DU9z425w42hk9B8l",
-      "instance": "tianyiso20241129",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/tianyiso.txt",
-      "type": 100
     },
     {
       "name": "「盘」 玩偶",
@@ -267,12 +200,107 @@
       "type": 101
     },
     {
-      "name": "「直」 4k-av",
+      "name": "「盘」 趣盘搜",
+      "version": 3,
+      "remark": "来自proversion2024，仅搜索",
+      "webSite": "https://pan.funletu.com",
+      "codeID": "LO5aQSJYBZLrRD1g",
+      "instance": "funletu20241124",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/funletu.txt",
+      "type": 100
+    },
+    {
+      "name": "「盘」 TG搜",
+      "version": 1,
+      "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
+      "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/tgs.js",
+      "type": 101
+    },
+    {
+      "name": "「盘」 天逸搜",
+      "version": 3,
+      "remark": "来自proversion2024，仅搜索",
+      "webSite": "https://www.tianyiso.com",
+      "codeID": "DU9z425w42hk9B8l",
+      "instance": "tianyiso20241129",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/tianyiso.txt",
+      "type": 100
+    },
+    {
+      "name": "「盘」 大玩ou",
+      "version": 1,
+      "webSite": "http://149.88.87.18:6688",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/dawanou.js",
+      "type": 101
+    },
+    {
+      "name": "「盘」 南风短剧",
+      "version": 1,
+      "webSite": "https://www.nanf.cc",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/nanfdj.js",
+      "type": 101
+    },
+    {
+      "name": "「盘」 云盘资源网",
+      "version": 1,
+      "webSite": "https://res.yunpan.win",
+      "instance": "resYunPan20241120",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/resyunpan.js",
+      "type": 100
+    },
+    {
+      "name": "「盘」 PanSearch",
+      "version": 1,
+      "remark": "来自proversion2024，仅搜索",
+      "webSite": "https://www.pansearch.me",
+      "codeID": "UM9WK6x3sPm3mbUgJB2dJNs59vTyNynm",
+      "instance": "leiJing20241126",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/pansearch.txt",
+      "type": 101
+    },
+    {
+      "name": "「直」 烧火",
       "version": 2,
-      "webSite": "https://4k-av.com",
-      "instance": "www4kav20240705",
+      "webSite": "https://saohuo.tv",
+      "instance": "saohuo20240623",
       "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/4kav.js",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/saohuo.js",
+      "type": 100
+    },
+    {
+      "name": "「直」 蛋蛋剧",
+      "version": 2,
+      "webSite": "https://www.dandanju.tv",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/dandanju.js",
+      "type": 101
+    },
+    {
+      "name": "「直」 囧次元",
+      "version": 2,
+      "remark": "网站填写[https://jocy.app]会自动获取最新网址，也可以在环境变量修改[囧次元更新网址]的值为1",
+      "env": "囧次元更新网址##填写1,然后在首页源列表重新切换到囧次元,可更新手动更新网址",
+      "webSite": "https://jocy.app",
+      "codeID": "cm7OBqdp0KChaJ7bg2OhuAyTgt8ufeyJ",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/jocy.js",
+      "type": 101
+    },
+    {
+      "name": "「直」 素白白",
+      "version": 2,
+      "webSite": "https://www.subaibaiys.com",
+      "instance": "sbb20240624",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/subaibai.js",
       "type": 100
     },
     {
@@ -300,40 +328,12 @@
       "type": 101
     },
     {
-      "name": "「直」 蛋蛋剧",
-      "version": 2,
-      "webSite": "https://www.dandanju.tv",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/dandanju.js",
-      "type": 101
-    },
-    {
       "name": "「直」 短剧天堂",
       "version": 2,
       "webSite": "https://duanjutt.tv",
       "instance": "duanjutt20240922",
       "order": "C",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/duanjutt.js",
-      "type": 100
-    },
-    {
-      "name": "[直]瓜子 app",
-      "version": 2,
-      "remark": "v1.6.53 及以上版本",
-      "webSite": "https://api.9cec79d.com",
-      "codeID": "ra5Z3wtXKshzSMK2",
-      "instance": "gzapp20241001",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/gzapp.txt",
-      "type": 100
-    },
-    {
-      "name": "「直」 瓜子web",
-      "version": 2,
-      "webSite": "https://api.zaqohu.com",
-      "instance": "gzys20240822",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/gzys.js",
       "type": 100
     },
     {
@@ -344,17 +344,6 @@
       "order": "C",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/hjkk.js",
       "type": 100
-    },
-    {
-      "name": "「直」 囧次元",
-      "version": 2,
-      "remark": "网站填写[https://jocy.app]会自动获取最新网址，也可以在环境变量修改[囧次元更新网址]的值为1",
-      "env": "囧次元更新网址##填写1,然后在首页源列表重新切换到囧次元,可更新手动更新网址",
-      "webSite": "https://jocy.app",
-      "codeID": "cm7OBqdp0KChaJ7bg2OhuAyTgt8ufeyJ",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/jocy.js",
-      "type": 101
     },
     {
       "name": "「直」 金牌影视",
@@ -384,24 +373,6 @@
       "type": 100
     },
     {
-      "name": "「直」 烧火",
-      "version": 2,
-      "webSite": "https://saohuo.tv",
-      "instance": "saohuo20240623",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/saohuo.js",
-      "type": 100
-    },
-    {
-      "name": "「直」 素白白",
-      "version": 2,
-      "webSite": "https://www.subaibaiys.com",
-      "instance": "sbb20240624",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/subaibai.js",
-      "type": 100
-    },
-    {
       "name": "「直」 天天影视",
       "version": 2,
       "webSite": "http://op.ysdqjs.cn",
@@ -420,11 +391,48 @@
       "type": 100
     },
     {
-      "name": "「嗅」 girigirilove",
+      "name": "「直」 4k-av",
+      "version": 2,
+      "webSite": "https://4k-av.com",
+      "instance": "www4kav20240705",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/4kav.js",
+      "type": 100
+    },
+    {
+      "name": "[直]瓜子 app",
+      "version": 2,
+      "remark": "v1.6.53 及以上版本",
+      "webSite": "https://api.9cec79d.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
+      "instance": "gzapp20241001",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/gzapp.txt",
+      "type": 100
+    },
+    {
+      "name": "「直」 瓜子web",
+      "version": 2,
+      "webSite": "https://api.zaqohu.com",
+      "instance": "gzys20240822",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/gzys.js",
+      "type": 100
+    },
+    {
+      "name": "「嗅」 E-ACG",
       "version": 1,
-      "webSite": "https://anime.girigirilove.com",
+      "webSite": "https://eacg1.com",
       "order": "D",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/aggl.js",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/eacg.js",
+      "type": 101
+    },
+    {
+      "name": "「嗅」 mifun",
+      "version": 1,
+      "webSite": "http://www.mifun.tw",
+      "order": "D",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/mifun.js",
       "type": 101
     },
     {
@@ -436,14 +444,6 @@
       "type": 101
     },
     {
-      "name": "「嗅」 E-ACG",
-      "version": 1,
-      "webSite": "https://eacg1.com",
-      "order": "D",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/eacg.js",
-      "type": 101
-    },
-    {
       "name": "「嗅」 E-ACG2",
       "version": 1,
       "webSite": "https://eacg1.com",
@@ -452,11 +452,11 @@
       "type": 101
     },
     {
-      "name": "「嗅」 mifun",
+      "name": "「嗅」 girigirilove",
       "version": 1,
-      "webSite": "http://www.mifun.tw",
+      "webSite": "https://anime.girigirilove.com",
       "order": "D",
-      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/mifun.js",
+      "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/aggl.js",
       "type": 101
     },
     {
