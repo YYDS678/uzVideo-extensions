@@ -1,7 +1,8 @@
 //@version:3
-//@name:[盘]多多盘
+//@name:「盘」 多多
 //@webSite:https://tv.yydsys.top
 //@remark:
+//@order: B
 const appConfig = {
     _webSite: 'https://tv.yydsys.top',
     /**
@@ -63,7 +64,7 @@ async function getClassList(args) {
         },
         {
             type_id: '20',
-            type_name: '多多纪录片',
+            type_name: '多多纪录',
             hasSubclass: false,
         },
     ]

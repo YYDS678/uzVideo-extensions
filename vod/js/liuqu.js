@@ -1,7 +1,8 @@
-//@name:[盘]六趣盘
+//@name:「盘」 六趣
 //@version:1
 //@webSite:https://wp.0v.fit
 //@remark:
+//@order: B
 const appConfig = {
     _webSite: 'https://wp.0v.fit',
     /**

@@ -1,8 +1,9 @@
 // ignore
-//@name:[直]两个bt
+//@name:「直」 两个BT
 //@version:2
 //@webSite:https://www.bttwoo.com
 //@remark:
+//@order: C
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

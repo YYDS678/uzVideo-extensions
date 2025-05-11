@@ -1,7 +1,8 @@
-//@name:[盘]TG搜
+//@name:「盘」 TG搜
 //@version:1
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
+//@order: B
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示

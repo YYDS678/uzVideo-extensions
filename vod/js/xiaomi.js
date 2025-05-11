@@ -1,9 +1,10 @@
-//@name:[盘]小米盘
+//@name:「盘」 小米
 //@version:3
-//@webSite:http://www.mucpan.cc
+//@webSite:https://xiaomiai.site
 //@remark:
+//@order: B
 const appConfig = {
-    _webSite: 'http://www.mucpan.cc',
+    _webSite: 'https://xiaomiai.site',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -37,23 +38,38 @@ async function getClassList(args) {
     var backData = new RepVideoClassList()
     backData.data = [
         {
-            type_id: '20',
+            type_id: '1',
             type_name: '小米电影',
             hasSubclass: false,
         },
         {
-            type_id: '21',
+            type_id: '2',
             type_name: '小米剧集',
             hasSubclass: false,
         },
         {
-            type_id: '22',
+            type_id: '3',
             type_name: '小米动漫',
             hasSubclass: false,
         },
         {
-            type_id: '23',
+            type_id: '4',
             type_name: '小米综艺',
+            hasSubclass: false,
+        },
+        {
+            type_id: '5',
+            type_name: '小米短剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '24',
+            type_name: '小米老剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '26',
+            type_name: '小米臻彩',
             hasSubclass: false,
         },
     ]

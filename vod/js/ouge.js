@@ -1,7 +1,8 @@
-//@name:[盘]讴歌盘
+//@name:「盘」 欧歌
 //@version:3
 //@webSite:https://woog.nxog.eu.org
 //@remark:
+//@order: B
 const appConfig = {
     _webSite: 'https://woog.nxog.eu.org',
     /**
@@ -59,6 +60,11 @@ async function getClassList(args) {
         {
             type_id: '5',
             type_name: '欧歌短剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '21',
+            type_name: '欧歌综合',
             hasSubclass: false,
         },
     ]

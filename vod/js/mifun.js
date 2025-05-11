@@ -1,8 +1,9 @@
 // ignore
-//@name:[嗅]mifun
+//@name:「嗅」 mifun
 //@version:1
 //@webSite:http://www.mifun.tw
 //@remark:
+//@order: D
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

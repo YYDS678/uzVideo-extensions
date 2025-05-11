@@ -1,8 +1,9 @@
 // ignore
-//@name:[嗅]eacg
+//@name:「嗅」 E-ACG
 //@version:1
 //@webSite:https://eacg1.com
 //@remark:
+//@order: D
 // ignore
 
 // ignore

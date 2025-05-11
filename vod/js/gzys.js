@@ -1,10 +1,11 @@
 // ignore
-//@name:[直]瓜子web
+//@name:「直」 瓜子web
 //@version:2
 //@webSite:https://api.zaqohu.com
 //@remark:
 //@type:100
 //@instance:gzys20240822
+//@order: C
 
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

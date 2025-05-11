@@ -1,10 +1,10 @@
-//@name:[直]老白听书
+//@name:「直」 老白听书
 //@version:2
 //@webSite:https://apk-lb-json.fodexin.com
 //@remark:
 //@type:100
 //@instance:laobai20240831
-
+//@order: C
 class laobaiClass extends WebApiBase {
     constructor() {
         super()

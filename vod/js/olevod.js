@@ -1,11 +1,11 @@
 // ignore
-//@name:[直]欧乐影视
+//@name:「直」 欧乐影视
 //@version:2
 //@webSite:https://www.olevod.tv
 //@remark:
 //@type:100
 //@instance:olevod20240620
-
+//@order: C
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

@@ -1,8 +1,8 @@
-//@name:[盘]revohd
+//@name:「盘」 清影
 //@version:1
 //@webSite:https://www.revohd.com
-//@remark:v1.6.57及以上版本可用
-//@deprecated:1
+//@remark:v1.6.57及以上版本可用，加载不出来就是空资源
+//@order: B
 
 
 
@@ -64,7 +64,7 @@ const firstClass = [
         id: '@{webSite}/vod/show/id/2/page/@{page}.html',
     },
     {
-        name: '电影',
+        name: '动漫',
         // https://www.revohd.com/vod/show/id/5/page/2.html
         // 把网站主页变成 @{webSite}  把页码变成 @{page}
         id: '@{webSite}/vod/show/id/5/page/@{page}.html',

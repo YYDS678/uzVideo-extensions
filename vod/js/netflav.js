@@ -1,11 +1,11 @@
-//@name:[直|18]netflav
+//@name:「禁」 netflav
 //@version:2
 //@webSite:https://www.netflav.com
 //@remark:
 //@type:100
 //@instance:netflav20240905
 //@isAV:1
-
+//@order: E
 class netflavClass extends WebApiBase {
     constructor() {
         super()

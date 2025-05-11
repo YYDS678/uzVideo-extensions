@@ -1,11 +1,12 @@
 // ignore
-//@name:[直|18]jable
+//@name:「禁」 jable
 //@version:3
 //@webSite:https://jable.tv
 //@remark:
 //@type:100
 //@instance:jable20240831
 //@isAV:1
+//@order: E
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

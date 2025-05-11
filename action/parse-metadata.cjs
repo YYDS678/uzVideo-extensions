@@ -41,6 +41,7 @@ const parseComments = (filePath) => {
     type: extractValue(content, '@type:'),
     instance: extractValue(content, '@instance:'),
     isAV: extractValue(content, '@isAV:'),
+    order: extractValue(content, '@order:'),
   }
 
   if (!metadata.name) return null
@@ -95,6 +96,7 @@ const main = async () => {
           ...(metadata.webSite && { webSite: metadata.webSite }),
           ...(metadata.codeID && { codeID: metadata.codeID }),
           ...(metadata.instance && { instance: metadata.instance }),
+          ...(metadata.order && { order: metadata.order }),
 
           api: metadata.api,
           type: parseInt(metadata.type),
@@ -110,16 +112,52 @@ const main = async () => {
     })
   })
 
-  // allInOneResult.vod 按 name 排序
-  allInOneResult.vod.sort((a, b) => b.name.localeCompare(a.name))
-  // avResultList 按 name 排序
-  avResultList.sort((a, b) => a.name.localeCompare(b.name))
+  // 定义排序函数
+  const sortByOrder = (a, b) => {
+    // 如果都有order，按order排序
+    if (a.order && b.order) {
+      // 获取order的第一个字符(分类字母)
+      const aOrderChar = a.order.charAt(0);
+      const bOrderChar = b.order.charAt(0);
+      
+      // 如果分类字母不同，按字母排序
+      if (aOrderChar !== bOrderChar) {
+        return aOrderChar.localeCompare(bOrderChar);
+      }
+      
+      // 如果分类字母相同，先按名称长度从短到长排序
+      if (a.name.length !== b.name.length) {
+        return a.name.length - b.name.length;
+      }
+      
+      // 如果名称长度也相同，按完整order值排序
+      return a.order.localeCompare(b.order);
+    }
+    // 如果只有一个有order，有order的排前面
+    if (a.order) return -1;
+    if (b.order) return 1;
+    // 否则按name排序
+    return a.name.localeCompare(b.name);
+  };
+
+  // 为各个类别应用排序
+  for (const category of Object.keys(allInOneResult)) {
+    if (Array.isArray(allInOneResult[category])) {
+      allInOneResult[category].sort(sortByOrder);
+    }
+  }
+  
+  // avResultList 也按照order排序
+  avResultList.sort(sortByOrder);
 
   const liveData = JSON.parse(fs.readFileSync('live/live.json', 'utf8'))
   allInOneResult.live = liveData
 
   const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'))
   allInOneResult.vod.push(...cmsData)
+  
+  // 添加cms数据后再次排序vod
+  allInOneResult.vod.sort(sortByOrder);
 
   // 写入整合后的uzAio.json
   fs.writeFileSync('uzAio_raw.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ''))

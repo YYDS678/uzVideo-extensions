@@ -1,7 +1,8 @@
-//@name:[盘]闪电优汐
+//@name:「盘」 闪电
 //@version:1
 //@webSite:http://1.95.79.193/
 //@remark:
+//@order: B
 const appConfig = {
     _webSite: 'http://1.95.79.193/',
     /**
@@ -54,6 +55,11 @@ async function getClassList(args) {
         {
             type_id: '4',
             type_name: '闪电动漫',
+            hasSubclass: false,
+        },
+        {
+            type_id: '30',
+            type_name: '闪电短剧',
             hasSubclass: false,
         },
     ]

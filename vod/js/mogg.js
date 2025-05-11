@@ -1,9 +1,10 @@
-//@name:[盘]木偶
+//@name:「盘」 木偶
 //@version:2
-//@webSite:https://mo.91muou.icu
+//@webSite:https://666.666291.xyz
 //@remark:
+//@order: B
 const appConfig = {
-    _webSite: 'https://mo.91muou.icu',
+    _webSite: 'https://666.666291.xyz',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -53,12 +54,12 @@ async function getClassList(args) {
         },
         {
             type_id: '4',
-            type_name: '木偶纪录片',
+            type_name: '木偶纪录',
             hasSubclass: false,
         },
         {
-            type_id: '25',
-            type_name: '木偶综艺片',
+            type_id: '27',
+            type_name: '天翼专区',
             hasSubclass: false,
         },
     ]
