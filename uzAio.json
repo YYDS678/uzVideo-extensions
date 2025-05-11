@@ -2,18 +2,18 @@
   "danMu": [
     {
       "name": "弹幕扩展",
-      "version": 1,
-      "order": "A02",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu.js",
-      "type": 400
-    },
-    {
-      "name": "弹幕扩展",
       "version": 10,
       "remark": "搜不到就算了，不要那么执着",
       "codeID": "HyplMQ00pLZipW1jy1e9qTsjZbznKjq2",
       "order": "A01",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu2.txt",
+      "type": 400
+    },
+    {
+      "name": "弹幕扩展",
+      "version": 1,
+      "order": "A02",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu.js",
       "type": 400
     }
   ],
