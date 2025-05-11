@@ -116,7 +116,17 @@ const main = async () => {
   const sortByOrder = (a, b) => {
     // 如果都有order，按order排序
     if (a.order && b.order) {
-      return a.order.localeCompare(b.order);
+      // 获取order的第一个字符(分类字母)
+      const aOrderChar = a.order.charAt(0);
+      const bOrderChar = b.order.charAt(0);
+      
+      // 如果分类字母不同，按字母排序
+      if (aOrderChar !== bOrderChar) {
+        return aOrderChar.localeCompare(bOrderChar);
+      }
+      
+      // 如果分类字母相同，按名称长度从短到长排序
+      return a.name.length - b.name.length;
     }
     // 如果只有一个有order，有order的排前面
     if (a.order) return -1;
