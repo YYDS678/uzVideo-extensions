@@ -1786,12 +1786,13 @@ class Pan123 {
 
     getShareData(url) {
         let panUrl = decodeURIComponent(url.trim())
-        const matches = this.regex.exec(panUrl)
-        if (!matches) {
-            return null
-        }
         this.SharePwd = ''
-        if (panUrl.indexOf('?') > 0) {
+        // 支持 ;、,、，、空格后跟提取码
+        let pwdMatch = panUrl.match(/[;，,\s]+[\u63d0\u53d6\u7801:：\s]*([a-zA-Z0-9]{4})/)
+        if (pwdMatch) {
+            this.SharePwd = pwdMatch[1]
+            panUrl = panUrl.substring(0, pwdMatch.index)
+        } else if (panUrl.indexOf('?') > 0) {
             this.SharePwd = panUrl.slice(-4)
             panUrl = panUrl.split('?')[0]
         } else if (panUrl.indexOf('码') > 0) {
@@ -1803,6 +1804,10 @@ class Pan123 {
         }
         panUrl = panUrl.replace(/[.,，/]$/, '')
         panUrl = panUrl.trim()
+        const matches = this.regex.exec(panUrl)
+        if (!matches) {
+            return null
+        }
         const shareKey = panUrl.split('/').pop()
         if (!shareKey) {
             return null
@@ -1814,6 +1819,14 @@ class Pan123 {
     async getFilesByShareUrl(shareUrl) {
         try {
             const shareKey = this.getShareData(shareUrl)
+
+            if (shareKey === null) {
+                return {
+                    videos: [],
+                    fileName: '',
+                    error: '无法解析分享链接',
+                }
+            }
             this.fileName = ''
             let file = {}
             let cate = await this.getShareInfo(shareKey, this.SharePwd, 0, 0)
