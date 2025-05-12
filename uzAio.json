@@ -153,10 +153,9 @@
     {
       "name": "「盘」 清影",
       "version": 1,
-      "remark": "v1.6.57及以上版本可用，加载不出来就是空资源",
-      "webSite": "https://www.revohd.com",
+      "webSite": "https://revohd.com",
       "order": "B",
-      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/revohd.js",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/qingying.js",
       "type": 101
     },
     {
