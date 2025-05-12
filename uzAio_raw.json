@@ -69,8 +69,8 @@
     },
     {
       "name": "「盘」 奥秘",
-      "version": 2,
-      "webSite": "https://vip.omii.top/",
+      "version": 3,
+      "webSite": "https://vip.omii.top",
       "order": "B",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/aomipan.js",
       "type": 101
