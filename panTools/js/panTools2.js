@@ -1,5 +1,5 @@
 //@name:夸克|123|189|UC|解析 网盘解析工具
-//@version:20
+//@version:21
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 // ignore
@@ -997,7 +997,7 @@ class Ali {
                     data: JSON.stringify(data),
                 })
                 if (response.code === 401) {
-                    this.cookie = ''
+                    this.token = ''
                     return {}
                 }
                 const resp = response.data
@@ -1024,7 +1024,7 @@ class Ali {
                     data: JSON.stringify(data),
                 })
                 if (response.code === 401) {
-                    this.cookie = ''
+                    this.token = ''
                     return {}
                 }
                 const resp = response.data
@@ -1505,7 +1505,7 @@ class Ali {
     async getPlayUrl(data) {
         let playData = new PanPlayInfo()
         playData.urls = []
-        if (this.cookie.length < 1) {
+        if (this.token.length < 1) {
             playData.error = '请先在环境变量中添加 阿里Token'
             return playData
         }
