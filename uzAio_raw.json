@@ -2,9 +2,10 @@
   "danMu": [
     {
       "name": "弹幕扩展",
-      "version": 10,
+      "version": 11,
       "remark": "搜不到就算了，不要那么执着",
-      "codeID": "HyplMQ00pLZipW1jy1e9qTsjZbznKjq2",
+      "env": "弹幕解析地址##内置 4 条线路。格式 地址1;地址2",
+      "codeID": "4Y6DDMATfbw0Rg0Y2AOGpfmpU2cgspFf",
       "order": "A01",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
       "type": 400
@@ -30,9 +31,9 @@
   "recommend": [
     {
       "name": "豆瓣推荐",
-      "version": 3,
+      "version": 4,
       "remark": "iOS14 以上版本可用",
-      "codeID": "N7WRmLmOdB8FSh4M",
+      "codeID": "hZC5h9Id3nP6mwaolSXqNemBLQCMFqhw",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/recommend/js/douban.txt",
       "type": 200
     }
