@@ -473,6 +473,14 @@
       "api": "https://json.heimuer.xyz/api.php/provide/vod/",
       "name": "「采」黑木耳",
       "type": 0
+    },
+    {
+      "name": "自行搭建的 cms",
+      "version": 1,
+      "remark": "地址输入自己搭建的 cms 采集地址，默认使用如意采集占位",
+      "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cmsUser.js",
+      "type": 101
     }
   ],
   "live": [

@@ -435,6 +435,14 @@
     "type": 0
   },
   {
+    "name": "自行搭建的 cms",
+    "version": 1,
+    "remark": "地址输入自己搭建的 cms 采集地址，默认使用如意采集占位",
+    "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
+    "api": "vod/js/cmsUser.js",
+    "type": 101
+  },
+  {
     "name": "夸克|123|189|UC|解析 网盘解析工具",
     "version": 21,
     "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
