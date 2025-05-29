@@ -17,10 +17,22 @@ const getRepoInfo = () => {
     return process.env.GITHUB_REPOSITORY.split('/')
   }
   try {
-    const gitUrl = child_process.execSync('git config --get remote.origin.url').toString().trim()
-    const matches = gitUrl.match(/github\.com[:/](.+?)\/(.+?)(\.git)?$/)
-    if (!matches) throw new Error('无法解析Git远程URL')
-    return [matches[1], matches[2]]
+    const gitUrl = require('child_process')
+      .execSync('git config --get remote.origin.url')
+      .toString()
+      .trim()
+  
+    // 支持 https://github.com/user/repo.git 和 git@github.com:user/repo.git 形式
+    // 同时匹配 SSH(git@host:owner/repo) 和 HTTPS(https://host/owner/repo) 格式
+    const matches = gitUrl.match(/(?:git@([^:]+):|https?:\/\/([^\/]+)\/)([^\/]+)\/([^\/.]+)(?:\.git)?$/)
+
+    if (!matches || matches.length < 5) throw new Error('无法解析Git远程URL')
+
+    const host = matches[1] || matches[2]  // 匹配 SSH 或 HTTPS 的主机名
+    const owner = matches[3]
+    const repo = matches[4]
+  
+    return [owner, repo]  // 只需要返回拥有者和仓库名
   } catch (error) {
     throw new Error('获取仓库信息失败: ' + error.message)
   }
