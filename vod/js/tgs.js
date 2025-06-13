@@ -1,6 +1,7 @@
-//@name:「盘」 TG搜
+//@name:「盘」TG搜
 //@version:1
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
+//@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@order: B
 
@@ -111,6 +112,12 @@ const panUrlsExt = [
 async function getClassList(args) {
     var backData = new RepVideoClassList()
     try {
+        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
+        if (tgs && tgs.length > 0) {
+            appConfig.tgs = tgs
+        }
+
+
         appConfig.webSite.split('&').forEach((item) => {
             let name = item.split('@')[0]
             let id = item.split('@')[1]
