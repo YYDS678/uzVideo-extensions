@@ -1,5 +1,5 @@
 // ignore
-//@name:「禁」 missav
+//@name:「禁」missav
 //@version:2
 //@webSite:https://missav.ai
 //@remark:

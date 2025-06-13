@@ -1,4 +1,4 @@
-//@name:「解」 小猫咪
+//@name:「解」小猫咪
 //@version:1
 //@webSite:https://zy.xiaomaomi.cc/api.php/provide/vod
 //@remark:通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。

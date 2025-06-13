@@ -1,4 +1,4 @@
-//@name:「盘」 木偶
+//@name:「盘」木偶
 //@version:2
 //@webSite:https://666.666291.xyz
 //@remark:

@@ -1,5 +1,5 @@
 // ignore
-//@name:「禁」 jable
+//@name:「禁」jable
 //@version:3
 //@webSite:https://jable.tv
 //@remark:

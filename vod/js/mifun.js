@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」 mifun
+//@name:「嗅」mifun
 //@version:1
 //@webSite:http://www.mifun.tw
 //@remark:

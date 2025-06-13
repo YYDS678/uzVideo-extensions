@@ -1,4 +1,4 @@
-//@name:「盘」 六趣
+//@name:「盘」六趣
 //@version:1
 //@webSite:https://wp.0v.fit
 //@remark:

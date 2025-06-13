@@ -1,4 +1,4 @@
-//@name:「盘」 小米
+//@name:「盘」小米
 //@version:3
 //@webSite:https://xiaomiai.site
 //@remark:

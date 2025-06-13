@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」 E-ACG2
+//@name:「嗅」E-ACG2
 //@version:1
 //@webSite:https://eacg1.com
 //@remark:

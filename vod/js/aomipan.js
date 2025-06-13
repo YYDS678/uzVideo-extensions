@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」 奥秘
+//@name:「盘」奥秘
 //@version:3
 //@webSite:https://vip.omii.top
 //@remark:

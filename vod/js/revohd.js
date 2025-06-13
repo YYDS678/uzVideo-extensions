@@ -1,4 +1,4 @@
-//@name:「盘」 清影
+//@name:「盘」清影
 //@version:1
 //@webSite:https://www.revohd.com
 //@remark:v1.6.57及以上版本可用，加载不出来就是空资源

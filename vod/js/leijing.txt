@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」 雷鲸
+//@name:「盘」雷鲸
 //@version:4
 //@webSite:https://www.leijing.xyz
 //@remark:来自proversion2024

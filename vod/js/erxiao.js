@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」 二小
+//@name:「盘」二小
 //@version:1
 //@webSite:https://2xiaopan.fun
 //@remark:

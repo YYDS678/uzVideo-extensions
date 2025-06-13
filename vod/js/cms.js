@@ -1,4 +1,4 @@
-//@name:「解」 虾米
+//@name:「解」虾米
 //@version:3
 //@webSite:https://zy.hls.one/api.php/provide/vod
 //@remark:通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！

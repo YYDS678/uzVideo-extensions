@@ -1,4 +1,4 @@
-//@name:「直」 天天影视
+//@name:「直」天天影视
 //@version:2
 //@webSite:http://op.ysdqjs.cn
 //@remark:

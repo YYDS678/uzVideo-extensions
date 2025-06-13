@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」 素白白
+//@name:「直」素白白
 //@version:2
 //@webSite:https://www.subaibaiys.com
 //@remark:

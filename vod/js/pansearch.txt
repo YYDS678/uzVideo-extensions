@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」 PanSearch
+//@name:「盘」PanSearch
 //@version:1
 //@webSite:https://www.pansearch.me
 //@remark:来自proversion2024，仅搜索

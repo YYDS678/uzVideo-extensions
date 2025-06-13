@@ -1,4 +1,4 @@
-//@name:「解」 虾米
+//@name:「解」虾米
 //@version:1
 //@webSite:https://zy.hls.one/api.php/provide/vod
 //@remark:通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。
