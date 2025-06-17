@@ -2,7 +2,7 @@
 //@version:4
 //@webSite:https://zy.xiaomaomi.cc/api.php/provide/vod
 //@remark:通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！
-// @order: A1
+// @order: A
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
