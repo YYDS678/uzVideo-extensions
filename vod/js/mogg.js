@@ -2,7 +2,7 @@
 //@version:2
 //@webSite:https://666.666291.xyz
 //@remark:
-//@order: B03
+//@order: B3
 const appConfig = {
     _webSite: 'https://666.666291.xyz',
     /**
