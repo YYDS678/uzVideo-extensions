@@ -3,7 +3,7 @@
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
-//@order: B1
+//@order: A3
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
