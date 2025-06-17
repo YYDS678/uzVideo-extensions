@@ -3,6 +3,7 @@
 //@version:1
 //@webSite:https://www.clicli.pro
 //@remark:
+//@deprecated:1
 //@order: D
 // ignore
 

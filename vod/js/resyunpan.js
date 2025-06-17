@@ -3,6 +3,7 @@
 //@version:1
 //@webSite:https://res.yunpan.win
 //@remark:
+//@deprecated:1
 //@type:100
 //@instance:resYunPan20241120
 //@order: B

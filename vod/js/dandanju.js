@@ -3,6 +3,7 @@
 //@version:2
 //@webSite:https://www.dandanju.tv
 //@remark:
+//@deprecated:1
 //@order: C
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'

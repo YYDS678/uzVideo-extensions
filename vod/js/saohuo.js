@@ -3,6 +3,7 @@
 //@version:2
 //@webSite:https://saohuo.tv
 //@remark:
+//@deprecated:1
 //@type:100
 //@instance:saohuo20240623
 //@order: C

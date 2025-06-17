@@ -2,6 +2,7 @@
 //@version:2
 //@webSite:http://op.ysdqjs.cn
 //@remark:
+//@deprecated:1
 //@type:100
 //@instance:tiantian20240629
 //@order: C
