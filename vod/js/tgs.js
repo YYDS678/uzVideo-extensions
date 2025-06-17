@@ -1,6 +1,6 @@
 //@name:「盘」TG搜
 //@version:2
-//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@order: B
@@ -54,7 +54,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&木偶UC@ucpanpan&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量

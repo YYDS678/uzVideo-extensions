@@ -3,6 +3,7 @@
 //@version:2
 //@webSite:https://duanjutt.tv
 //@remark:
+//@deprecated:1
 //@type:100
 //@instance:duanjutt20240922
 //@order: C

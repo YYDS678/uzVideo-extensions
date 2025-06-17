@@ -1,7 +1,7 @@
 // ignore
 //@name:「直」在线之家
-//@version:2
-//@webSite:https://www.zxzja.com
+//@version:3
+//@webSite:https://www.zxzjhd.com
 //@remark:
 //@type:100
 //@instance:zxzj20240620

@@ -1,10 +1,12 @@
 // ignore
-//@name:「嗅」mifun
+//@name:「嗅」樱花动漫
 //@version:1
-//@webSite:http://www.mifun.tw
+//@webSite:https://www.vdm5.com
 //@remark:
-//@deprecated:1
 //@order: D
+// ignore
+
+// ignore
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'
@@ -12,6 +14,7 @@ import { } from '../../core/uzUtils.js'
 // ignore
 
 const appConfig = {
+
   get headers() {
     return {
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15',
@@ -20,73 +23,57 @@ const appConfig = {
 
   get playHeaders() {
     return {
-      Referer: this.webSite,
+       Referer: this.webSite,
     }
   },
 
-  _webSite: 'http://www.mifun.tw',
+  _webSite: 'https://www.vdm5.com',
+  
+  filterListUrl: '@{webSite}/type_@{mainId}-@{page}.html',
 
-  filterListUrl: '@{webSite}/vodshow/@{mainId}/page/@{page}/',
-
-  mainListUrl: '@{webSite}/vodshow/@{mainId}/page/@{page}/',
+  mainListUrl: '@{webSite}/type_@{mainId}-@{page}.html',
 
   firstClass: [
     {
-      name: '番剧',
-      id: '1',
-      filter: [
-
-      ],
+      name: '日本动漫',
+      id: 'ribendongman',
+      filter: [],
     },
     {
-      name: '国创',
-      id: '2',
-      filter: [
-
-      ],
+      name: '国产动漫',
+      id: 'guochandongman',
+      filter: [],
     },
     {
-      name: '剧场',
-      id: '3',
-      filter: [
-
-      ],
+      name: '动漫电影',
+      id: 'dongmandianying',
+      filter: [],
     },
     {
-      name: '美漫',
-      id: '4',
-      filter: [
-
-      ],
-    },
-    {
-      name: '特摄',
-      id: '5',
-      filter: [
-
-      ],
+      name: '欧美动漫',
+      id: 'oumeidongman',
+      filter: [],
     },
   ],
   // MARK: 4. 分类筛选列表元素
   videoListLiTag: {
     name: 'li',
-    class: 'hl-list-item hl-col-xs-4 hl-col-sm-3 hl-col-md-20w hl-col-lg-2',
-            
+    class: 'col-md-6 col-sm-4 col-xs-3',
   },
   // MARK: 5. 单个视频的图片元素
   vImageTag: {
     name: 'a',
-    class: 'hl-item-thumb hl-lazy',
+    class: 'stui-vodlist__thumb lazyload',
   },
   // MARK: 6. 单个视频的名称元素
   vNameTag: {
-    name: 'div',
-    class: 'hl-item-title hl-text-site hl-lc-1',
+    name: 'a',
+    class: '',
   },
   // MARK: 7. 选集线路列表
   playFromTag: {
-    name: 'ul',
-    class: 'hl-plays-list hl-sort-list hl-list-hide-xs clearfix',
+    name: 'div',
+    class: 'stui-pannel_bd col-pd clearfix',
   },
   // MARK: 8. 单个剧集的元素
   episodeItemTag: {
@@ -94,22 +81,24 @@ const appConfig = {
     class: '',
   },
   // MARK: 9. 搜索链接
-  searchUrl: '@{webSite}/vodsearch/?wd=@{searchWord}',
+  searchUrl: '@{webSite}/search_-------------.html?wd=@{searchWord}',
   // MARK: 10. 搜索结果列表元素
   searchListTag: {
     name: 'li',
-    class: 'hl-list-item hl-col-xs-12',
+    class: 'active top-line-dot clearfix',
   },
   // MARK: 11. 搜索结果图片元素
   searchImageTag: {
     name: 'a',
-    class: 'hl-item-thumb hl-lazy',
+    class: 'v-thumb stui-vodlist__thumb lazyload',
   },
   // MARK: 12. 搜索结果名称元素
   searchNameTag: {
-    name: 'div',
-    class: 'hl-item-title hl-text-site hl-lc-2',
+    name: 'a',
+    class: '',
   },
+
+
 
   /**
    * 网站主页，uz 调用每个函数前都会进行赋值操作
@@ -246,161 +235,6 @@ async function getSubclassVideoList(args) {
   return JSON.stringify(backData)
 }
 
-
-/**
- * 获取视频详情
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoDetail())>}
- */
-async function getVideoDetail(args) {
-  var backData = new RepVideoDetail()
-  try {
-    var url = combineUrl(args.url)
-    dlog("视频详情 组合链接", url)
-    const respData = await req(url, {
-      headers: appConfig.headers,
-    })
-    const htmlStr = respData.data ?? ''
-    const $ = cheerio.load(htmlStr)
-    const playFromTag = appConfig.playFromTag
-
-    const episodeItemTag = appConfig.episodeItemTag
-    const playFromHtmlList = $(buildFindStr(playFromTag))
-    var playFrom = []
-    var eps = []
-
-    for (let index = 0; index < playFromHtmlList.length; index++) {
-      const element = playFromHtmlList[index]
-      const episodeItem = $(element).find(buildFindStr(episodeItemTag))
-      eps = []
-
-      for (let index = 0; index < episodeItem.length; index++) {
-        const ep = episodeItem[index]
-        const href = $(ep).attr('href') ?? ''
-        const title = $(ep).text() ?? ''
-        if (href.includes('http') || href.startsWith('/')) {
-          eps.push({
-            url: removeDomain(href),
-            name: title,
-          })
-        }
-      }
-      if (eps.length > 0) {
-        playFrom.push(eps)
-      }
-    }
-
-    // 第一集$第一集的视频详情链接#第二集$第二集的视频详情链接$$$第一集$第一集的视频详情链接#第二集$第二集的视频详情链接
-    var playUrl = ''
-    for (let index = 0; index < playFrom.length; index++) {
-      const from = playFrom[index]
-      for (let index = 0; index < from.length; index++) {
-        const element = from[index]
-        playUrl += `${element.name}$${element.url}#`
-      }
-      playUrl += '$$$'
-    }
-    backData.data = {
-      vod_play_url: playUrl,
-    }
-  } catch (error) {
-    backData.error = error.toString()
-  }
-  return JSON.stringify(backData)
-}
-
-
-/**
- * 获取视频的播放地址
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoPlayUrl())>}
- */
-async function getVideoPlayUrl(args) {
-  var backData = new RepVideoPlayUrl()
-  try {
-    var url = combineUrl(args.url)
-    dlog("视频播放 组合链接", url)
-    backData.sniffer = {
-      url: url,
-      ua: appConfig.headers['User-Agent'],
-    }
-    backData.headers = appConfig.playHeaders
-  } catch (error) {
-    backData.error = error.toString()
-  }
-  return JSON.stringify(backData)
-}
-
-/**
- * 搜索视频
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoList())>}
- */
-async function searchVideo(args) {
-  var backData = new RepVideoList()
-  try {
-    var url = appConfig.searchUrl
-    url = url.replace('@{webSite}', appConfig.webSite)
-    url = url.replace('@{searchWord}', args.searchWord)
-    url = url.replace('@{page}', args.page)
-    dlog("搜索 组合链接", url)
-    const respData = await req(url, {
-      headers: appConfig.headers,
-    })
-    const htmlStr = respData.data ?? ''
-    const $ = cheerio.load(htmlStr)
-    const searchListTag = appConfig.searchListTag
-    const searchImageTag = appConfig.searchImageTag
-    const searchNameTag = appConfig.searchNameTag
-    const videoItems = $(buildFindStr(searchListTag))
-    var list = []
-    for (let index = 0; index < videoItems.length; index++) {
-      const element = videoItems[index]
-      const findImgStr = buildFindStr(searchImageTag)
-      var imageHtml = $(element).find(findImgStr) ?? []
-      if (imageHtml.length < 1 && findImgStr.includes("lazyloaded")) {
-        imageHtml = $(element).find(findImgStr.replace("lazyloaded", "lazyload"))
-      }
-
-      const nameHtml = $(element).find(buildFindStr(searchNameTag)) ?? []
-      if (imageHtml.length < 1 || nameHtml.length < 1) {
-        continue
-      }
-      const imageUrl = parseImage(imageHtml)
-      const name = nameHtml.text()
-      const href = findHref($, imageHtml, nameHtml)
-      list.push({
-        vod_pic: imageUrl,
-        vod_name: name,
-        vod_id: removeDomain(href),
-      })
-    }
-    backData.data = list
-  } catch (error) {
-    backData.error = error.toString()
-  }
-  return JSON.stringify(backData)
-}
-
-
-function combineUrl(url) {
-  if (url.includes('http')) {
-    return url
-  } else if (url.startsWith('/')) {
-    return appConfig.webSite + url
-  } else {
-    return appConfig.webSite + '/' + url
-  }
-}
-
-function removeDomain(url) {
-  if (url.includes(appConfig.webSite)) {
-    return url.replace(appConfig.webSite, '')
-  } else {
-    return url
-  }
-}
-
 function buildFindStr(tag) {
   var findStr = `${tag.name}`
   var className = tag.class ?? ''
@@ -511,8 +345,159 @@ function parseVideoList({ videoItems }) {
   return backDatalist
 }
 
+/**
+ * 获取视频详情
+ * @param {UZArgs} args
+ * @returns {@Promise<JSON.stringify(new RepVideoDetail())>}
+ */
+async function getVideoDetail(args) {
+  var backData = new RepVideoDetail()
+  try {
+    var url = combineUrl(args.url)
+    dlog("视频详情 组合链接", url)
+    const respData = await req(url, {
+      headers: appConfig.headers,
+    })
+    const htmlStr = respData.data ?? ''
+    const $ = cheerio.load(htmlStr)
+    const playFromTag = appConfig.playFromTag
+
+    const episodeItemTag = appConfig.episodeItemTag
+    const playFromHtmlList = $(buildFindStr(playFromTag))
+    var playFrom = []
+    var eps = []
+
+    for (let index = 0; index < playFromHtmlList.length; index++) {
+      const element = playFromHtmlList[index]
+      const episodeItem = $(element).find(buildFindStr(episodeItemTag))
+      eps = []
+
+      for (let index = 0; index < episodeItem.length; index++) {
+        const ep = episodeItem[index]
+        const href = $(ep).attr('href') ?? ''
+        const title = $(ep).text() ?? ''
+        if (href.includes('http') || href.startsWith('/')) {
+          eps.push({
+            url: removeDomain(href),
+            name: title,
+          })
+        }
+      }
+      if (eps.length > 0) {
+        playFrom.push(eps)
+      }
+    }
+
+    // 第一集$第一集的视频详情链接#第二集$第二集的视频详情链接$$$第一集$第一集的视频详情链接#第二集$第二集的视频详情链接
+    var playUrl = ''
+    for (let index = 0; index < playFrom.length; index++) {
+      const from = playFrom[index]
+      for (let index = 0; index < from.length; index++) {
+        const element = from[index]
+        playUrl += `${element.name}$${element.url}#`
+      }
+      playUrl += '$$$'
+    }
+    backData.data = {
+      vod_play_url: playUrl,
+    }
+  } catch (error) {
+    backData.error = error.toString()
+  }
+  return JSON.stringify(backData)
+}
+
+function combineUrl(url) {
+  if (url.includes('http')) {
+    return url
+  } else if (url.startsWith('/')) {
+    return appConfig.webSite + url
+  } else {
+    return appConfig.webSite + '/' + url
+  }
+}
+
+function removeDomain(url) {
+  if (url.includes(appConfig.webSite)) {
+    return url.replace(appConfig.webSite, '')
+  } else {
+    return url
+  }
+}
+
+/**
+ * 获取视频的播放地址
+ * @param {UZArgs} args
+ * @returns {@Promise<JSON.stringify(new RepVideoPlayUrl())>}
+ */
+async function getVideoPlayUrl(args) {
+  var backData = new RepVideoPlayUrl()
+  try {
+    var url = combineUrl(args.url)
+    dlog("视频播放 组合链接", url)
+    backData.sniffer = {
+      url: url,
+      ua: appConfig.headers['User-Agent'],
+    }
+    backData.headers = appConfig.playHeaders
+  } catch (error) {
+    backData.error = error.toString()
+  }
+  return JSON.stringify(backData)
+}
+
+/**
+ * 搜索视频
+ * @param {UZArgs} args
+ * @returns {@Promise<JSON.stringify(new RepVideoList())>}
+ */
+async function searchVideo(args) {
+  var backData = new RepVideoList()
+  try {
+    var url = appConfig.searchUrl
+    url = url.replace('@{webSite}', appConfig.webSite)
+    url = url.replace('@{searchWord}', args.searchWord)
+    url = url.replace('@{page}', args.page)
+    dlog("搜索 组合链接", url)
+    const respData = await req(url, {
+      headers: appConfig.headers,
+    })
+    const htmlStr = respData.data ?? ''
+    const $ = cheerio.load(htmlStr)
+    const searchListTag = appConfig.searchListTag
+    const searchImageTag = appConfig.searchImageTag
+    const searchNameTag = appConfig.searchNameTag
+    const videoItems = $(buildFindStr(searchListTag))
+    var list = []
+    for (let index = 0; index < videoItems.length; index++) {
+      const element = videoItems[index]
+      const findImgStr = buildFindStr(searchImageTag)
+      var imageHtml = $(element).find(findImgStr) ?? []
+      if (imageHtml.length < 1 && findImgStr.includes("lazyloaded")) {
+        imageHtml = $(element).find(findImgStr.replace("lazyloaded", "lazyload"))
+      }
+
+      const nameHtml = $(element).find(buildFindStr(searchNameTag)) ?? []
+      if (imageHtml.length < 1 || nameHtml.length < 1) {
+        continue
+      }
+      const imageUrl = parseImage(imageHtml)
+      const name = nameHtml.text()
+      const href = findHref($, imageHtml, nameHtml)
+      list.push({
+        vod_pic: imageUrl,
+        vod_name: name,
+        vod_id: removeDomain(href),
+      })
+    }
+    backData.data = list
+  } catch (error) {
+    backData.error = error.toString()
+  }
+  return JSON.stringify(backData)
+}
+
 
 function dlog() {
   UZUtils.debugLog("---", ...arguments)
 }
-

@@ -1,9 +1,8 @@
 // ignore
-//@name:「嗅」clicli
+//@name:「嗅」NT动漫
 //@version:1
-//@webSite:https://www.clicli.pro
+//@webSite:https://www.ntdm9.com
 //@remark:
-//@deprecated:1
 //@order: D
 // ignore
 
@@ -16,33 +15,39 @@ const isUsePC = 1
 const isAddReferer = 1
 
 // 网站主页
-const webSite = 'https://www.clicli.pro'
+const webSite = 'https://www.ntdm9.com'
 // 网站搜索
-// https://www.clicli.pro/search/page/2/wd/海.html
+// https://www.ntdm9.com/search/-------------.html?wd=%E8%83%86%E5%A4%A7%E5%85%9A&page=1
 // 把网站主页变成 @{webSite} 把搜索词变成 @{searchWord}  把页码变成 @{page}
-const searchUrl = '@{webSite}/search/page/@{page}/wd/@{searchWord}.html'
+const searchUrl = '@{webSite}/search/-------------.html?wd=@{searchWord}&page=@{page}'
 // 当前网站任意视频详情页
-// https://www.clicli.pro/bangumi/3384.html
-const videoDetailPage = '@{webSite}/bangumi/3384.html'
+// https://www.ntdm9.com/video/6139.html
+const videoDetailPage = '@{webSite}/video/6139.html'
 // 当前网站任意视频播放页
-// https://www.clicli.pro/video/3384/1-1.html
-const videoPlayPage = '@{webSite}/video/3384/1-1.html'
+// https://www.ntdm9.com/play/6139-1-1.html
+const videoPlayPage = '@{webSite}/play/6139-1-1.html'
 
 // 保持不变
 const filterListUrl = ''
 
 const firstClass = [
     {
-        name: '番剧',
-        // https://www.clicli.pro/show/id/1/page/2.html
+        name: '日漫',
+        // https://www.ntdm9.com/type/riben-2.html
         // 把网站主页变成 @{webSite}  把页码变成 @{page}
-        id: '@{webSite}/show/id/1/page/@{page}.html',
+        id: '@{webSite}/type/riben-@{page}.html',
     },
     {
-        name: '剧场版',
-        // https://www.clicli.pro/show/id/2/page/2.html
+        name: '国漫',
+        // https://www.ntdm9.com/type/zhongguo-2.html
         // 把网站主页变成 @{webSite}  把页码变成 @{page}
-        id: '@{webSite}/show/id/2/page/@{page}.html',
+        id: '@{webSite}/type/zhongguo-@{page}.html',
+    },
+    {
+        name: '欧漫',
+        // https://www.ntdm9.com/type/omei-2.html
+        // 把网站主页变成 @{webSite}  把页码变成 @{page}
+        id: '@{webSite}/type/omei-@{page}.html',
     },
 ]
 

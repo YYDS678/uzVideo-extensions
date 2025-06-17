@@ -1,7 +1,7 @@
 // ignore
 //@name:「直」素白白
-//@version:2
-//@webSite:https://www.subaibaiys.com
+//@version:3
+//@webSite:https://www.subaibai.com
 //@remark:
 //@type:100
 //@instance:sbb20240624

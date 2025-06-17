@@ -2,6 +2,7 @@
 //@version:2
 //@webSite:https://www.ghw9zwp5.com
 //@remark:
+//@deprecated:1
 //@type:100
 //@instance:jpyy20240716
 //@order: C

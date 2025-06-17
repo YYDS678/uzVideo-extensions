@@ -1,9 +1,8 @@
 // ignore
-//@name:「嗅」clicli
+//@name:「嗅」八号影视
 //@version:1
-//@webSite:https://www.clicli.pro
+//@webSite:https://www.bahaotv.com
 //@remark:
-//@deprecated:1
 //@order: D
 // ignore
 
@@ -16,34 +15,40 @@ const isUsePC = 1
 const isAddReferer = 1
 
 // 网站主页
-const webSite = 'https://www.clicli.pro'
+const webSite = 'https://www.bahaotv.com'
 // 网站搜索
-// https://www.clicli.pro/search/page/2/wd/海.html
+// https://www.bahaotv.com/vodsearch/-------------.html?wd=%E6%8E%8C%E5%BF%83
 // 把网站主页变成 @{webSite} 把搜索词变成 @{searchWord}  把页码变成 @{page}
-const searchUrl = '@{webSite}/search/page/@{page}/wd/@{searchWord}.html'
+const searchUrl = '@{webSite}/vodsearch/-------------.html?wd=@{searchWord}'
 // 当前网站任意视频详情页
-// https://www.clicli.pro/bangumi/3384.html
-const videoDetailPage = '@{webSite}/bangumi/3384.html'
+// https://www.bahaotv.com/details/2182.html
+const videoDetailPage = '@{webSite}/details/2182.html'
 // 当前网站任意视频播放页
-// https://www.clicli.pro/video/3384/1-1.html
-const videoPlayPage = '@{webSite}/video/3384/1-1.html'
+// https://www.bahaotv.com/vodplay/2182-1-1.html
+const videoPlayPage = '@{webSite}/vodplay/2182-1-1.html'
 
 // 保持不变
 const filterListUrl = ''
 
 const firstClass = [
     {
-        name: '番剧',
-        // https://www.clicli.pro/show/id/1/page/2.html
+        name: '电影',
+        // https://www.bahaotv.com/vodshow/movie--------2---.html
         // 把网站主页变成 @{webSite}  把页码变成 @{page}
-        id: '@{webSite}/show/id/1/page/@{page}.html',
+        id: '@{webSite}/vodshow/movie--------@{page}---.html',
     },
     {
-        name: '剧场版',
-        // https://www.clicli.pro/show/id/2/page/2.html
+        name: '电视剧',
+        // https://www.bahaotv.com/vodshow/tvseries--------2---.html
         // 把网站主页变成 @{webSite}  把页码变成 @{page}
-        id: '@{webSite}/show/id/2/page/@{page}.html',
+        id: '@{webSite}/vodshow/tvseries--------@{page}---.html',
     },
+    {
+        name: '动漫',
+        // https://www.bahaotv.com/vodshow/anime--------2---.html
+        // 把网站主页变成 @{webSite}  把页码变成 @{page}
+        id: '@{webSite}/vodshow/anime--------@{page}---.html',
+    } 
 ]
 
 // 下面这个不要有任何改动，且保持在最后一行，加载内置代码需要

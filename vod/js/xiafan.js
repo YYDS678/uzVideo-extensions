@@ -2,6 +2,7 @@
 //@version:1
 //@webSite:http://www.xn--ghqy10g1w0a.xyz/
 //@remark:
+//@deprecated:1
 //@order: B
 const appConfig = {
     _webSite: 'http://www.xn--ghqy10g1w0a.xyz/',

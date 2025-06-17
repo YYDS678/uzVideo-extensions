@@ -2,6 +2,7 @@
 //@version:1
 //@webSite:https://wp.0v.fit
 //@remark:
+//@deprecated:1
 //@order: B
 const appConfig = {
     _webSite: 'https://wp.0v.fit',
