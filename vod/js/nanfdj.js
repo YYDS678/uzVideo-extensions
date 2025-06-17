@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」南风短剧
+//@name:「盘」南风
 //@version:1
 //@webSite:https://www.nanf.cc
 //@remark:
