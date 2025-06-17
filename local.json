@@ -1,31 +1,21 @@
 [
   {
-    "name": "「解」虾米",
-    "version": 3,
+    "name": "「解」小猫咪",
+    "version": 4,
     "remark": "通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！",
-    "webSite": "https://zy.hls.one/api.php/provide/vod",
+    "webSite": "https://zy.xiaomaomi.cc/api.php/provide/vod",
     "order": "A",
     "api": "vod/js/cms.js",
     "type": 101
   },
   {
-    "name": "「解」虾米",
-    "version": 1,
-    "remark": "通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。",
-    "env": "采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
-    "webSite": "https://zy.hls.one/api.php/provide/vod",
-    "order": "A",
-    "api": "vod/js/cms2.js",
-    "type": 101
-  },
-  {
     "name": "「解」小猫咪",
-    "version": 1,
+    "version": 2,
     "remark": "通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。",
     "env": "采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
     "webSite": "https://zy.xiaomaomi.cc/api.php/provide/vod",
     "order": "A",
-    "api": "vod/js/cms3.js",
+    "api": "vod/js/cms2.js",
     "type": 101
   },
   {
@@ -34,14 +24,6 @@
     "webSite": "https://vip.omii.top",
     "order": "B",
     "api": "vod/js/aomipan.js",
-    "type": 101
-  },
-  {
-    "name": "「盘」百家",
-    "version": 1,
-    "webSite": "http://cj.jiexi.news",
-    "order": "B",
-    "api": "vod/js/baijia.js",
     "type": 101
   },
   {
@@ -88,14 +70,6 @@
     "type": 100
   },
   {
-    "name": "「盘」六趣",
-    "version": 1,
-    "webSite": "https://wp.0v.fit",
-    "order": "B",
-    "api": "vod/js/liuqu.js",
-    "type": 101
-  },
-  {
     "name": "「盘」木偶",
     "version": 2,
     "webSite": "https://666.666291.xyz",
@@ -112,14 +86,6 @@
     "type": 101
   },
   {
-    "name": "「盘」清影",
-    "version": 1,
-    "webSite": "https://revohd.com",
-    "order": "B",
-    "api": "vod/js/qingying.js",
-    "type": 101
-  },
-  {
     "name": "「盘」闪电",
     "version": 1,
     "webSite": "http://1.95.79.193/",
@@ -133,14 +99,6 @@
     "webSite": "http://wogg.xxooo.cf",
     "order": "B",
     "api": "vod/js/wobg.js",
-    "type": 101
-  },
-  {
-    "name": "「盘」下饭",
-    "version": 1,
-    "webSite": "http://www.xn--ghqy10g1w0a.xyz/",
-    "order": "B",
-    "api": "vod/js/xiafan.js",
     "type": 101
   },
   {
@@ -208,15 +166,6 @@
     "type": 101
   },
   {
-    "name": "「盘」云盘资源网",
-    "version": 1,
-    "webSite": "https://res.yunpan.win",
-    "instance": "resYunPan20241120",
-    "order": "B",
-    "api": "vod/js/resyunpan.js",
-    "type": 100
-  },
-  {
     "name": "「盘」PanSearch",
     "version": 1,
     "remark": "来自proversion2024，仅搜索",
@@ -225,23 +174,6 @@
     "instance": "leiJing20241126",
     "order": "B",
     "api": "vod/js/pansearch.txt",
-    "type": 101
-  },
-  {
-    "name": "「直」烧火",
-    "version": 2,
-    "webSite": "https://saohuo.tv",
-    "instance": "saohuo20240623",
-    "order": "C",
-    "api": "vod/js/saohuo.js",
-    "type": 100
-  },
-  {
-    "name": "「直」蛋蛋剧",
-    "version": 2,
-    "webSite": "https://www.dandanju.tv",
-    "order": "C",
-    "api": "vod/js/dandanju.js",
     "type": 101
   },
   {
@@ -257,8 +189,8 @@
   },
   {
     "name": "「直」素白白",
-    "version": 2,
-    "webSite": "https://www.subaibaiys.com",
+    "version": 3,
+    "webSite": "https://www.subaibai.com",
     "instance": "sbb20240624",
     "order": "C",
     "api": "vod/js/subaibai.js",
@@ -266,8 +198,8 @@
   },
   {
     "name": "「直」修罗影视",
-    "version": 1,
-    "webSite": "https://www.xlys01.com",
+    "version": 2,
+    "webSite": "https://xl01.com.de",
     "order": "C",
     "api": "vod/js/biliys.js",
     "type": 101
@@ -289,15 +221,6 @@
     "type": 101
   },
   {
-    "name": "「直」短剧天堂",
-    "version": 2,
-    "webSite": "https://duanjutt.tv",
-    "instance": "duanjutt20240922",
-    "order": "C",
-    "api": "vod/js/duanjutt.js",
-    "type": 100
-  },
-  {
     "name": "「直」韩剧看看",
     "version": 2,
     "webSite": "https://www.hanjukankan.com",
@@ -307,45 +230,18 @@
     "type": 100
   },
   {
-    "name": "「直」金牌影视",
-    "version": 2,
-    "webSite": "https://www.ghw9zwp5.com",
-    "instance": "jpyy20240716",
-    "order": "C",
-    "api": "vod/js/jpyy.js",
-    "type": 100
-  },
-  {
-    "name": "「直」老白听书",
-    "version": 2,
-    "webSite": "https://apk-lb-json.fodexin.com",
-    "instance": "laobai20240831",
-    "order": "C",
-    "api": "vod/js/laobai.js",
-    "type": 100
-  },
-  {
     "name": "「直」欧乐影视",
-    "version": 2,
-    "webSite": "https://www.olevod.tv",
+    "version": 3,
+    "webSite": "https://www.olehdtv.com",
     "instance": "olevod20240620",
     "order": "C",
     "api": "vod/js/olevod.js",
     "type": 100
   },
   {
-    "name": "「直」天天影视",
-    "version": 2,
-    "webSite": "http://op.ysdqjs.cn",
-    "instance": "tiantian20240629",
-    "order": "C",
-    "api": "vod/js/tiantian.js",
-    "type": 100
-  },
-  {
     "name": "「直」在线之家",
-    "version": 2,
-    "webSite": "https://www.zxzja.com",
+    "version": 3,
+    "webSite": "https://www.zxzjhd.com",
     "instance": "zxzj20240620",
     "order": "C",
     "api": "vod/js/zxzj.js",
@@ -381,6 +277,54 @@
     "type": 100
   },
   {
+    "name": "「嗅」路漫漫",
+    "version": 1,
+    "webSite": "https://www.lmm97.com",
+    "order": "D",
+    "api": "vod/js/Xiu_lmm.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」八号影视",
+    "version": 1,
+    "webSite": "https://www.bahaotv.com",
+    "order": "D",
+    "api": "vod/js/Xiu_bhys.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」风车动漫",
+    "version": 1,
+    "webSite": "https://www.tt776b.com",
+    "order": "D",
+    "api": "vod/js/Xiu_fcdm.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」MX动漫",
+    "version": 1,
+    "webSite": "https://www.mxdm6.com",
+    "order": "D",
+    "api": "vod/js/Xiu_mxdm.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」NT动漫",
+    "version": 1,
+    "webSite": "https://www.ntdm9.com",
+    "order": "D",
+    "api": "vod/js/Xiu_ntdm.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」樱花动漫",
+    "version": 1,
+    "webSite": "https://www.vdm5.com",
+    "order": "D",
+    "api": "vod/js/Xiu_yhdm.js",
+    "type": 101
+  },
+  {
     "name": "「嗅」E-ACG",
     "version": 1,
     "webSite": "https://eacg1.com",
@@ -389,27 +333,19 @@
     "type": 101
   },
   {
-    "name": "「嗅」mifun",
-    "version": 1,
-    "webSite": "http://www.mifun.tw",
-    "order": "D",
-    "api": "vod/js/mifun.js",
-    "type": 101
-  },
-  {
-    "name": "「嗅」clicli",
-    "version": 1,
-    "webSite": "https://www.clicli.pro",
-    "order": "D",
-    "api": "vod/js/clicli.js",
-    "type": 101
-  },
-  {
     "name": "「嗅」E-ACG2",
     "version": 1,
     "webSite": "https://eacg1.com",
     "order": "D",
     "api": "vod/js/eacg2.js",
+    "type": 101
+  },
+  {
+    "name": "「嗅」MuteFun",
+    "version": 1,
+    "webSite": "https://www.mutean.com",
+    "order": "D",
+    "api": "vod/js/Xiu_MuteFun.js",
     "type": 101
   },
   {
