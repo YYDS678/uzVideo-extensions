@@ -146,10 +146,10 @@
   },
   {
     "name": "[盘] TG搜",
-    "version": 2,
+    "version": 3,
     "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
     "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
-    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation",
+    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation",
     "order": "B",
     "api": "vod/js/tgs.js",
     "type": 101
