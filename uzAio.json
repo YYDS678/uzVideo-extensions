@@ -48,7 +48,7 @@
   ],
   "vod": [
     {
-      "name": "「解」小猫咪",
+      "name": "[解] 小猫咪",
       "version": 4,
       "remark": "通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！",
       "webSite": "https://zy.xiaomaomi.cc/api.php/provide/vod",
@@ -57,7 +57,7 @@
       "type": 101
     },
     {
-      "name": "「解」小猫咪",
+      "name": "[解] 小猫咪",
       "version": 2,
       "remark": "通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。",
       "env": "采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
@@ -67,7 +67,7 @@
       "type": 101
     },
     {
-      "name": "「盘」奥秘",
+      "name": "[盘] 奥秘",
       "version": 3,
       "webSite": "https://vip.omii.top",
       "order": "B",
@@ -75,7 +75,7 @@
       "type": 101
     },
     {
-      "name": "「盘」大玩",
+      "name": "[盘] 大玩",
       "version": 1,
       "webSite": "http://149.88.87.18:6688",
       "order": "B",
@@ -83,7 +83,7 @@
       "type": 101
     },
     {
-      "name": "「盘」多多",
+      "name": "[盘] 多多",
       "version": 3,
       "webSite": "https://tv.yydsys.top",
       "order": "B",
@@ -91,7 +91,7 @@
       "type": 101
     },
     {
-      "name": "「盘」二小",
+      "name": "[盘] 二小",
       "version": 1,
       "webSite": "https://2xiaopan.fun",
       "order": "B",
@@ -99,7 +99,7 @@
       "type": 101
     },
     {
-      "name": "「盘」虎斑",
+      "name": "[盘] 虎斑",
       "version": 1,
       "webSite": "http://103.45.162.207:20720",
       "order": "B",
@@ -107,7 +107,7 @@
       "type": 101
     },
     {
-      "name": "「盘」蜡笔",
+      "name": "[盘] 蜡笔",
       "version": 3,
       "webSite": "http://feimaoai.site",
       "order": "B",
@@ -115,7 +115,7 @@
       "type": 101
     },
     {
-      "name": "「盘」雷鲸",
+      "name": "[盘] 雷鲸",
       "version": 4,
       "remark": "来自proversion2024",
       "webSite": "https://www.leijing.xyz",
@@ -126,7 +126,7 @@
       "type": 100
     },
     {
-      "name": "「盘」木偶",
+      "name": "[盘] 木偶",
       "version": 2,
       "webSite": "https://666.666291.xyz",
       "order": "B",
@@ -134,7 +134,7 @@
       "type": 101
     },
     {
-      "name": "「盘」南风",
+      "name": "[盘] 南风",
       "version": 1,
       "webSite": "https://www.nanf.cc",
       "order": "B",
@@ -142,7 +142,7 @@
       "type": 101
     },
     {
-      "name": "「盘」欧歌",
+      "name": "[盘] 欧歌",
       "version": 3,
       "webSite": "https://woog.nxog.eu.org",
       "order": "B",
@@ -150,7 +150,7 @@
       "type": 101
     },
     {
-      "name": "「盘」闪电",
+      "name": "[盘] 闪电",
       "version": 1,
       "webSite": "http://1.95.79.193/",
       "order": "B",
@@ -158,7 +158,7 @@
       "type": 101
     },
     {
-      "name": "「盘」玩偶",
+      "name": "[盘] 玩偶",
       "version": 3,
       "webSite": "http://wogg.xxooo.cf",
       "order": "B",
@@ -166,7 +166,7 @@
       "type": 101
     },
     {
-      "name": "「盘」小米",
+      "name": "[盘] 小米",
       "version": 3,
       "webSite": "https://xiaomiai.site",
       "order": "B",
@@ -174,7 +174,7 @@
       "type": 101
     },
     {
-      "name": "「盘」至臻",
+      "name": "[盘] 至臻",
       "version": 3,
       "webSite": "https://mihdr.top",
       "order": "B",
@@ -182,7 +182,7 @@
       "type": 101
     },
     {
-      "name": "「盘」趣盘搜",
+      "name": "[盘] 趣盘搜",
       "version": 3,
       "remark": "来自proversion2024，仅搜索",
       "webSite": "https://pan.funletu.com",
@@ -193,7 +193,7 @@
       "type": 100
     },
     {
-      "name": "「盘」TG搜",
+      "name": "[盘] TG搜",
       "version": 2,
       "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
       "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
@@ -203,7 +203,7 @@
       "type": 101
     },
     {
-      "name": "「盘」天逸搜",
+      "name": "[盘] 天逸搜",
       "version": 3,
       "remark": "来自proversion2024，仅搜索",
       "webSite": "https://www.tianyiso.com",
@@ -214,7 +214,7 @@
       "type": 100
     },
     {
-      "name": "「盘」PanSearch",
+      "name": "[盘] PanSearch",
       "version": 1,
       "remark": "来自proversion2024，仅搜索",
       "webSite": "https://www.pansearch.me",
@@ -225,7 +225,7 @@
       "type": 101
     },
     {
-      "name": "「直」囧次元",
+      "name": "[直] 囧次元",
       "version": 2,
       "remark": "网站填写[https://jocy.app]会自动获取最新网址，也可以在环境变量修改[囧次元更新网址]的值为1",
       "env": "囧次元更新网址##填写1,然后在首页源列表重新切换到囧次元,可更新手动更新网址",
@@ -236,7 +236,7 @@
       "type": 101
     },
     {
-      "name": "「直」素白白",
+      "name": "[直] 素白白",
       "version": 3,
       "webSite": "https://www.subaibai.com",
       "instance": "sbb20240624",
@@ -245,7 +245,7 @@
       "type": 100
     },
     {
-      "name": "「直」修罗影视",
+      "name": "[直] 修罗影视",
       "version": 2,
       "webSite": "https://xl01.com.de",
       "order": "C",
@@ -253,7 +253,7 @@
       "type": 101
     },
     {
-      "name": "「直」两个BT",
+      "name": "[直] 两个BT",
       "version": 2,
       "webSite": "https://www.bttwoo.com",
       "order": "C",
@@ -261,7 +261,7 @@
       "type": 101
     },
     {
-      "name": "「直」厂长影视",
+      "name": "[直] 厂长影视",
       "version": 2,
       "webSite": "https://www.czzy77.com",
       "order": "C",
@@ -269,7 +269,7 @@
       "type": 101
     },
     {
-      "name": "「直」韩剧看看",
+      "name": "[直] 韩剧看看",
       "version": 2,
       "webSite": "https://www.hanjukankan.com",
       "instance": "hjkk20240624",
@@ -278,7 +278,7 @@
       "type": 100
     },
     {
-      "name": "「直」欧乐影视",
+      "name": "[直] 欧乐影视",
       "version": 3,
       "webSite": "https://www.olehdtv.com",
       "instance": "olevod20240620",
@@ -287,7 +287,7 @@
       "type": 100
     },
     {
-      "name": "「直」在线之家",
+      "name": "[直] 在线之家",
       "version": 3,
       "webSite": "https://www.zxzjhd.com",
       "instance": "zxzj20240620",
@@ -296,7 +296,7 @@
       "type": 100
     },
     {
-      "name": "「直」4k-av",
+      "name": "[直] 4k-av",
       "version": 2,
       "webSite": "https://4k-av.com",
       "instance": "www4kav20240705",
@@ -305,7 +305,7 @@
       "type": 100
     },
     {
-      "name": "「直」瓜子app",
+      "name": "[直] 瓜子app",
       "version": 2,
       "remark": "v1.6.53 及以上版本",
       "webSite": "https://api.9cec79d.com",
@@ -316,7 +316,7 @@
       "type": 100
     },
     {
-      "name": "「直」瓜子web",
+      "name": "[直] 瓜子web",
       "version": 2,
       "webSite": "https://api.zaqohu.com",
       "instance": "gzys20240822",
@@ -325,7 +325,7 @@
       "type": 100
     },
     {
-      "name": "「嗅」路漫漫",
+      "name": "[嗅] 路漫漫",
       "version": 1,
       "webSite": "https://www.lmm97.com",
       "order": "D",
@@ -333,7 +333,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」八号影视",
+      "name": "[嗅] 八号影视",
       "version": 1,
       "webSite": "https://www.bahaotv.com",
       "order": "D",
@@ -341,7 +341,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」风车动漫",
+      "name": "[嗅] 风车动漫",
       "version": 1,
       "webSite": "https://www.tt776b.com",
       "order": "D",
@@ -349,7 +349,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」MX动漫",
+      "name": "[嗅] MX动漫",
       "version": 1,
       "webSite": "https://www.mxdm6.com",
       "order": "D",
@@ -357,7 +357,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」NT动漫",
+      "name": "[嗅] NT动漫",
       "version": 1,
       "webSite": "https://www.ntdm9.com",
       "order": "D",
@@ -365,7 +365,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」樱花动漫",
+      "name": "[嗅] 樱花动漫",
       "version": 1,
       "webSite": "https://www.vdm5.com",
       "order": "D",
@@ -373,7 +373,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」E-ACG",
+      "name": "[嗅] E-ACG",
       "version": 1,
       "webSite": "https://eacg1.com",
       "order": "D",
@@ -381,7 +381,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」E-ACG2",
+      "name": "[嗅] E-ACG2",
       "version": 1,
       "webSite": "https://eacg1.com",
       "order": "D",
@@ -389,7 +389,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」MuteFun",
+      "name": "[嗅] MuteFun",
       "version": 1,
       "webSite": "https://www.mutean.com",
       "order": "D",
@@ -397,7 +397,7 @@
       "type": 101
     },
     {
-      "name": "「嗅」girigirilove",
+      "name": "[嗅] girigirilove",
       "version": 1,
       "webSite": "https://anime.girigirilove.com",
       "order": "D",
@@ -406,26 +406,26 @@
     },
     {
       "api": "https://cjhwba.com/api.php/provide/vod/",
-      "name": "「采」华为吧",
+      "name": "[采] 华为吧",
       "type": 0
     },
     {
       "api": "https://cj.rycjapi.com/api.php/provide/vod",
-      "name": "「采」如意",
+      "name": "[采] 如意",
       "type": 0
     },
     {
-      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
-      "name": "「采」黑木耳",
-      "type": 0
-    },
-    {
-      "name": "自行搭建的 cms",
+      "name": "[采] 自建CMS",
       "version": 1,
       "remark": "地址输入自己搭建的 cms 采集地址，默认使用如意采集占位",
       "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/cmsUser.js",
       "type": 101
+    },
+    {
+      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+      "name": "[采] 黑木耳",
+      "type": 0
     }
   ],
   "live": [
