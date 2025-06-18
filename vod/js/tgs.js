@@ -1,6 +1,6 @@
 //@name:[盘] TG搜
-//@version:2
-//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
+//@version:3
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@order: B
@@ -54,7 +54,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -81,28 +81,49 @@ const appConfig = {
     },
 }
 
-// --- Global Constants/Configuration ---
-const providerMap = [
-    { name: '天翼', keywords: ['189.cn'] },
-    { name: '夸克', keywords: ['pan.quark.cn'] },
-    { name: 'UC', keywords: ['drive.uc.cn'] },
-    { name: '阿里', keywords: ['alipan.com'] },
-    { name: '123', keywords: ['123684.com', '123865.com', '123912.com', '123pan.com', '123pan.cn'] }
-];
+// --- 全局常量/配置 ---
+// 统一的网盘配置 - 单一数据源
+const CLOUD_PROVIDERS = {
+    tianyi: {
+        name: '天翼',
+        domains: ['189.cn']
+    },
+    quark: {
+        name: '夸克',
+        domains: ['pan.quark.cn']
+    },
+    uc: {
+        name: 'UC',
+        domains: ['drive.uc.cn']
+    },
+    ali: {
+        name: '阿里',
+        domains: ['alipan.com']
+    },
+    pan123: {
+        name: '123',
+        domains: ['123684.com', '123865.com', '123912.com', '123pan.com', '123pan.cn', '123592.com']
+    }
+};
 
-const panUrlsExt = [
-    '189.cn', //天翼
-    '123684.com', // 123
-    '123865.com',
-    '123912.com',
-    '123pan.com',
-    '123pan.cn',
-    '123592.com',
-    'pan.quark.cn', // 夸克
-    'drive.uc.cn', // uc
-    'alipan.com', // 阿里
-];
-// --- End Global Constants ---
+// 从统一配置自动生成所需数组
+const panUrlsExt = Object.values(CLOUD_PROVIDERS).flatMap(provider => provider.domains);
+
+// 预编译网盘提供商正则表达式，提高匹配性能
+const providerRegexMap = Object.values(CLOUD_PROVIDERS).map(provider => ({
+    name: provider.name,
+    // 将多个域名组合成一个正则，用 | 分隔，转义点号
+    regex: new RegExp(provider.domains.map(domain =>
+        domain.replace(/\./g, '\\.')
+    ).join('|'), 'i')
+}));
+
+// 预编译剧集信息提取正则表达式，一次匹配解决所有情况
+const EPISODE_COMBINED_REGEX = /((?:更新至|全|第)\s*\d+\s*集)|((?:更新至|全|第)\s*[一二三四五六七八九十百千万亿]+\s*集)|((?:更至|更)\s*(?:EP)?\s*\d+)/;
+
+// 预编译图片URL提取正则表达式
+const IMAGE_URL_REGEX = /url\(['"]?(https?:\/\/[^'")]+)['"]?\)/;
+// --- 全局常量结束 ---
 
 /**
  * 异步获取分类列表的方法。
@@ -167,7 +188,7 @@ async function getVideoList(args) {
             endUrl += nextPage
         }
         const res = await getTGList(endUrl, false)
-        // Deduplicate results before returning
+        // 返回前对结果进行去重
         backData.data = deduplicateVideoListByLinks(res.videoList);
         _videoListPageMap[args.url] = res.nextPage
     } catch (error) {
@@ -181,7 +202,7 @@ async function getTGList(url, isSearchContext = false){
     let videoList = []
     let nextPage = ""
 
-    // --- Extract Channel ID and Name ---
+    // --- 提取频道ID和名称 ---
     let currentChannelId = null;
     const urlMatch = url.match(/\/s\/([^/?]+)/);
     if (urlMatch && urlMatch[1]) {
@@ -192,12 +213,12 @@ async function getTGList(url, isSearchContext = false){
     appConfig.webSite.split('&').forEach(item => {
         const parts = item.split('@');
         if (parts.length === 2) {
-            channelMap.set(parts[1], parts[0]); // key: id, value: name
+            channelMap.set(parts[1], parts[0]); // 键: id, 值: name
         }
     });
 
     const currentChannelName = currentChannelId ? (channelMap.get(currentChannelId) || '未知频道') : '未知频道';
-    // --- End Extract ---
+    // --- 提取结束 ---
 
     try {
         const res = await req(url)
@@ -210,18 +231,17 @@ async function getTGList(url, isSearchContext = false){
             const aList = $(message).find('a')
             const video = new VideoDetail()
 
-            // --- Extract Message ID ---
+            // --- 提取消息ID ---
             const postIdStr = $(message).attr('data-post')?.split('/')?.[1];
-            video.message_id = parseInt(postIdStr) || 0; // Store message ID
-            // --- End Extract Message ID ---
+            video.message_id = parseInt(postIdStr) || 0; // 存储消息ID
+            // --- 提取消息ID结束 ---
 
             for (let j = 0; j < aList.length; j++) {
                 const a = aList[j]
                 const style = $(a).attr('style')
 
                 if (style && style.includes('image')) {
-                    const regex = /url\(['"]?(https?:\/\/[^'")]+)['"]?\)/
-                    const match = style.match(regex)
+                    const match = style.match(IMAGE_URL_REGEX)
                     if (match) {
                         const imageUrl = match[1]
                         video.vod_pic = imageUrl
@@ -231,76 +251,70 @@ async function getTGList(url, isSearchContext = false){
             }
             const time = $(message).find('time').attr('datetime')
 
-            const date = new Date(time)
-            const formattedDate = date
-                .toLocaleString('zh-CN', {
-                    month: '2-digit',
-                    day: '2-digit',
-                })
-                .replace(/\//g, '-')
+            // 安全的时间格式化处理，防止无效日期导致的错误
+            let formattedDate = '未知时间';
+            if (time) {
+                const date = new Date(time);
+                if (!isNaN(date.getTime())) {
+                    formattedDate = date
+                        .toLocaleString('zh-CN', {
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        .replace(/\//g, '-');
+                }
+            }
 
-            const htmlContent = $('div.tgme_widget_message_text').html()
+            const htmlContent = $(message).find('div.tgme_widget_message_text').html()
             // 取到第一个 <br> 之前的内容
-            const cleanedTitle = htmlContent
-                .split('<br>')[0]
-                ?.replace(/<[^>]+>/g, "")
-                ?.trim()
-                ?.replace(/^(名称[：:])/, '')
-                ?.trim()
+            let cleanedTitle = '';
+            if (htmlContent) {
+                cleanedTitle = htmlContent
+                    .split('<br>')[0]
+                    .replace(/<[^>]+>/g, "")
+                    .trim()
+                    .replace(/^(名称[：:])/, '')
+                    .trim();
+            }
 
-            // Assign initial cleaned title first
-            video.vod_name = cleanedTitle ?? '';
+            // 首先分配初始清理后的标题
+            video.vod_name = cleanedTitle;
             const ids = _getAllPanUrls(message)
             video.vod_id = JSON.stringify(ids)
 
-            // --- New Remark Logic: Determine provider from URLs --- 
+            // --- 新的备注逻辑：从URL确定提供商 ---
             let providers = new Set();
 
             if (ids && ids.length > 0) {
                 for (const url of ids) {
-                    for (const provider of providerMap) {
-                        for (const keyword of provider.keywords) {
-                            if (url.includes(keyword)) {
-                                providers.add(provider.name);
-                                // Optional: break inner loop if one keyword match is enough per provider
-                                break; 
-                            }
+                    for (const provider of providerRegexMap) {
+                        if (provider.regex.test(url)) {
+                            providers.add(provider.name);
+                            // 找到匹配的提供商后跳出，提高性能
+                            break;
                         }
-                        // Optional: if providers set already contains this provider, maybe break outer loop too?
-                        // Depends on whether we need to check all URLs even if provider is known.
-                        // Let's keep checking all URLs for now.
                     }
                 }
             }
 
-            // --- Try to extract episode/season info from title --- (Moved here)
-            // Define separate regex for Arabic and Chinese numerals
-            const regexArabicEpisodes = /((?:更新至|全|第)\s*\d+\s*集)/; // Must end in 集
-            const regexChineseEpisodes = /((?:更新至|全|第)\s*[一二三四五六七八九十百千万亿]+\s*集)/; // Must end in 集
-            const regexEpNumbers = /((?:更至|更)\s*(?:EP)?\s*\d+)/; // EP numbering, no suffix needed
-
-            let episodeMatch = cleanedTitle.match(regexArabicEpisodes); // Try Arabic Episodes first
-            if (!episodeMatch) { // If Arabic Episodes fails, try Chinese Episodes
-                episodeMatch = cleanedTitle.match(regexChineseEpisodes);
-            }
-            if (!episodeMatch) { // If Chinese Episodes also fails, try EP Numbers
-                episodeMatch = cleanedTitle.match(regexEpNumbers);
-            }
+            // --- 尝试从标题中提取剧集/季度信息 --- (移到这里)
+            // 使用合并的正则表达式，一次匹配解决所有情况
+            const episodeMatch = cleanedTitle.match(EPISODE_COMBINED_REGEX);
             const extractedEpisodeInfo = episodeMatch ? episodeMatch[0] : null;
-            // --- End extraction ---
+            // --- 提取结束 ---
 
-            // --- Adjust vod_name if episode info was extracted ---
+            // --- 如果提取了剧集信息，调整vod_name ---
             if (extractedEpisodeInfo) {
                 video.vod_name = cleanedTitle.replace(extractedEpisodeInfo, '').trim();
             }
-            // --- End Adjustment ---
+            // --- 调整结束 ---
 
-            // --- Build remark dynamically based on available info ---
+            // --- 根据可用信息动态构建备注 ---
             const remarkParts = [];
             if (providers.size > 0) {
                 remarkParts.push(Array.from(providers).join('/'));
             }
-            // Only add channel name if in search context and it's not the default '未知频道'
+            // 只有在搜索上下文中且不是默认的'未知频道'时才添加频道名称
             if (isSearchContext && currentChannelName !== '未知频道') {
                 remarkParts.push(currentChannelName);
             }
@@ -311,19 +325,23 @@ async function getTGList(url, isSearchContext = false){
             if (remarkParts.length > 0) {
                 video.vod_remarks = remarkParts.join('|');
             } else {
-                // Fallback to timestamp only if NO other info was available
+                // 如果没有其他信息可用，则回退到仅时间戳
                 video.vod_remarks = formattedDate;
             }
-            // --- End building remark ---
+            // --- 构建备注结束 ---
 
-            // --- Only push video if it contains valid pan URLs ---
-            if (ids && ids.length > 0) { // Check if ids array is not empty
+            // --- 只有包含有效网盘URL时才推送视频 ---
+            if (ids && ids.length > 0) { // 检查ids数组是否不为空
                 videoList.push(video);
             }
-            // --- End check ---
+            // --- 检查结束 ---
         }
     } catch (error) {
-        
+        console.error('getTGList解析错误:', {
+            url: url,
+            error: error.message,
+            stack: error.stack
+        });
     }
     videoList.reverse()
     if(nextPage?.length > 0) {
@@ -337,24 +355,25 @@ async function getTGList(url, isSearchContext = false){
 function _getAllPanUrls(html) {
     const $ = cheerio.load(html)
     const aList = $('a')
-    let results = []
+    const resultSet = new Set()  // 使用Set进行O(1)去重
 
     for (let i = 0; i < aList.length; i++) {
         const element = aList[i]
         const href = $(element)?.attr('href') ?? ''
-        if (results.includes(href)) {
-            continue
-        }
-        // 如果 href 包含 panUrlsExt 中的某一个
-        for (let j = 0; j < panUrlsExt.length; j++) {
-            const element = panUrlsExt[j]
-            if (href.includes(element)) {
-                results.push(href)
+
+        if (href && !resultSet.has(href)) {  // O(1)查找
+            // 检查是否为网盘链接
+            for (let j = 0; j < panUrlsExt.length; j++) {
+                const domain = panUrlsExt[j]
+                if (href.includes(domain)) {
+                    resultSet.add(href);  // O(1)添加
+                    break;  // 找到匹配就跳出
+                }
             }
         }
     }
 
-    return results
+    return Array.from(resultSet);  // 转换回数组
 }
 
 /**
@@ -418,7 +437,7 @@ async function searchVideo(args) {
             const element = channels[index];
             let endUrl = appConfig.tgs + element + "?q=" + args.searchWord
         if(args.page == 1) {
-            _searchListPageMap[args.element] = ""
+            _searchListPageMap[element] = ""
         }else {
             const nextPage = _searchListPageMap[element] ?? ""
             if(nextPage.length == 0 || nextPage == "0") {
@@ -427,9 +446,9 @@ async function searchVideo(args) {
             endUrl += nextPage
         }
         const res = await getTGList(endUrl, true)
-        // Deduplicate the results for the current page of this channel
+        // 为当前频道的当前页面结果去重
         const deduplicatedPageVideos = deduplicateVideoListByLinks(res.videoList);
-        backData.data.push(...deduplicatedPageVideos); // Add deduplicated results
+        backData.data.push(...deduplicatedPageVideos); // 添加去重后的结果
         _searchListPageMap[element] = res.nextPage
         }
         
@@ -439,29 +458,29 @@ async function searchVideo(args) {
     return JSON.stringify(backData)
 }
 
-// --- Deduplication Function ---
+// --- 去重函数 ---
 function deduplicateVideoListByLinks(videoList) {
     const map = new Map();
     for (const video of videoList) {
         let ids;
         try {
-            // video.vod_id is a stringified array, parse it back
+            // video.vod_id 是一个字符串化的数组，将其解析回来
             ids = JSON.parse(video.vod_id || '[]');
             if (!Array.isArray(ids)) {
-                ids = []; // Ensure it's an array
+                ids = []; // 确保它是一个数组
             }
         } catch (e) {
-            ids = []; // Handle parsing errors
+            ids = []; // 处理解析错误
         }
 
-        // Create a stable key by sorting the IDs before stringifying
+        // 通过在字符串化之前对ID进行排序来创建稳定的键
         const key = JSON.stringify(ids.sort());
 
-        // If the key doesn't exist, or if the current video's message_id is greater
+        // 如果键不存在，或者当前视频的message_id更大
         if (!map.has(key) || (video.message_id > (map.get(key)?.message_id || 0))) {
             map.set(key, video);
         }
     }
     return Array.from(map.values());
 }
-// --- End Deduplication Function ---
+// --- 去重函数结束 ---
