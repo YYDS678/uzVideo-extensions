@@ -1,5 +1,5 @@
 // ignore
-//@name:「禁」麻豆
+//@name:[禁] 麻豆
 //@version:2
 //@webSite:https://madou.club
 //@remark:

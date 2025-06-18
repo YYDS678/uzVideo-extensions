@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」NT动漫
+//@name:[嗅] NT动漫
 //@version:1
 //@webSite:https://www.ntdm9.com
 //@remark:

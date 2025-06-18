@@ -1,4 +1,4 @@
-//@name:「盘」TG搜
+//@name:[盘] TG搜
 //@version:2
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&CH资源@ChangAn2504&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。

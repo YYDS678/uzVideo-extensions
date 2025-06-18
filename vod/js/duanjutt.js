@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」短剧天堂
+//@name:[直] 短剧天堂
 //@version:2
 //@webSite:https://duanjutt.tv
 //@remark:

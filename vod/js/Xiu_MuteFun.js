@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」MuteFun
+//@name:[嗅] MuteFun
 //@version:1
 //@webSite:https://www.mutean.com
 //@remark:

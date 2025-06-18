@@ -1,4 +1,4 @@
-//@name:自行搭建的 cms
+//@name:[采] 自建CMS
 //@version:1
 //@webSite:https://cj.rycjapi.com/api.php/provide/vod
 //@remark:地址输入自己搭建的 cms 采集地址，默认使用如意采集占位

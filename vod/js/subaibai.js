@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」素白白
+//@name:[直] 素白白
 //@version:3
 //@webSite:https://www.subaibai.com
 //@remark:

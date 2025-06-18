@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」蛋蛋剧
+//@name:[直] 蛋蛋剧
 //@version:2
 //@webSite:https://www.dandanju.tv
 //@remark:

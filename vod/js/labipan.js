@@ -1,4 +1,4 @@
-//@name:「盘」蜡笔
+//@name:[盘] 蜡笔
 //@version:3
 //@webSite:http://feimaoai.site
 //@remark:

@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」路漫漫
+//@name:[嗅] 路漫漫
 //@version:1
 //@webSite:https://www.lmm97.com
 //@remark:

@@ -1,4 +1,4 @@
-//@name:「解」小猫咪
+//@name:[解] 小猫咪
 //@version:4
 //@webSite:https://zy.xiaomaomi.cc/api.php/provide/vod
 //@remark:通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！

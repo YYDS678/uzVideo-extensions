@@ -1,4 +1,4 @@
-//@name:「禁」netflav
+//@name:[禁] netflav
 //@version:2
 //@webSite:https://www.netflav.com
 //@remark:

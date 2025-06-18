@@ -1,4 +1,4 @@
-//@name:「盘」清影
+//@name:[盘] 清影
 //@version:1
 //@webSite:https://revohd.com
 //@remark:

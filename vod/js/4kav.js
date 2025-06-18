@@ -1,4 +1,4 @@
-//@name:「直」4k-av 
+//@name:[直] 4k-av 
 //@version:2
 //@webSite:https://4k-av.com
 //@remark:

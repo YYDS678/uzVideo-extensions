@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」clicli
+//@name:[嗅] clicli
 //@version:1
 //@webSite:https://www.clicli.pro
 //@remark:

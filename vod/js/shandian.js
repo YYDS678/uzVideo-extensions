@@ -1,4 +1,4 @@
-//@name:「盘」闪电
+//@name:[盘] 闪电
 //@version:1
 //@webSite:http://1.95.79.193/
 //@remark:
