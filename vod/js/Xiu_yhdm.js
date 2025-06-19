@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」樱花动漫
+//@name:[嗅] 樱花动漫
 //@version:1
 //@webSite:https://www.vdm5.com
 //@remark:

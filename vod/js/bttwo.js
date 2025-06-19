@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」两个BT
+//@name:[直] 两个BT
 //@version:2
 //@webSite:https://www.bttwoo.com
 //@remark:

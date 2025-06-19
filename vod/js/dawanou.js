@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」大玩
+//@name:[盘] 大玩
 //@version:1
 //@webSite:http://149.88.87.18:6688
 //@remark:

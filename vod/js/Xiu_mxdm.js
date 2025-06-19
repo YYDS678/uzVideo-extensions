@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」MX动漫
+//@name:[嗅] MX动漫
 //@version:1
 //@webSite:https://www.mxdm6.com
 //@remark:

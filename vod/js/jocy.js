@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」囧次元
+//@name:[直] 囧次元
 //@version:2
 //@webSite:https://jocy.app
 //@remark:网站填写[https://jocy.app]会自动获取最新网址，也可以在环境变量修改[囧次元更新网址]的值为1

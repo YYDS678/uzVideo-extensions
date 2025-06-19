@@ -1,5 +1,5 @@
 // ignore
-//@name:「禁」91jav
+//@name:[禁] 91jav
 //@version:3
 //@webSite:https://041.bndmpsjx.com
 //@remark:

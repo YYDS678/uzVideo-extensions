@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」八号影视
+//@name:[嗅] 八号影视
 //@version:1
 //@webSite:https://www.bahaotv.com
 //@remark:

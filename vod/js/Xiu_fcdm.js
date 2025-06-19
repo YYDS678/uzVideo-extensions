@@ -1,5 +1,5 @@
 // ignore
-//@name:「嗅」风车动漫
+//@name:[嗅] 风车动漫
 //@version:1
 //@webSite:https://www.tt776b.com
 //@remark:

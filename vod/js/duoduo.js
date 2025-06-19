@@ -1,5 +1,5 @@
 //@version:3
-//@name:「盘」多多
+//@name:[盘] 多多
 //@webSite:https://tv.yydsys.top
 //@remark:
 //@order: B

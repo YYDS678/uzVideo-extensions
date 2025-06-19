@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」韩剧看看
+//@name:[直] 韩剧看看
 //@version:2
 //@webSite:https://www.hanjukankan.com
 //@remark:

@@ -1,5 +1,5 @@
 // ignore
-//@name:「盘」趣盘搜
+//@name:[盘] 趣盘搜
 //@version:3
 //@webSite:https://pan.funletu.com
 //@remark:来自proversion2024，仅搜索

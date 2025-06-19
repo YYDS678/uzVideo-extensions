@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」在线之家
+//@name:[直] 在线之家
 //@version:3
 //@webSite:https://www.zxzjhd.com
 //@remark:

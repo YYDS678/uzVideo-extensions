@@ -1,5 +1,5 @@
 // ignore
-//@name:「直」欧乐影视
+//@name:[直] 欧乐影视
 //@version:3
 //@webSite:https://www.olehdtv.com
 //@remark:
