@@ -177,6 +177,12 @@ const _videoListPageMap = {}
 async function getVideoList(args) {
     var backData = new RepVideoList()
     try {
+        // 确保在获取视频列表前获取最新的代理地址
+        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
+        if (tgs && tgs.length > 0) {
+            appConfig.tgs = tgs
+        }
+
         let endUrl = appConfig.tgs + args.url
         if(args.page == 1) {
             _videoListPageMap[args.url] = ""
@@ -430,6 +436,12 @@ const _searchListPageMap = {}
 async function searchVideo(args) {
     var backData = new RepVideoList()
     try {
+        // 确保在搜索前获取最新的代理地址
+        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
+        if (tgs && tgs.length > 0) {
+            appConfig.tgs = tgs
+        }
+
         const channels = appConfig.webSite.split('&').map((item) => {
             return item.split('@')[1]
         })
