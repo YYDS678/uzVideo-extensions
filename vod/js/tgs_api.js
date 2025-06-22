@@ -1,7 +1,7 @@
 //@name:[盘] TG纯搜
-//@version:3
+//@version:4
 //@webSite:123资源@zyfb123|2&夸克UC@ucquark|5&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504
-//@env:TG搜索API地址，默认: https://tgsou.252035.xyz
+//@env:TG搜API地址##https://tgsou.252035.xyz
 //@remark:免代理纯搜索无图片，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个，支持5种网盘：天翼/夸克/UC/阿里/123
 //@order: B
 
