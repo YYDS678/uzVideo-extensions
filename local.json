@@ -146,7 +146,7 @@
   },
   {
     "name": "[盘] TG搜",
-    "version": 4,
+    "version": 5,
     "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
     "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
     "webSite": "123资源@zyfb123&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504",
