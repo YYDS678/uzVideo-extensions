@@ -1,5 +1,5 @@
 //@name:夸克|123|189|UC|解析 网盘解析工具
-//@version:1
+//@version:2
 //@remark:iOS15 以下版本使用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 // ignore
@@ -2624,7 +2624,7 @@ function Pan189() {
         pubKey:
             'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZLyV4gHNDUGJMZoOcYauxmNEsKrc0TlLeBEVVIIQNzG4WqjimceOj5R9ETwDeeSN3yejAKLGHgx83lyy2wBjvnbfm/nLObyWwQD/09CmpZdxoFYCH6rdDjRpwZOZ2nXSZpgkZXoOBkfNXNxnN74aXtho2dqBynTw3NFTWyQl8BQIDAQAB',
     }
-    this.headers = {
+    this.loginHeaders = {
         'User-Agent':
             'Mozilla/5.0 (Linux; U; Android 11; ' +
             this.config.model +
@@ -2638,6 +2638,11 @@ function Pan189() {
         Referer:
             'https://m.cloud.189.cn/zhuanti/2016/sign/index.jsp?albumBackupOpened=1',
         'Accept-Encoding': 'gzip, deflate',
+    }
+    this.normalHeaders = {
+        'User-Agent':
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        Accept: 'application/json;charset=UTF-8',                    
     }
 
     this.api = 'https://cloud.189.cn/api'
@@ -2774,7 +2779,7 @@ Pan189.prototype.login = function (uname, passwd) {
                                                 self.cookie = cookies
                                                 var headers = Object.assign(
                                                     {},
-                                                    self.headers,
+                                                    self.loginHeaders,
                                                     { Cookie: cookies }
                                                 )
 
@@ -3014,14 +3019,7 @@ Pan189.prototype.getShareInfo = function (shareUrl, accessCode) {
                                 '&accessCode=' +
                                 self.accessCode,
                             {
-                                headers: {
-                                    'user-agent':
-                                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                                    accept: 'application/json;charset=UTF-8',
-                                    'accept-encoding':
-                                        'gzip, deflate, br, zstd',
-                                    'accept-language': 'zh-CN,zh;q=0.9',
-                                },
+                                headers: self.normalHeaders,
                             }
                         )
                         .then(function (check) {
@@ -3034,16 +3032,7 @@ Pan189.prototype.getShareInfo = function (shareUrl, accessCode) {
                                         '/open/share/getShareInfoByCodeV2.action?key=noCache&shareCode=' +
                                         self.shareCode,
                                     {
-                                        headers: {
-                                            'user-agent':
-                                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                                            accept:
-                                                'application/json;charset=UTF-8',
-                                            'accept-encoding':
-                                                'gzip, deflate, br, zstd',
-                                            'accept-language':
-                                                'zh-CN,zh;q=0.9',
-                                        },
+                                        headers: self.normalHeaders,
                                     }
                                 )
                                 .then(function (resp) {
@@ -3065,12 +3054,7 @@ Pan189.prototype.getShareInfo = function (shareUrl, accessCode) {
                         self.shareCode
                     axios
                         .get(url, {
-                            headers: {
-                                // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                                Accept: 'application/json;charset=UTF-8',
-                                // 'accept-encoding': 'gzip, deflate, br, zstd',
-                                // 'accept-language': 'zh-CN,zh;q=0.9',
-                            },
+                            headers: self.normalHeaders,
                         })
                         .then(function (resp) {
                             var fileId = resp.data.fileId
@@ -3097,11 +3081,7 @@ Pan189.prototype.getShareList = function (fileId) {
     return new Promise(function (resolve) {
         try {
             var videos = []
-            var headers = {
-                // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                Accept: 'application/json;charset=UTF-8',
-                // 'Accept-Encoding': 'gzip, deflate, br, zstd',
-            }
+            var headers = self.normalHeaders
             var options = {
                 method: 'GET',
                 headers: headers,
@@ -3178,12 +3158,7 @@ Pan189.prototype.getShareFile = function (fileId, pageNum, retry) {
                 resolve(null)
                 return
             }
-            var headers = {
-                'User-Agent':
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                Accept: 'application/json;charset=UTF-8',
-                'Accept-Encoding': 'gzip, deflate, br, zstd',
-            }
+            var headers = self.normalHeaders
             var options = {
                 method: 'GET',
                 headers: headers,
@@ -3293,10 +3268,7 @@ Pan189.prototype.getShareUrl = function (fileId, shareId) {
     var self = this
     return new Promise(function (resolve) {
         var headers = {
-            'User-Agent':
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            Accept: 'application/json;charset=UTF-8',
-            'Accept-Encoding': 'gzip, deflate, br, zstd',
+            ... self.normalHeaders,
         }
         var getUrl = function () {
             if (

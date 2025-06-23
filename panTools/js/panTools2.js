@@ -1,5 +1,5 @@
 //@name:夸克|123|189|UC|解析 网盘解析工具
-//@version:21
+//@version:22
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&阿里Token##用于播放阿里网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 // ignore
@@ -2109,11 +2109,11 @@ class Pan189 {
             version: '9.0.6',
             pubKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZLyV4gHNDUGJMZoOcYauxmNEsKrc0TlLeBEVVIIQNzG4WqjimceOj5R9ETwDeeSN3yejAKLGHgx83lyy2wBjvnbfm/nLObyWwQD/09CmpZdxoFYCH6rdDjRpwZOZ2nXSZpgkZXoOBkfNXNxnN74aXtho2dqBynTw3NFTWyQl8BQIDAQAB',
         }
-        this.headers = {
+        this.loginHeaders = {
             'User-Agent': `Mozilla/5.0 (Linux; U; Android 11; ${this.config.model} Build/RP1A.201005.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.136 Mobile Safari/537.36 Ecloud/${this.config.version} Android/30 clientId/${this.config.clientId} clientModel/${this.config.model} clientChannelId/qq proVersion/1.0.6`,
             Referer:
                 'https://m.cloud.189.cn/zhuanti/2016/sign/index.jsp?albumBackupOpened=1',
-            'Accept-Encoding': 'gzip, deflate',
+            // 'Accept-Encoding': 'gzip, deflate',
         }
 
         this.api = 'https://cloud.189.cn/api'
@@ -2136,6 +2136,11 @@ class Pan189 {
     password = ''
     cookie = ''
     authKey = '189panAuth'
+    normalHeaders = {
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        Accept: 'application/json;charset=UTF-8',
+    }
 
     async login(uname, passwd) {
         if (uname.length < 1 || passwd.length < 1) {
@@ -2162,6 +2167,7 @@ class Pan189 {
             let Lt = lastReqUrl.match(/lt=(\w+)/)[1]
             let tHeaders = {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                Accept: 'application/json;charset=UTF-8',
                 'User-Agent':
                     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/76.0',
                 Referer: 'https://open.e.189.cn/',
@@ -2222,7 +2228,7 @@ class Pan189 {
                     .join(';')
 
                 this.cookie = cookies
-                const headers = { ...this.headers, Cookie: cookies }
+                const headers = { ...this.loginHeaders, Cookie: cookies }
 
                 resp = await axios.get(loginJsonData.toUrl, {
                     headers: headers,
@@ -2231,9 +2237,9 @@ class Pan189 {
 
                 cookies +=
                     '; ' +
-                    resp.headers?.['set-cookie']
-                        ?.map((it) => it.split(';')[0])
-                        .join(';') ?? ''
+                        resp.headers?.['set-cookie']
+                            ?.map((it) => it.split(';')[0])
+                            .join(';') ?? ''
                 this.cookie = cookies
 
                 await UZUtils.setStorage({
@@ -2369,13 +2375,7 @@ class Pan189 {
                 let check = await axios.get(
                     `${this.api}/open/share/checkAccessCode.action?shareCode=${this.shareCode}&accessCode=${this.accessCode}`,
                     {
-                        headers: {
-                            'user-agent':
-                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                            accept: 'application/json;charset=UTF-8',
-                            'accept-encoding': 'gzip, deflate, br, zstd',
-                            'accept-language': 'zh-CN,zh;q=0.9',
-                        },
+                        headers: this.normalHeaders,
                     }
                 )
                 if (check.status === 200) {
@@ -2384,13 +2384,7 @@ class Pan189 {
                 let resp = await axios.get(
                     `${this.api}/open/share/getShareInfoByCodeV2.action?key=noCache&shareCode=${this.shareCode}`,
                     {
-                        headers: {
-                            'user-agent':
-                                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                            accept: 'application/json;charset=UTF-8',
-                            'accept-encoding': 'gzip, deflate, br, zstd',
-                            'accept-language': 'zh-CN,zh;q=0.9',
-                        },
+                        headers: this.normalHeaders,
                     }
                 )
                 let fileId = resp.data.fileId
@@ -2401,16 +2395,13 @@ class Pan189 {
                 }
                 return fileId
             } else {
-                const url = `${this.api
-                    }/open/share/getShareInfoByCodeV2.action?noCache=${Math.random()}&shareCode=${this.shareCode
-                    }`
+                const url = `${
+                    this.api
+                }/open/share/getShareInfoByCodeV2.action?noCache=${Math.random()}&shareCode=${
+                    this.shareCode
+                }`
                 let resp = await axios.get(url, {
-                    headers: {
-                        // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                        Accept: 'application/json;charset=UTF-8',
-                        // 'accept-encoding': 'gzip, deflate, br, zstd',
-                        // 'accept-language': 'zh-CN,zh;q=0.9',
-                    },
+                    headers: this.normalHeaders,
                 })
                 let fileId = resp.data.fileId
                 this.shareId = resp.data.shareId
@@ -2430,14 +2421,10 @@ class Pan189 {
     async getShareList(fileId) {
         try {
             let videos = []
-            const headers = {
-                // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                Accept: 'application/json;charset=UTF-8',
-                // 'Accept-Encoding': 'gzip, deflate, br, zstd',
-            }
+
             const options = {
                 method: 'GET',
-                headers: headers,
+                headers: this.normalHeaders,
                 responseType: ReqResponseType.plain,
             }
 
@@ -2480,23 +2467,22 @@ class Pan189 {
             if (!fileId || retry > 3) {
                 return null
             }
-            const headers = {
-                'User-Agent':
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-                Accept: 'application/json;charset=UTF-8',
-                'Accept-Encoding': 'gzip, deflate, br, zstd',
-            }
+            
             const options = {
                 method: 'GET',
-                headers: headers,
+                headers: this.normalHeaders,
                 responseType: ReqResponseType.plain,
             }
             const pageSize = 60
-            const url = `${this.api
-                }/open/share/listShareDir.action?key=noCache&pageNum=${pageNum}&pageSize=${pageSize}&fileId=${fileId}&shareDirFileId=${fileId}&isFolder=${this.isFolder
-                }&shareId=${this.shareId}&shareMode=${this.shareMode
-                }&iconOption=5&orderBy=filename&descending=false&accessCode=${this.accessCode
-                }&noCache=${Math.random()}`
+            const url = `${
+                this.api
+            }/open/share/listShareDir.action?key=noCache&pageNum=${pageNum}&pageSize=${pageSize}&fileId=${fileId}&shareDirFileId=${fileId}&isFolder=${
+                this.isFolder
+            }&shareId=${this.shareId}&shareMode=${
+                this.shareMode
+            }&iconOption=5&orderBy=filename&descending=false&accessCode=${
+                this.accessCode
+            }&noCache=${Math.random()}`
 
             let resp = await req(url, options)
 
@@ -2561,12 +2547,7 @@ class Pan189 {
     }
 
     async getShareUrl(fileId, shareId) {
-        let headers = {
-            'User-Agent':
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-            Accept: 'application/json;charset=UTF-8',
-            'Accept-Encoding': 'gzip, deflate, br, zstd',
-        }
+        let headers = { ...this.normalHeaders }
         if (
             this.cookie.length < 1 &&
             this.account.length > 0 &&
