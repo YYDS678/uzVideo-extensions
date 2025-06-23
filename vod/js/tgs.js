@@ -1,5 +1,5 @@
 //@name:[盘] TG搜
-//@version:4
+//@version:5
 //@webSite:123资源@zyfb123&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
@@ -67,6 +67,7 @@ const appConfig = {
     },
 
     tgs: 'https://t.me/s/',
+    _tgsInitialized: false, // 标记是否已初始化代理地址
 
     _uzTag: '',
     /**
@@ -126,6 +127,25 @@ const IMAGE_URL_REGEX = /url\(['"]?(https?:\/\/[^'")]+)['"]?\)/;
 // --- 全局常量结束 ---
 
 /**
+ * 初始化代理地址（仅在首次调用时执行）
+ */
+async function initTgsProxy() {
+    if (!appConfig._tgsInitialized) {
+        try {
+            const tgs = await getEnv(appConfig.uzTag, "TG搜代理地址")
+            if (tgs && tgs.length > 0) {
+                appConfig.tgs = tgs
+            }
+            appConfig._tgsInitialized = true
+        } catch (error) {
+            console.error('初始化代理地址失败:', error)
+            // 即使失败也标记为已初始化，避免重复尝试
+            appConfig._tgsInitialized = true
+        }
+    }
+}
+
+/**
  * 异步获取分类列表的方法。
  * @param {UZArgs} args
  * @returns {@Promise<JSON.stringify(new RepVideoClassList())>}
@@ -133,11 +153,8 @@ const IMAGE_URL_REGEX = /url\(['"]?(https?:\/\/[^'")]+)['"]?\)/;
 async function getClassList(args) {
     var backData = new RepVideoClassList()
     try {
-        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
-        if (tgs && tgs.length > 0) {
-            appConfig.tgs = tgs
-        }
-
+        // 初始化代理地址（仅首次执行）
+        await initTgsProxy()
 
         appConfig.webSite.split('&').forEach((item) => {
             let name = item.split('@')[0]
@@ -177,11 +194,8 @@ const _videoListPageMap = {}
 async function getVideoList(args) {
     var backData = new RepVideoList()
     try {
-        // 确保在获取视频列表前获取最新的代理地址
-        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
-        if (tgs && tgs.length > 0) {
-            appConfig.tgs = tgs
-        }
+        // 初始化代理地址（仅首次执行）
+        await initTgsProxy()
 
         let endUrl = appConfig.tgs + args.url
         if(args.page == 1) {
@@ -436,11 +450,8 @@ const _searchListPageMap = {}
 async function searchVideo(args) {
     var backData = new RepVideoList()
     try {
-        // 确保在搜索前获取最新的代理地址
-        var tgs = await getEnv(appConfig.uzTag,"TG搜代理地址")
-        if (tgs && tgs.length > 0) {
-            appConfig.tgs = tgs
-        }
+        // 初始化代理地址（仅首次执行）
+        await initTgsProxy()
 
         const channels = appConfig.webSite.split('&').map((item) => {
             return item.split('@')[1]
