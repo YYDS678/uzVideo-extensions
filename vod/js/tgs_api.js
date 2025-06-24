@@ -1,8 +1,8 @@
 //@name:[盘] TG纯搜
-//@version:4
-//@webSite:123资源@zyfb123|2&夸克UC@ucquark|5&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504
+//@version:5
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜API地址##https://tgsou.252035.xyz
-//@remark:免代理纯搜索无图片，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个，支持5种网盘：天翼/夸克/UC/阿里/123
+//@remark:🍃豆儿出品，不属精品！免代理纯搜索，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个
 //@order: B
 
 // ignore
@@ -49,7 +49,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // ignore
 
 const appConfig = {
-    _webSite: '123资源@zyfb123|2&夸克UC@ucquark|5&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -283,13 +283,12 @@ async function searchVideo(args) {
             channelLimits[channel.id] = channel.count
         })
 
-        // 为每个频道分别搜索
-        const allVideoLists = []
-
-        for (const channel of channels) {
+        // 🚀 并发优化：同时搜索所有频道
+        const searchPromises = channels.map(async (channel) => {
             try {
                 // 构建单个频道的搜索API请求URL
-                const searchUrl = `${appConfig.tgs}?pic=false&count=${channel.count}&channelUsername=${encodeURIComponent(channel.id)}&keyword=${encodeURIComponent(args.searchWord)}`
+                // 🖼️ 测试启用图片功能
+                const searchUrl = `${appConfig.tgs}?pic=true&count=${channel.count}&channelUsername=${encodeURIComponent(channel.id)}&keyword=${encodeURIComponent(args.searchWord)}`
 
                 console.log(`搜索频道 ${channel.name}(${channel.id}) 数量:${channel.count}`)
                 console.log('搜索URL:', searchUrl)
@@ -300,17 +299,64 @@ async function searchVideo(args) {
                 if (res.data && res.data.results) {
                     // 解析API返回的数据，传递频道限制
                     const videoList = parseAPIResults(res.data.results, args.searchWord, channelLimits)
-                    allVideoLists.push(...videoList)
+                    return {
+                        channel: channel.name,
+                        videoList: videoList,
+                        success: true
+                    }
                 }
 
-                // 添加小延迟避免请求过快
-                await new Promise(resolve => setTimeout(resolve, 100))
+                return {
+                    channel: channel.name,
+                    videoList: [],
+                    success: true
+                }
 
             } catch (channelError) {
                 console.error(`频道 ${channel.name} 搜索失败:`, channelError)
-                // 继续处理其他频道
+                return {
+                    channel: channel.name,
+                    videoList: [],
+                    success: false,
+                    error: channelError.message
+                }
             }
-        }
+        })
+
+        // 🚀 并发执行所有搜索请求，设置10秒超时（API请求可能比直接访问慢）
+        const results = await Promise.allSettled(
+            searchPromises.map(promise =>
+                Promise.race([
+                    promise,
+                    new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error('API请求超时')), 10000)
+                    )
+                ])
+            )
+        )
+
+        // 处理并发结果
+        const allVideoLists = []
+        let successCount = 0
+        let failCount = 0
+
+        results.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value.success) {
+                allVideoLists.push(...result.value.videoList)
+                successCount++
+                console.log(`频道 ${result.value.channel} 搜索成功，获得 ${result.value.videoList.length} 个结果`)
+            } else {
+                failCount++
+                const channelName = channels[index]?.name || '未知频道'
+                if (result.status === 'rejected') {
+                    console.error(`频道 ${channelName} 请求失败:`, result.reason?.message || result.reason)
+                } else {
+                    console.error(`频道 ${channelName} 搜索失败:`, result.value?.error || '未知错误')
+                }
+            }
+        })
+
+        console.log(`搜索完成: 成功 ${successCount} 个频道，失败 ${failCount} 个频道`)
 
         // 合并所有结果并去重
         backData.data = deduplicateVideoListByLinks(allVideoLists)
@@ -344,7 +390,8 @@ function parseAPIResults(results, searchWord, channelLimits = {}) {
     for (const result of results) {
         if (!result || typeof result !== 'string') continue
 
-        // 解析格式: "频道名$$$链接1$$标题1##链接2$$标题2##..."
+        // 🖼️ 解析格式: "频道名$$$链接1@图片1$$标题1##链接2@图片2$$标题2##..."
+        // 注意：启用图片后，链接和图片用@分隔
         const parts = result.split('$$$')
         if (parts.length !== 2) continue
 
@@ -353,7 +400,7 @@ function parseAPIResults(results, searchWord, channelLimits = {}) {
 
         if (!contentStr) continue
 
-        // 解析内容项: "链接1$$标题1##链接2$$标题2##..."
+        // 解析内容项: "链接1@图片1$$标题1##链接2@图片2$$标题2##..."
         let items = contentStr.split('##')
 
         // 根据频道限制截取结果数量
@@ -369,8 +416,20 @@ function parseAPIResults(results, searchWord, channelLimits = {}) {
             if (!item.trim()) continue
 
             const itemParts = item.split('$$')
-            let link = itemParts[0]?.trim()
+            let linkAndPic = itemParts[0]?.trim() || ''
             let title = itemParts[1]?.trim()
+
+            // 🖼️ 解析链接和图片（格式：链接@图片URL）
+            let link = ''
+            let picUrl = ''
+
+            if (linkAndPic.includes('@')) {
+                const linkPicParts = linkAndPic.split('@')
+                link = linkPicParts[0]?.trim() || ''
+                picUrl = linkPicParts[1]?.trim() || ''
+            } else {
+                link = linkAndPic
+            }
 
             // 如果没有标题，使用搜索关键词
             if (!title) {
@@ -408,8 +467,8 @@ function parseAPIResults(results, searchWord, channelLimits = {}) {
 
             video.vod_remarks = remarkParts.length > 0 ? remarkParts.join('|') : '资源'
 
-            // 设置默认图片
-            video.vod_pic = ''
+            // 🖼️ 设置图片URL（如果有的话）
+            video.vod_pic = picUrl || ''
 
             videoList.push(video)
         }

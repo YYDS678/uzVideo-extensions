@@ -1,6 +1,6 @@
 //@name:[盘] TG搜
-//@version:5
-//@webSite:123资源@zyfb123&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504
+//@version:6
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@order: B
@@ -54,7 +54,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '123资源@zyfb123&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -456,25 +456,62 @@ async function searchVideo(args) {
         const channels = appConfig.webSite.split('&').map((item) => {
             return item.split('@')[1]
         })
-        for (let index = 0; index < channels.length; index++) {
-            const element = channels[index];
+
+        // 🚀 核心优化：并发请求所有频道
+        const searchPromises = channels.map(async (element) => {
             let endUrl = appConfig.tgs + element + "?q=" + args.searchWord
-        if(args.page == 1) {
-            _searchListPageMap[element] = ""
-        }else {
-            const nextPage = _searchListPageMap[element] ?? ""
-            if(nextPage.length == 0 || nextPage == "0") {
-                return JSON.stringify(backData)
+
+            if(args.page == 1) {
+                _searchListPageMap[element] = ""
+            } else {
+                const nextPage = _searchListPageMap[element] ?? ""
+                if(nextPage.length == 0 || nextPage == "0") {
+                    return { videoList: [], nextPage: "0", channel: element }
+                }
+                endUrl += nextPage
             }
-            endUrl += nextPage
-        }
-        const res = await getTGList(endUrl, true)
-        // 为当前频道的当前页面结果去重
-        const deduplicatedPageVideos = deduplicateVideoListByLinks(res.videoList);
-        backData.data.push(...deduplicatedPageVideos); // 添加去重后的结果
-        _searchListPageMap[element] = res.nextPage
-        }
-        
+
+            try {
+                const res = await getTGList(endUrl, true)
+                _searchListPageMap[element] = res.nextPage
+                return {
+                    videoList: res.videoList,
+                    nextPage: res.nextPage,
+                    channel: element
+                }
+            } catch (error) {
+                console.error(`频道 ${element} 搜索失败:`, error)
+                return { videoList: [], nextPage: "0", channel: element }
+            }
+        })
+
+        // 🚀 并发执行所有请求，设置8秒超时防止慢请求拖累整体性能
+        const results = await Promise.allSettled(
+            searchPromises.map(promise =>
+                Promise.race([
+                    promise,
+                    new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error('请求超时')), 8000)
+                    )
+                ])
+            )
+        )
+
+        // 处理并发结果
+        const allVideos = []
+        results.forEach((result, index) => {
+            if (result.status === 'fulfilled' && result.value.videoList) {
+                // 为当前频道的结果去重
+                const deduplicatedPageVideos = deduplicateVideoListByLinks(result.value.videoList);
+                allVideos.push(...deduplicatedPageVideos)
+            } else if (result.status === 'rejected') {
+                console.error(`频道 ${channels[index]} 请求失败:`, result.reason)
+            }
+        })
+
+        // 🚀 最终跨频道去重
+        backData.data = deduplicateVideoListByLinks(allVideos)
+
     } catch (error) {
         backData.error = error.toString()
     }
