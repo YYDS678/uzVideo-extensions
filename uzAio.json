@@ -67,6 +67,16 @@
       "type": 101
     },
     {
+      "name": "[综] HDmoli",
+      "version": 2,
+      "remark": "🍃豆儿出品，不属精品！支持在线播放和网盘",
+      "webSite": "https://www.hdmoli.pro/",
+      "codeID": "OAxUOePWsN3I7NQfNIO9Il1I1cgolbSa",
+      "order": "A",
+      "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Zong_HDmoli.txt",
+      "type": 101
+    },
+    {
       "name": "[盘] 奥秘",
       "version": 3,
       "webSite": "https://vip.omii.top",
@@ -194,10 +204,10 @@
     },
     {
       "name": "[盘] TG搜",
-      "version": 5,
+      "version": 6,
       "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
       "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
-      "webSite": "123资源@zyfb123&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation&鱼哥资源@yggpan&CH资源@ChangAn2504",
+      "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation",
       "order": "B",
       "api": "https://github.moeyy.xyz/https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/tgs.js",
       "type": 101
