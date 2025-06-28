@@ -1,10 +1,10 @@
 //@name:[盘] 至臻
-//@version:3
-//@webSite:https://mihdr.top
+//@version:4
+//@webSite:http://www.miqk.cc
 //@remark:
 //@order: B
 const appConfig = {
-    _webSite: 'https://mihdr.top',
+    _webSite: 'http://www.miqk.cc',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
