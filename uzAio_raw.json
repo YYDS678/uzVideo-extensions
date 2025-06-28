@@ -49,19 +49,19 @@
   "vod": [
     {
       "name": "[解] 小猫咪",
-      "version": 4,
+      "version": 5,
       "remark": "通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！",
-      "webSite": "https://zy.xiaomaomi.cc/api.php/provide/vod",
+      "webSite": "https://zy.xmm.hk/api.php/provide/vod",
       "order": "A",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cms.js",
       "type": 101
     },
     {
       "name": "[解] 小猫咪",
-      "version": 2,
+      "version": 3,
       "remark": "通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。",
       "env": "采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
-      "webSite": "https://zy.xiaomaomi.cc/api.php/provide/vod",
+      "webSite": "https://zy.xmm.hk/api.php/provide/vod",
       "order": "A",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cms2.js",
       "type": 101
@@ -74,6 +74,16 @@
       "codeID": "OAxUOePWsN3I7NQfNIO9Il1I1cgolbSa",
       "order": "A",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/Zong_HDmoli.txt",
+      "type": 101
+    },
+    {
+      "name": "[盘] 校长",
+      "version": 1,
+      "remark": "🍃豆儿出品，不属精品！",
+      "webSite": "https://xzys.fun",
+      "codeID": "7T4PFJobJZegoH1hLUyEL1HOGSoNuwR6",
+      "order": "B",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/Pan_xzys.txt",
       "type": 101
     },
     {
@@ -185,8 +195,8 @@
     },
     {
       "name": "[盘] 至臻",
-      "version": 3,
-      "webSite": "https://mihdr.top",
+      "version": 4,
+      "webSite": "http://www.miqk.cc",
       "order": "B",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/zhizhen.js",
       "type": 101
