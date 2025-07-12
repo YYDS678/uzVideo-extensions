@@ -14,7 +14,6 @@
 //@deprecated:0
 // ignore
 
-
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
 // 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
@@ -57,7 +56,6 @@ import {
 
 import { cheerio, Crypto, Encrypt, JSONbig } from '../core/uz3lib.js'
 // ignore
-
 
 const appConfig = {
     _uzTag: '',
@@ -114,11 +112,32 @@ class SearchParameters {
          * 动画或影片集数
          */
         this.episode = ''
+
         /**
-         * 是否是电影
+         * 所在平台剧集链接
+         * v1.6.60 及以上版本可用
          */
-        this.isMovie = false
+        this.videoUrl = ''
+
+        /**
+         * 弹幕线路
+         * v1.6.60 及以上版本可用
+         */
+        this.line = ''
     }
+}
+
+/**
+ * 获取所有弹幕线路 (可选)
+ * v1.6.60 及以上版本可用
+ * @returns {Promise<{lines: string[],error: string}>} result - 返回一个包含弹幕线路列表的 Promise 对象
+ */
+
+async function getLines() {
+    return formatBackData({
+        lines: [],
+        error: '',
+    })
 }
 
 /**

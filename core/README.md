@@ -18,6 +18,7 @@
 - [请为扩展添加以下注释，用于自动更新 json](#请为扩展添加以下注释用于自动更新-json)
 - [加密说明](#加密说明)
 - [修改记录](#修改记录)
+    - [v1.6.60](#v1660)
     - [v1.6.57](#v1657)
     - [v1.6.55](#v1655)
     - [v1.6.54](#v1654)
@@ -208,6 +209,13 @@ A[开始] --> B[uz 调用 searchDanMu 获取弹幕] --> C[结束]
 6. 验证相关代码请见 `verifyServer.js` 请注意修改 `salt` 及 `sid` 验证逻辑。
 
 # 修改记录
+
+### v1.6.60
+
+1. `SearchParameters` 新增 `videoUrl` 字段，用于传递所在平台剧集链接
+2. `SearchParameters` 新增 `line` 字段，用于传递弹幕线路
+3. `SearchParameters` 移除 `isMovie` 字段
+4. `danMu.js` 新增 `getLines` 方法，用于获取所有弹幕线路
 
 ### v1.6.57
 
