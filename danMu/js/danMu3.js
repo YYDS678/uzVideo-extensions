@@ -1,6 +1,6 @@
 // ignore
 //@name:可选线路弹幕扩展
-//@version:1
+//@version:2
 //@remark:v1.6.60 及以上版本可用
 //@env:弹幕线路##格式 线路名称1@地址1;线路名称2@地址2
 //@order: A01
@@ -194,14 +194,14 @@ async function getLines() {
 
 /**
  * 搜索弹幕
- * @param {SearchParameters} item - 包含搜索参数的对象
+ * @param {SearchParameters} args - 包含搜索参数的对象
  * @returns {Promise<BackData>} backData - 返回一个 Promise 对象
  */
-async function searchDanMu(item) {
+async function searchDanMu(args) {
     let backData = new BackData()
     try {
         // 首先获取视频播放地址
-        const videoUrl = await getVideoUrl(item)
+        const videoUrl = await getVideoUrl(args)
 
         if (!videoUrl || videoUrl.length === 0) {
             backData.error = '未找到视频播放地址'
@@ -211,9 +211,9 @@ async function searchDanMu(item) {
         // 获取弹幕线路链接
         let lines = danmuLines.map((item) => item.url)
 
-        if (item.danmuLine && item.danmuLine !== '智能') {
+        if (args.line && args.line !== '智能') {
             const matchedLine = danmuLines.find(
-                (line) => line.name === item.danmuLine
+                (line) => line.name === args.line
             )
             if (matchedLine) {
                 lines = [matchedLine.url]
@@ -326,7 +326,7 @@ function parseDanmuData(data) {
  */
 async function getVideoUrl(args) {
     if (args.videoUrl && args.videoUrl.startsWith('http')) {
-        return formatBackData(args.videoUrl.trim())
+        return args.videoUrl.trim()
     }
 
     let videoName = args.name
