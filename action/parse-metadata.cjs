@@ -179,10 +179,15 @@ const main = async () => {
 
   let sources = [...allInOneResult.vod, ...allInOneResult.panTools, ...allInOneResult.recommend, ...allInOneResult.danMu, ...allInOneResult.live, ...avResultList]
 
-  const githubProxy = 'https://gh-proxy.com/'
+  // 使用 JSDelivr CDN 加速
+  const [owner, repo] = getRepoInfo()
+  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
   const githubRawHost = 'https://raw.githubusercontent.com'
+  const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
+
   sources.forEach((item) => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`)
+    // 将 https://raw.githubusercontent.com/user/repo/branch/path 转换为 https://cdn.jsdelivr.net/gh/user/repo@branch/path
+    item.api = item.api.replace(`${githubRawHost}/${owner}/${repo}/${branch}/`, jsdelivrCDN)
   })
   fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ''))
   fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
