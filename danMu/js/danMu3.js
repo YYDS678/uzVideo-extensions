@@ -4,6 +4,7 @@
 //@remark:v1.6.60 及以上版本可用
 //@env:弹幕线路##格式 线路名称1@地址1;线路名称2@地址2
 //@order: A01
+//@deprecated:1
 // ignore
 
 // ignore
