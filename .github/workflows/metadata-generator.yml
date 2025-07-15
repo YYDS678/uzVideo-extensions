@@ -32,8 +32,7 @@ jobs:
       run: |
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
-        git add *.json
-        git add *.zip
-        git add *.md
+        git add uzAio.json uzAio_raw.json av_auto.json av_raw_auto.json local.json env.json README.md
+        git add uzAio.zip
         git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        git push
