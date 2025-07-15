@@ -396,13 +396,8 @@
     "type": 101
   },
   {
-    "api": "https://cjhwba.com/api.php/provide/vod/",
-    "name": "[采] 华为吧",
-    "type": 0
-  },
-  {
-    "api": "https://cj.rycjapi.com/api.php/provide/vod",
-    "name": "[采] 如意",
+    "api": "http://zhangqun66.xyz/cjjh.php",
+    "name": "[采] 聚合",
     "type": 0
   },
   {
@@ -412,6 +407,11 @@
     "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
     "api": "vod/js/cmsUser.js",
     "type": 101
+  },
+  {
+    "api": "https://mozhuazy.com/api.php/provide/vod/",
+    "name": "[采] 魔爪4k",
+    "type": 0
   },
   {
     "api": "https://json.heimuer.xyz/api.php/provide/vod/",
@@ -448,14 +448,14 @@
     "remark": "搜不到就算了，不要那么执着",
     "env": "弹幕解析地址##内置 4 条线路。格式 地址1;地址2",
     "codeID": "4Y6DDMATfbw0Rg0Y2AOGpfmpU2cgspFf",
-    "order": "A01",
+    "order": "A02",
     "api": "danMu/js/danMu2.txt",
     "type": 400
   },
   {
     "name": "弹幕扩展",
     "version": 1,
-    "order": "A02",
+    "order": "A03",
     "api": "danMu/js/danMu.js",
     "type": 400
   },
@@ -485,6 +485,18 @@
     "api": "https://tv.iill.top/m3u/Sport",
     "type": 10,
     "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
+  },
+  {
+    "name": "📡范明明IPv6",
+    "api": "https://cdn.jsdelivr.net/gh/fanmingming/live@refs/heads/main/tv/m3u/ipv6.m3u",
+    "type": 10,
+    "remark": "来自 范明明 大佬 https://github.com/fanmingming"
+  },
+  {
+    "name": "🛰️Govin",
+    "api": "https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u",
+    "type": 10,
+    "remark": "来自 Guovin 大佬 https://github.com/Guovin"
   },
   {
     "name": "[禁] 麻豆",
