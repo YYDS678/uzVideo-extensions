@@ -8,10 +8,5 @@
     "api": "https://json.heimuer.xyz/api.php/provide/vod/",
     "name": "[采] 黑木耳",
     "type": 0
-  },
-  {
-    "api": "http://zhangqun66.xyz/cjjh.php",
-    "name": "[采] 聚合",
-    "type": 0
   }
 ]

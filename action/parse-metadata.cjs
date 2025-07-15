@@ -194,6 +194,8 @@ const main = async () => {
 
   let sourcesCopy = JSON.parse(JSON.stringify(sources))
   let envList = []
+  const envSet = new Set() // 用于去重
+
   sourcesCopy.forEach((item) => {
     if (item.api.includes(kLocalPathTAG)) {
       item.api = item.api.split(kLocalPathTAG)[1]
@@ -202,11 +204,17 @@ const main = async () => {
       const longList = item.env.split('&&')
       longList.forEach((env) => {
         const oneEnv = env.split('##')
-        envList.push({
-          name: oneEnv[0],
-          desc: oneEnv[1],
-          value: '',
-        })
+        const envKey = oneEnv[0] // 使用环境变量名作为唯一标识
+
+        // 只有当环境变量名不存在时才添加
+        if (!envSet.has(envKey)) {
+          envSet.add(envKey)
+          envList.push({
+            name: oneEnv[0],
+            desc: oneEnv[1],
+            value: '',
+          })
+        }
       })
     }
   })
