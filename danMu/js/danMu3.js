@@ -131,10 +131,6 @@ var danmuLines = [
         url: 'https://dmku.hls.one/?ac=dm&url=',
     },
     {
-        name: '牛牛',
-        url: 'http://dm.apptotv.top/?ac=dm&url=',
-    },
-    {
         name: 'DouFun',
         url: 'https://danmu.56uxi.com/?ac=dm&url=',
     },
@@ -143,13 +139,9 @@ var danmuLines = [
         url: 'https://api.danmu.icu/?ac=dm&url=',
     },
     {
-        name: '墨白',
-        url: 'http://124.223.12.23:5566/dmku/?ac=dm&url=',
-    },
-    {
-        name: 'vidz',
-        url: 'https://dm.vidz.asia/?ac=dm&url=',
-    },
+        name: '678弹幕',
+        url: 'https://se.678.ooo/?ac=dm&url='
+    }
 ]
 
 /**

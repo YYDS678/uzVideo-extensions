@@ -2,6 +2,7 @@ name: Metadata JSON Generator
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   generate-metadata:
