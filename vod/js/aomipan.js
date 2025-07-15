@@ -4,6 +4,7 @@
 //@webSite:https://vip.omii.top
 //@remark:
 //@order: B
+//@deprecated:1
 // ignore
 const appConfig = {
     _webSite: 'https://vip.omii.top',
