@@ -131,19 +131,25 @@ const main = async () => {
       // 获取order的第一个字符(分类字母)
       const aOrderChar = a.order.charAt(0);
       const bOrderChar = b.order.charAt(0);
-      
+
       // 如果分类字母不同，按字母排序
       if (aOrderChar !== bOrderChar) {
         return aOrderChar.localeCompare(bOrderChar);
       }
-      
-      // 如果分类字母相同，先按名称长度从短到长排序
+
+      // 如果分类字母相同，按完整order值排序
+      const orderCompare = a.order.localeCompare(b.order);
+      if (orderCompare !== 0) {
+        return orderCompare;
+      }
+
+      // 如果order值也相同，按名称长度从短到长排序
       if (a.name.length !== b.name.length) {
         return a.name.length - b.name.length;
       }
-      
-      // 如果名称长度也相同，按完整order值排序
-      return a.order.localeCompare(b.order);
+
+      // 最后按名称排序
+      return a.name.localeCompare(b.name);
     }
     // 如果只有一个有order，有order的排前面
     if (a.order) return -1;
