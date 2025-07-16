@@ -131,19 +131,25 @@ const main = async () => {
       // 获取order的第一个字符(分类字母)
       const aOrderChar = a.order.charAt(0);
       const bOrderChar = b.order.charAt(0);
-      
+
       // 如果分类字母不同，按字母排序
       if (aOrderChar !== bOrderChar) {
         return aOrderChar.localeCompare(bOrderChar);
       }
-      
-      // 如果分类字母相同，先按名称长度从短到长排序
+
+      // 如果分类字母相同，按完整order值排序
+      const orderCompare = a.order.localeCompare(b.order);
+      if (orderCompare !== 0) {
+        return orderCompare;
+      }
+
+      // 如果order值也相同，按名称长度从短到长排序
       if (a.name.length !== b.name.length) {
         return a.name.length - b.name.length;
       }
-      
-      // 如果名称长度也相同，按完整order值排序
-      return a.order.localeCompare(b.order);
+
+      // 最后按名称排序
+      return a.name.localeCompare(b.name);
     }
     // 如果只有一个有order，有order的排前面
     if (a.order) return -1;
@@ -179,16 +185,23 @@ const main = async () => {
 
   let sources = [...allInOneResult.vod, ...allInOneResult.panTools, ...allInOneResult.recommend, ...allInOneResult.danMu, ...allInOneResult.live, ...avResultList]
 
-  const githubProxy = 'https://gh-proxy.com/'
+  // 使用 JSDelivr CDN 加速
+  const [owner, repo] = getRepoInfo()
+  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
   const githubRawHost = 'https://raw.githubusercontent.com'
+  const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
+
   sources.forEach((item) => {
-    item.api = item.api.replaceAll(githubRawHost, `${githubProxy}${githubRawHost}`)
+    // 将 https://raw.githubusercontent.com/user/repo/branch/path 转换为 https://cdn.jsdelivr.net/gh/user/repo@branch/path
+    item.api = item.api.replace(`${githubRawHost}/${owner}/${repo}/${branch}/`, jsdelivrCDN)
   })
   fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ''))
   fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
 
   let sourcesCopy = JSON.parse(JSON.stringify(sources))
   let envList = []
+  const envSet = new Set() // 用于去重
+
   sourcesCopy.forEach((item) => {
     if (item.api.includes(kLocalPathTAG)) {
       item.api = item.api.split(kLocalPathTAG)[1]
@@ -197,11 +210,17 @@ const main = async () => {
       const longList = item.env.split('&&')
       longList.forEach((env) => {
         const oneEnv = env.split('##')
-        envList.push({
-          name: oneEnv[0],
-          desc: oneEnv[1],
-          value: '',
-        })
+        const envKey = oneEnv[0] // 使用环境变量名作为唯一标识
+
+        // 只有当环境变量名不存在时才添加
+        if (!envSet.has(envKey)) {
+          envSet.add(envKey)
+          envList.push({
+            name: oneEnv[0],
+            desc: oneEnv[1],
+            value: '',
+          })
+        }
       })
     }
   })

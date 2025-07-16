@@ -1,7 +1,7 @@
 //@name:弹幕扩展
 //@version:1
 //@remark:
-//@order: A02
+//@order: A03
 // ignore
 import {} from '../../core/uz3lib.js'
 import {} from '../../core/uzUtils.js'

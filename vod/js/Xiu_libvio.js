@@ -1,6 +1,6 @@
 // ignore
 
-//@name:[嗅] LIBVIO
+//@name:[嗅] 立播
 //@webSite:https://libvio.mov/
 //@version:1
 //@remark:🍃豆儿出品，不属精品！

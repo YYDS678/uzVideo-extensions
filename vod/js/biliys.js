@@ -1,5 +1,5 @@
 // ignore
-//@name:[直] 修罗影视
+//@name:[直] 修罗
 //@version:2
 //@webSite:https://xl01.com.de
 //@remark:

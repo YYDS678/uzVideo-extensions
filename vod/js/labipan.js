@@ -1,10 +1,10 @@
 //@name:[盘] 蜡笔
-//@version:3
-//@webSite:http://feimaoai.site
+//@version:4
+//@webSite:https://www.labi88.sbs
 //@remark:
 //@order: B
 const appConfig = {
-    _webSite: 'http://feimaoai.site',
+    _webSite: 'https://www.labi88.sbs',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
