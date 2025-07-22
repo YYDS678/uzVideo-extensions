@@ -4,7 +4,7 @@
     "version": 2,
     "webSite": "https://madou.club",
     "instance": "madou20240626",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/madou.js",
     "type": 100
   },
@@ -13,7 +13,7 @@
     "version": 2,
     "webSite": "https://hongkongdollvideo.com",
     "instance": "hkdoll20240705",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/hkdoll.js",
     "type": 100
   },
@@ -21,7 +21,7 @@
     "name": "[禁] 91jav",
     "version": 3,
     "webSite": "https://041.bndmpsjx.com",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/91jav.js",
     "type": 101
   },
@@ -30,7 +30,7 @@
     "version": 3,
     "webSite": "https://jable.tv",
     "instance": "jable20240831",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/jable.js",
     "type": 100
   },
@@ -39,7 +39,7 @@
     "version": 2,
     "webSite": "https://missav.ai",
     "instance": "missav20240627",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/missav.js",
     "type": 100
   },
@@ -48,7 +48,7 @@
     "version": 2,
     "webSite": "https://www.netflav.com",
     "instance": "netflav20240905",
-    "order": "E",
+    "order": "F",
     "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/netflav.js",
     "type": 100
   }

@@ -2,10 +2,10 @@
   "danMu": [
     {
       "name": "可选线路弹幕扩展",
-      "version": 4,
+      "version": 5,
       "remark": "v1.6.60 及以上版本可用",
       "env": "弹幕线路##格式 线路名称1@地址1;线路名称2@地址2",
-      "codeID": "OYWsHggmQPOmQsrgaJx3w9z5sfXrQ10o",
+      "codeID": "4PqcO6xPFunsneXlUVMvH0iJuMLDUGrR",
       "order": "A01",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu4.txt",
       "type": 400
@@ -34,14 +34,16 @@
       "version": 23,
       "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
       "env": "UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools3.js",
+      "order": "A",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools2.js",
       "type": 300
     },
     {
       "name": "夸克|UC|天翼|123|解析 网盘解析工具",
-      "version": 2,
+      "version": 3,
       "remark": "iOS15 以下版本使用",
       "env": "UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
+      "order": "B",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/panTools/js/panTools_iOS14.js",
       "type": 300
     }
@@ -98,14 +100,6 @@
       "webSite": "https://tv.yydsys.top",
       "order": "B",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/duoduo.js",
-      "type": 101
-    },
-    {
-      "name": "[盘] 小米",
-      "version": 3,
-      "webSite": "https://xiaomiai.site",
-      "order": "B",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/xiaomi.js",
       "type": 101
     },
     {
@@ -171,7 +165,7 @@
     {
       "name": "[盘] 蜡笔",
       "version": 4,
-      "webSite": "https://www.labi88.sbs",
+      "webSite": "http://feimaoai.site",
       "order": "B",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/labipan.js",
       "type": 101
@@ -264,6 +258,27 @@
       "type": 100
     },
     {
+      "name": "[直] 瓜子¹",
+      "version": 3,
+      "remark": "瓜子APP",
+      "webSite": "https://api.gudvxty.com",
+      "codeID": "ra5Z3wtXKshzSMK2",
+      "instance": "gzapp20241001",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
+      "type": 100
+    },
+    {
+      "name": "[直] 瓜子²",
+      "version": 3,
+      "remark": "瓜子WEB",
+      "webSite": "https://api.gudvxty.com",
+      "instance": "gzys20240822",
+      "order": "C",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzys.js",
+      "type": 100
+    },
+    {
       "name": "[直] 素白白",
       "version": 3,
       "webSite": "https://www.subaibai.com",
@@ -288,26 +303,6 @@
       "instance": "www4kav20240705",
       "order": "C",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/4kav.js",
-      "type": 100
-    },
-    {
-      "name": "[直] 瓜子app",
-      "version": 2,
-      "remark": "v1.6.53 及以上版本",
-      "webSite": "https://api.9cec79d.com",
-      "codeID": "ra5Z3wtXKshzSMK2",
-      "instance": "gzapp20241001",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzapp.txt",
-      "type": 100
-    },
-    {
-      "name": "[直] 瓜子web",
-      "version": 2,
-      "webSite": "https://api.zaqohu.com",
-      "instance": "gzys20240822",
-      "order": "C",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/gzys.js",
       "type": 100
     },
     {
@@ -400,22 +395,25 @@
       "type": 101
     },
     {
-      "name": "[采] 自建CMS",
-      "version": 1,
-      "remark": "地址输入自己搭建的 cms 采集地址，默认使用如意采集占位",
-      "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
-      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cmsUser.js",
-      "type": 101
+      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+      "name": "[采] 黑木耳",
+      "order": "E",
+      "type": 0
     },
     {
       "api": "https://mozhuazy.com/api.php/provide/vod/",
       "name": "[采] 魔爪4k",
+      "order": "E",
       "type": 0
     },
     {
-      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
-      "name": "[采] 黑木耳",
-      "type": 0
+      "name": "[采] 自建CMS",
+      "version": 1,
+      "remark": "地址输入自己搭建的 cms 采集地址，默认使用如意采集占位",
+      "webSite": "https://cj.rycjapi.com/api.php/provide/vod",
+      "order": "E",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/cmsUser.js",
+      "type": 101
     }
   ],
   "live": [
