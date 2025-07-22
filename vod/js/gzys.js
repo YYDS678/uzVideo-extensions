@@ -1,8 +1,8 @@
 // ignore
-//@name:[直] 瓜子web
-//@version:2
-//@webSite:https://api.zaqohu.com
-//@remark:
+//@name:[直] 瓜子²
+//@version:3
+//@webSite:https://api.gudvxty.com
+//@remark:瓜子WEB
 //@type:100
 //@instance:gzys20240822
 //@order: C

@@ -1,3 +1,4 @@
+//@deprecated:1
 class xpgClass extends WebApiBase {
     constructor() {
         super()
