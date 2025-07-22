@@ -1,8 +1,8 @@
 //@name:夸克|UC|天翼|123|解析 网盘解析工具
-//@version:3
+//@version:2
 //@remark:iOS15 以下版本使用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
-//@order: B
+//@deprecated:1
 // ignore
 import {
     FilterLabel,
@@ -58,6 +58,11 @@ var PanType = {
      * UC
      **/
     UC: 'UC',
+
+    /**
+     * 阿里
+     **/
+    Ali: '阿里',
 
     /**
      * 123网盘
@@ -1133,42 +1138,883 @@ QuarkUC.prototype.getDownload = function (args) {
     })
 }
 
+//MARK: - 阿里 相关实现
+function Ali() {
+    this.shareTokenCache = {}
+    this.saveFileIdCaches = {}
+    this.saveDirId = null
+    this.userDriveId = null
+    this.saveDirName = 'uz影视'
+    this.user = {}
+    this.oauth = {}
+    this.isSVip = true
+    this.token = ''
+    this.apiUrl = 'https://api.aliyundrive.com/'
+    this.openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0/'
+    this.updateToken = function () {}
+    this.baseHeaders = {
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
+        referer: 'https://www.aliyundrive.com',
+        'Content-Type': 'application/json',
+    }
+}
+Ali.prototype.uzTag = ''
 
+Object.defineProperty(Ali.prototype, 'panName', {
+    get: function () {
+        return PanType.Ali
+    },
+})
+
+Ali.prototype.delay = function (ms) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, ms)
+    })
+}
+
+//验证时间戳
+Ali.prototype.verifyTimestamp = function (timestamp) {
+    // 时间为了保证任意时区都一致 所以使用格林威治时间
+    var currentTimeString = new Date().toISOString()
+    var currentTime = new Date(currentTimeString).getTime()
+    var requestTime = new Date(timestamp).getTime()
+    var timeDifference = Math.abs(currentTime - requestTime)
+    // 检查时间差是否小于2分钟（120000毫秒）
+    return timeDifference < 120000
+}
+
+Ali.prototype.api = function (url, data, headers, retry) {
+    var self = this
+    return new Promise(function (resolve) {
+        headers = headers || {}
+        var auth = url.startsWith('adrive/')
+        Object.assign(headers, self.baseHeaders)
+        if (auth) {
+            Object.assign(headers, {
+                Authorization: self.user.auth,
+            })
+        }
+
+        var leftRetry = retry || 3
+        var process = function () {
+            if (leftRetry > 0) {
+                req(self.apiUrl + url, {
+                    method: 'post',
+                    headers: headers,
+                    data: JSON.stringify(data),
+                })
+                    .then(function (response) {
+                        if (response.code === 401) {
+                            self.token = ''
+                            resolve({})
+                            return
+                        }
+                        var resp = response.data
+                        resolve(resp)
+                    })
+                    .catch(function (e) {
+                        leftRetry--
+                        self.delay(1000).then(process)
+                    })
+            } else {
+                resolve({})
+            }
+        }
+        process()
+    })
+}
+
+Ali.prototype.openApi = function (url, data, headers, retry) {
+    var self = this
+    return new Promise(function (resolve) {
+        headers = headers || {}
+        Object.assign(headers, {
+            Authorization: self.oauth.auth,
+        })
+
+        var leftRetry = retry || 3
+        var process = function () {
+            if (leftRetry > 0) {
+                req(self.openApiUrl + url, {
+                    method: 'post',
+                    headers: headers,
+                    data: JSON.stringify(data),
+                })
+                    .then(function (response) {
+                        if (response.code === 401) {
+                            self.token = ''
+                            resolve({})
+                            return
+                        }
+                        var resp = response.data
+                        resolve(resp)
+                    })
+                    .catch(function (e) {
+                        leftRetry--
+                        self.delay(1000).then(process)
+                    })
+            } else {
+                resolve({})
+            }
+        }
+        process()
+    })
+}
 
 // 一键就绪
+Ali.prototype.oneKeyReady = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        self.login().then(function () {
+            self.openAuth().then(function () {
+                if (self.userDriveId == null) {
+                    self.openApi('user/getDriveInfo', {}).then(
+                        function (driveInfo) {
+                            self.userDriveId = driveInfo.resource_drive_id
+                            resolve()
+                        }
+                    )
+                } else {
+                    resolve()
+                }
+            })
+        })
+    })
+}
 
+//用户登陆
+Ali.prototype.login = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        if (
+            !self.user.user_id ||
+            !self.verifyTimestamp(self.user.expire_time)
+        ) {
+            try {
+                req('https://auth.aliyundrive.com/v2/account/token', {
+                    method: 'post',
+                    headers: self.baseHeaders,
+                    data: {
+                        refresh_token: self.token,
+                        grant_type: 'refresh_token',
+                    },
+                }).then(function (loginResp) {
+                    if (loginResp.code == 200) {
+                        self.user = loginResp.data
+                        self.user.expire_time = new Date().toISOString()
+                        self.user.auth =
+                            loginResp.data.token_type +
+                            ' ' +
+                            loginResp.data.access_token
+                        self.user.token = loginResp.data.refresh_token
 
+                        self.updateToken()
+                    }
+                    resolve()
+                })
+            } catch (e) {
+                resolve()
+            }
+        } else {
+            resolve()
+        }
+    })
+}
 
+//授权第三方Alist
+Ali.prototype.openAuth = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        if (
+            !self.oauth.access_token ||
+            !self.verifyTimestamp(self.oauth.expire_time)
+        ) {
+            try {
+                var getOpenTokenPromise = self.oauth.token
+                    ? Promise.resolve(self.oauth.token)
+                    : self.getOpenToken()
+                getOpenTokenPromise.then(function (openToken) {
+                    req('https://api.nn.ci/alist/ali_open/token', {
+                        method: 'post',
+                        headers: self.baseHeaders,
+                        data: {
+                            refresh_token: openToken,
+                            grant_type: 'refresh_token',
+                        },
+                    }).then(function (openResp) {
+                        if (openResp.code == 200) {
+                            self.oauth = openResp.data
+                            self.oauth.expire_time = new Date().toISOString()
+                            self.oauth.auth =
+                                openResp.data.token_type +
+                                ' ' +
+                                openResp.data.access_token
+                            self.oauth.token = openResp.data.refresh_token
+                        }
+                        resolve()
+                    })
+                })
+            } catch (e) {
+                resolve()
+            }
+        } else {
+            resolve()
+        }
+    })
+}
 
+//根据授权码获取token
+Ali.prototype.getOpenToken = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        try {
+            self.getOpenCode().then(function (code) {
+                req('https://api.nn.ci/alist/ali_open/code', {
+                    method: 'post',
+                    headers: self.baseHeaders,
+                    data: {
+                        code: code,
+                        grant_type: 'authorization_code',
+                    },
+                }).then(function (openResp) {
+                    var openToken = openResp.data.refresh_token
+                    resolve(openToken)
+                })
+            })
+        } catch (e) {
+            resolve()
+        }
+    })
+}
 
+//用户授权，获取授权码code
+Ali.prototype.getOpenCode = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        var url =
+            'https://open.aliyundrive.com/oauth/users/authorize?client_id=76917ccccd4441c39457a04f6084fb2f&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state='
+        var headers = self.baseHeaders
+        Object.assign(headers, {
+            Authorization: self.user.auth,
+        })
 
+        try {
+            req(url, {
+                method: 'post',
+                headers: headers,
+                data: {
+                    authorize: 1,
+                    scope: 'user:base,file:all:read,file:all:write',
+                },
+            }).then(function (openResp) {
+                var uri = openResp.data.redirectUri
+                var regex = /http.*code=(.*)/
+                var matches = regex.exec(uri)
+                var code = matches[1]
+                resolve(code)
+            })
+        } catch (e) {
+            resolve()
+        }
+    })
+}
 
+/**
+ * 根据链接获取分享ID和文件夹ID
+ * @param {string} url
+ * @returns {null|{shareId: string, folderId: string}}
+ **/
+Ali.prototype.getShareData = function (url) {
+    var regex =
+        /https:\/\/www\.alipan\.com\/s\/([^\/]+)(\/folder\/([^\/]+))?|https:\/\/www\.aliyundrive\.com\/s\/([^\/]+)(\/folder\/([^\/]+))?/
+    var matches = regex.exec(url)
+    if (matches) {
+        return {
+            shareId: matches[1] || matches[4],
+            folderId: matches[3] || matches[6] || 'root',
+        }
+    }
+    return null
+}
 
+/**
+ * 获取分享token
+ * @param {{shareId: string, sharePwd: string}} shareData
+ **/
+Ali.prototype.getShareToken = function (shareData) {
+    var self = this
+    return new Promise(function (resolve) {
+        if (!self.shareTokenCache.hasOwnProperty(shareData.shareId)) {
+            delete self.shareTokenCache[shareData.shareId]
+            self.api('v2/share_link/get_share_token', {
+                share_id: shareData.shareId,
+                share_pwd: shareData.sharePwd || '',
+            }).then(function (shareToken) {
+                if (shareToken.expire_time) {
+                    self.shareTokenCache[shareData.shareId] = shareToken
+                }
+                resolve()
+            })
+        } else {
+            resolve()
+        }
+    })
+}
 
+Ali.prototype.clearSaveDir = function () {
+    var self = this
+    return new Promise(function (resolve) {
+        if (self.saveDirId == null) {
+            resolve()
+            return
+        }
+        self.openApi('openFile/list', {
+            drive_id: self.userDriveId,
+            parent_file_id: self.saveDirId,
+            limit: 100,
+            order_by: 'name',
+            order_direction: 'DESC',
+        }).then(function (listData) {
+            if (listData.items) {
+                var deletePromises = []
+                for (var i = 0; i < listData.items.length; i++) {
+                    var item = listData.items[i]
+                    deletePromises.push(
+                        self.openApi('openFile/delete', {
+                            drive_id: self.userDriveId,
+                            file_id: item.file_id,
+                        })
+                    )
+                }
+                Promise.all(deletePromises).then(function () {
+                    self.saveFileIdCaches = {}
+                    resolve()
+                })
+            } else {
+                self.saveFileIdCaches = {}
+                resolve()
+            }
+        })
+    })
+}
 
+Ali.prototype.createSaveDir = function (clean) {
+    var self = this
+    return new Promise(function (resolve) {
+        if (!self.user.device_id) {
+            resolve()
+            return
+        }
+        if (self.saveDirId) {
+            // 删除所有子文件
+            // if (clean) await this.clearSaveDir()
+            // await this.clearSaveDir()
+            resolve()
+            return
+        }
 
+        if (self.userDriveId) {
+            self.openApi('openFile/list', {
+                drive_id: self.userDriveId,
+                parent_file_id: 'root',
+                limit: 100,
+                order_by: 'name',
+                order_direction: 'DESC',
+            }).then(function (listData) {
+                if (listData.items) {
+                    for (var i = 0; i < listData.items.length; i++) {
+                        var item = listData.items[i]
+                        if (item.name === self.saveDirName) {
+                            self.saveDirId = item.file_id
+                            // await this.clearSaveDir()
+                            break
+                        }
+                    }
+                    if (!self.saveDirId) {
+                        self.openApi('openFile/create', {
+                            check_name_mode: 'refuse',
+                            drive_id: self.userDriveId,
+                            name: self.saveDirName,
+                            parent_file_id: 'root',
+                            type: 'folder',
+                        }).then(function (create) {
+                            if (create.file_id) {
+                                self.saveDirId = create.file_id
+                            }
+                            resolve()
+                        })
+                    } else {
+                        resolve()
+                    }
+                } else {
+                    resolve()
+                }
+            })
+        } else {
+            resolve()
+        }
+    })
+}
 
+/**
+ * 保存分享的文件到个人网盘
+ * @param {Object} params 保存参数
+ * @param {string} params.shareId 分享ID
+ * @param {string} params.fileId 文件ID
+ * @param {boolean} [params.clean=false] 是否清理已存在的保存目录
+ * @returns {Promise<string|null>} 返回保存成功的文件ID，失败返回null
+ */
+Ali.prototype.save = function (params) {
+    var self = this
+    return new Promise(function (resolve) {
+        var shareId = params.shareId,
+            fileId = params.fileId,
+            clean = params.clean || false
 
+        self.oneKeyReady().then(function () {
+            self.createSaveDir(clean).then(function () {
+                if (self.saveDirId == null) {
+                    resolve(null)
+                    return
+                }
+                self.getShareToken({ shareId: shareId }).then(function () {
+                    if (!self.shareTokenCache.hasOwnProperty(shareId)) {
+                        resolve(null)
+                        return
+                    }
+                    self.api(
+                        'adrive/v2/file/copy',
+                        {
+                            file_id: fileId,
+                            share_id: shareId,
+                            auto_rename: true,
+                            to_parent_file_id: self.saveDirId,
+                            to_drive_id: self.userDriveId,
+                        },
+                        {
+                            'X-Share-Token': self.shareTokenCache[shareId]
+                                .share_token,
+                        }
+                    ).then(function (saveResult) {
+                        if (saveResult.file_id) {
+                            resolve(saveResult.file_id)
+                        } else {
+                            resolve(false)
+                        }
+                    })
+                })
+            })
+        })
+    })
+}
 
+Ali.prototype.getLiveTranscoding = function (param) {
+    var self = this
+    return new Promise(function (resolve) {
+        var fileId = param.fileId
+        var isMount = param.isMount || false
 
+        self.openApi('openFile/getVideoPreviewPlayInfo', {
+            file_id: isMount ? fileId : self.saveFileIdCaches[fileId],
+            drive_id: self.userDriveId,
+            category: 'live_transcoding',
+            url_expire_sec: '14400',
+        }).then(function (transcoding) {
+            if (
+                transcoding.video_preview_play_info &&
+                transcoding.video_preview_play_info
+                    .live_transcoding_task_list
+            ) {
+                var liveList =
+                    transcoding.video_preview_play_info
+                        .live_transcoding_task_list
+                liveList.sort(function (a, b) {
+                    return b.template_width - a.template_width
+                })
+                var nameMap = {
+                    QHD: '超清',
+                    FHD: '高清',
+                    HD: '标清',
+                    SD: '普画',
+                    LD: '极速',
+                }
 
+                var urls = []
+                for (var i = 0; i < liveList.length; i++) {
+                    var video = liveList[i]
+                    var url = (video.url) || ''
+                    var priority = video.template_width
+                    var name = nameMap[video.template_id] || video.template_id
 
+                    if (url.length > 0) {
+                        urls.push({
+                            url: url,
+                            name: name,
+                            priority: priority,
+                            headers: {},
+                        })
+                    }
+                }
+                resolve(urls)
+            } else {
+                resolve([])
+            }
+        })
+    })
+}
 
+Ali.prototype.getDownload = function (param) {
+    var self = this
+    return new Promise(function (resolve) {
+        var fileId = param.fileId
+        var isMount = param.isMount || false
+        self.openApi('openFile/getDownloadUrl', {
+            file_id: isMount ? fileId : self.saveFileIdCaches[fileId],
+            drive_id: self.userDriveId,
+        }).then(function (down) {
+            if (down.url) {
+                resolve([
+                    {
+                        url: down.url,
+                        name: '原画',
+                        priority: 9999,
+                        headers: {},
+                    },
+                ])
+            } else {
+                resolve([])
+            }
+        })
+    })
+}
 
+Ali.prototype.findBestLCS = function (mainItem, targetItems) {
+    var results = []
+    var bestMatchIndex = 0
+    for (var i = 0; i < targetItems.length; i++) {
+        var currentLCS = UZUtils.lcs(mainItem.name, targetItems[i].name)
+        results.push({ target: targetItems[i], lcs: currentLCS })
+        if (currentLCS.length > results[bestMatchIndex].lcs.length) {
+            bestMatchIndex = i
+        }
+    }
+    var bestMatch = results[bestMatchIndex]
+    return {
+        allLCS: results,
+        bestMatch: bestMatch,
+        bestMatchIndex: bestMatchIndex,
+    }
+}
 
+Ali.prototype.listFile = function (
+    shareId,
+    folderId,
+    videos,
+    subtitles,
+    nextMarker
+) {
+    var self = this
+    return new Promise(function (resolve) {
+        var subtitleExts = ['srt', 'ass', 'scc', 'stl', 'ttml']
+        self.api(
+            'adrive/v2/file/list_by_share',
+            {
+                share_id: shareId,
+                parent_file_id: folderId,
+                limit: 200,
+                order_by: 'name',
+                order_direction: 'ASC',
+                marker: nextMarker || '',
+            },
+            {
+                'X-Share-Token': self.shareTokenCache[shareId].share_token,
+            }
+        ).then(function (listData) {
+            var items = listData.items
+            if (!items) {
+                resolve([])
+                return
+            }
 
+            if (listData.next_marker) {
+                self.listFile(
+                    shareId,
+                    folderId,
+                    videos,
+                    subtitles,
+                    listData.next_marker
+                ).then(function (nextItems) {
+                    for (var i = 0; i < nextItems.length; i++) {
+                        items.push(nextItems[i])
+                    }
+                    processItems()
+                })
+            } else {
+                processItems()
+            }
 
+            function processItems() {
+                var subDir = []
 
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i]
+                    if (item.type === 'folder') {
+                        subDir.push(item)
+                    } else if (
+                        item.type === 'file' &&
+                        item.category === 'video'
+                    ) {
+                        if (item.size < 1024 * 1024 * 5) continue
+                        item.name = item.name.replace(
+                            /玩偶哥.*【神秘的哥哥们】/g,
+                            ''
+                        )
+                        videos.push(item)
+                    } else if (
+                        item.type === 'file' &&
+                        subtitleExts.some(function (x) {
+                            return item.file_extension.endsWith(x)
+                        })
+                    ) {
+                        subtitles.push(item)
+                    }
+                }
 
+                var subDirPromises = []
+                for (var i = 0; i < subDir.length; i++) {
+                    var dir = subDir[i]
+                    subDirPromises.push(
+                        self.listFile(
+                            dir.share_id,
+                            dir.file_id,
+                            videos,
+                            subtitles
+                        )
+                    )
+                }
+                Promise.all(subDirPromises).then(function (results) {
+                    for (var i = 0; i < results.length; i++) {
+                        for (var j = 0; j < results[i].length; j++) {
+                            items.push(results[i][j])
+                        }
+                    }
+                    resolve(items)
+                })
+            }
+        })
+    })
+}
 
+Ali.prototype.fileName = ''
+/**
+ * 获取文件列表
+ * @param {string} shareUrl
+ * @returns {Promise<PanListDetail>}
+ **/
+Ali.prototype.getFilesByShareUrl = function (shareUrl) {
+    var self = this
+    return new Promise(function (resolve) {
+        var data = new PanListDetail()
+        self.fileName = ''
+        var shareData =
+            typeof shareUrl === 'string'
+                ? self.getShareData(shareUrl)
+                : shareUrl
+        if (!shareData) {
+            data.error = '分享链接无效'
+            resolve(data)
+            return
+        }
+        self.getShareToken(shareData).then(function () {
+            if (!self.shareTokenCache[shareData.shareId]) {
+                data.error = '分享失效'
+                resolve(data)
+                return
+            }
 
+            var videos = []
+            var subtitles = []
 
+            self.listFile(
+                shareData.shareId,
+                shareData.folderId,
+                videos,
+                subtitles
+            ).then(function () {
+                videos.forEach(function (item) {
+                    // 复制 item
+                    var element = JSON.parse(JSON.stringify(item))
+                    var size = element.size / 1024 / 1024
+                    var unit = 'MB'
+                    if (size >= 1000) {
+                        size = size / 1024
+                        unit = 'GB'
+                    }
+                    size = size.toFixed(1)
+                    var remark = '[' + size + unit + ']'
 
+                    var videoItem = new PanVideoItem()
+                    videoItem.data = element
+                    videoItem.panType = self.panName
+                    videoItem.name = element.name
+                    if (kAppVersion > 1650) {
+                        videoItem.remark = remark
+                    } else {
+                        videoItem.name = element.name + ' ' + remark
+                    }
+                    data.videos.push(videoItem)
+                })
 
+                if (subtitles.length > 0) {
+                    videos.forEach(function (item) {
+                        var matchSubtitle = self.findBestLCS(item, subtitles)
+                        if (matchSubtitle.bestMatch) {
+                            item.subtitle = matchSubtitle.bestMatch.target
+                        }
+                    })
+                }
 
+                resolve(data)
+            })
+        })
+    })
+}
 
+/**
+ * 获取播放信息
+ * @param {{flag:string,share_id:string,shareToken:string,file_id:string,shareFileToken:string }} data
+ * @returns {Promise<PanPlayInfo>}
+ */
+Ali.prototype.getPlayUrl = function (data) {
+    var self = this
+    return new Promise(function (resolve) {
+        var playData = new PanPlayInfo()
+        playData.urls = []
+        if (self.token.length < 1) {
+            playData.error = '请先在环境变量中添加 阿里Token'
+            resolve(playData)
+            return
+        }
+        try {
+            var shareId = data.share_id
+            var fileId = data.file_id
+            var process = function (saveFileId) {
+                if (!saveFileId) {
+                    resolve(new PanPlayInfo('', '转存失败～'))
+                    return
+                }
+                self.saveFileIdCaches[fileId] = saveFileId
 
+                self.getDownload({ fileId: fileId }).then(function (rawUrls) {
+                    self.getLiveTranscoding({
+                        fileId: fileId,
+                    }).then(function (transcodingUrls) {
+                        playData.urls = [].concat(rawUrls, transcodingUrls)
+                        playData.urls.sort(function (a, b) {
+                            return b.priority - a.priority
+                        })
+                        playData.url = playData.urls[0].url
+                        self.clearSaveDir().then(function () {
+                            resolve(playData)
+                        })
+                    })
+                })
+            }
+            if (!self.saveFileIdCaches[fileId]) {
+                self.save({
+                    shareId: shareId,
+                    fileId: fileId,
+                    clean: false,
+                }).then(process)
+            } else {
+                process(self.saveFileIdCaches[fileId])
+            }
+        } catch (error) {
+            playData = new PanPlayInfo()
+            playData.error = error.toString()
+            self.clearSaveDir().then(function () {
+                resolve(playData)
+            })
+        }
+    })
+}
 
+/**
+ * 下一次获取文件列表时使用的marker
+ * key: file_id
+ * value: marker
+ */
+Ali.prototype.nextMap = new Map()
+
+/**
+ * 获取文件列表
+ * @param {PanMountListData?} args
+ * @param {boolean} isRoot
+ * @param {number} page
+ */
+Ali.prototype.getFileList = function (param) {
+    var self = this
+    return new Promise(function (resolve) {
+        var args = param.args,
+            isRoot = param.isRoot,
+            page = param.page
+        var list = []
+        var fid = isRoot ? 'root' : args && args.data.file_id
+        var marker = (self.nextMap.get(fid)) || ''
+        if (page == 1) {
+            marker = ''
+        } else if (marker === '') {
+            resolve(list)
+            return
+        }
+
+        self.openApi('openFile/list', {
+            drive_id: self.userDriveId,
+            parent_file_id: fid,
+            limit: 200,
+            order_by: 'name',
+            order_direction: 'DESC',
+            marker: marker,
+        }).then(function (listData) {
+            var items = listData.items
+            self.nextMap.set(fid, listData.next_marker)
+
+            for (var index = 0; index < items.length; index++) {
+                var element = items[index]
+
+                var size = (element && element.size || 0) / 1024 / 1024
+                var remark = ''
+                if (size > 0) {
+                    var unit = 'MB'
+                    if (size >= 1000) {
+                        size = size / 1024
+                        unit = 'GB'
+                    }
+                    size = size.toFixed(1)
+                    remark = '[' + size + unit + ']'
+                }
+
+                var dataType = PanDataType.Dir
+                if (element.category == 'video') {
+                    dataType = PanDataType.Video
+                } else if (element.category) {
+                    dataType = PanDataType.Unknown
+                }
+                list.push({
+                    name: element.name,
+                    panType: PanType.Ali,
+                    dataType: dataType,
+                    data: {
+                        file_id: element.file_id,
+                    },
+                    remark: remark,
+                })
+            }
+            resolve(list)
+        })
+    })
+}
 
 function base64Encode(text) {
     return Crypto.enc.Base64.stringify(Crypto.enc.Utf8.parse(text))
@@ -2675,6 +3521,7 @@ function PanTools() {
 
     this.quark = new QuarkUC(true)
     this.uc = new QuarkUC(false)
+    this.ali = new Ali()
     this.pan123 = new Pan123()
     this.pan189 = new Pan189()
     this.jieXi = new JieXi()
@@ -2693,6 +3540,7 @@ Object.defineProperty(PanTools.prototype, 'uzTag', {
         this._uzTag = value
         this.quark.uzTag = value
         this.uc.uzTag = value
+        this.ali.uzTag = value
         this.pan123.uzTag = value
         this.pan189.uzTag = value
         this.jieXi.uzTag = value
@@ -2733,7 +3581,32 @@ PanTools.prototype.updateQuarkUCCookie = function (panType, cookie) {
     })
 }
 
+/**
+ * 获取 Alitoken  ** 无法在 PanTools 外部操作**
+ * 环境变量 key 为 PanType.xx + keyWord关键字,请在 json 文件中添加
+ * @param {PanType} panType
+ * @returns {Promise<string>}
+ */
+PanTools.prototype.getAliDataEnv = function (panType) {
+    var self = this
+    return new Promise(function (resolve) {
+        self.getPanEnv(panType + 'Token').then(function (token) {
+            resolve(token)
+        })
+    })
+}
 
+/**
+ * 更新 Alitoken  ** 无法在 PanTools 外部操作**
+ * @param {PanType} panType
+ * @param {string} data
+ */
+PanTools.prototype.updateAliDataEnv = function (panType, token) {
+    var self = this
+    return new Promise(function (resolve) {
+        self.setPanEnv(panType + 'Token', token).then(resolve)
+    })
+}
 
 /**
  * 统一获取环境变量
@@ -2773,7 +3646,10 @@ PanTools.prototype.registerRefreshAllCookie = function () {
     this.uc.updateCookie = function () {
         that.updateQuarkUCCookie(PanType.UC, this.cookie)
     }
-
+    /// 更新 Ali token
+    this.ali.updateToken = function () {
+        that.updateAliDataEnv(PanType.Ali, this.ali.token)
+    }
 }
 
 PanTools.prototype.getAllCookie = function () {
@@ -2786,31 +3662,35 @@ PanTools.prototype.getAllCookie = function () {
             self.getQuarkUCCookie(PanType.UC).then(function (ucCookie) {
                 self.uc.cookie = ucCookie || ''
 
-                self.getPanEnv(PanType.Pan123 + '账号').then(
-                    function (passport) {
-                        self.pan123.passport = passport || ''
+                self.getAliDataEnv(PanType.Ali).then(function (aliCookie) {
+                    self.ali.token = aliCookie || ''
 
-                        self.getPanEnv(PanType.Pan123 + '密码').then(
-                            function (password) {
-                                self.pan123.password = password || ''
+                    self.getPanEnv(PanType.Pan123 + '账号').then(
+                        function (passport) {
+                            self.pan123.passport = passport || ''
 
-                                self.getPanEnv(
-                                    PanType.Pan189 + '账号'
-                                ).then(function (account) {
-                                    self.pan189.account = account || ''
+                            self.getPanEnv(PanType.Pan123 + '密码').then(
+                                function (password) {
+                                    self.pan123.password = password || ''
 
                                     self.getPanEnv(
-                                        PanType.Pan189 + '密码'
-                                    ).then(function (password) {
-                                        self.pan189.password =
-                                            password || ''
-                                        resolve()
+                                        PanType.Pan189 + '账号'
+                                    ).then(function (account) {
+                                        self.pan189.account = account || ''
+
+                                        self.getPanEnv(
+                                            PanType.Pan189 + '密码'
+                                        ).then(function (password) {
+                                            self.pan189.password =
+                                                password || ''
+                                            resolve()
+                                        })
                                     })
-                                })
-                            }
-                        )
-                    }
-                )
+                                }
+                            )
+                        }
+                    )
+                })
             })
         })
     })
@@ -2839,6 +3719,7 @@ PanTools.prototype.setSaveDirName = function () {
                 //MARK: 2. 请补充自定义转存文件夹名称
                 self.quark.saveDirName = dirName
                 self.uc.saveDirName = dirName
+                self.ali.saveDirName = dirName
             }
         })
     })
@@ -2852,7 +3733,9 @@ PanTools.prototype.cleanSaveDir = function () {
     return new Promise(function (resolve) {
         //MARK: 3. 请实现清理转存文件夹
         self.quark.clearSaveDir().then(function () {
-            self.uc.clearSaveDir().then(resolve)
+            self.uc.clearSaveDir().then(function () {
+                self.ali.clearSaveDir().then(resolve)
+            })
         })
     })
 }
@@ -2875,7 +3758,10 @@ PanTools.prototype.getShareVideos = function (shareUrl) {
             self.uc.getFilesByShareUrl(shareUrl).then(function (data) {
                 resolve(JSON.stringify(data))
             })
-
+        } else if (shareUrl.includes('https://www.alipan.com')) {
+            self.ali.getFilesByShareUrl(shareUrl).then(function (data) {
+                resolve(JSON.stringify(data))
+            })
         } else if (self.pan123.getShareData(shareUrl) != null) {
             self.pan123.getFilesByShareUrl(shareUrl).then(function (data) {
                 resolve(JSON.stringify(data))
@@ -2914,7 +3800,10 @@ PanTools.prototype.getPlayInfo = function (item) {
                 self.uc.getPlayUrl(item.data).then(function (data) {
                     resolve(JSON.stringify(data))
                 })
-
+            } else if (item.panType === PanType.Ali) {
+                self.ali.getPlayUrl(item.data).then(function (data) {
+                    resolve(JSON.stringify(data))
+                })
             } else if (item.panType === PanType.Pan123) {
                 self.pan123.getPlayUrl(item.data).then(function (data) {
                     resolve(JSON.stringify(data))
@@ -2946,20 +3835,27 @@ PanTools.prototype.getSupportMountPan = function () {
     var self = this
     return new Promise(function (resolve) {
         self.getAllCookie().then(function () {
-            var x = formatBackData([
-                new PanMount(
-                    'UC',
-                    PanType.UC,
-                    self.uc.cookie !== ''
-                ),
-                new PanMount(
-                    'Quark',
-                    PanType.Quark,
-                    self.quark.cookie !== ''
-                ),
-            ])
+            self.ali.oneKeyReady().then(function () {
+                var x = formatBackData([
+                    new PanMount(
+                        'UC',
+                        PanType.UC,
+                        self.uc.cookie !== ''
+                    ),
+                    new PanMount(
+                        'Quark',
+                        PanType.Quark,
+                        self.quark.cookie !== ''
+                    ),
+                    new PanMount(
+                        '阿里盘',
+                        PanType.Ali,
+                        self.ali.token !== ''
+                    ),
+                ])
 
-            resolve(x)
+                resolve(x)
+            })
         })
     })
 }
@@ -2994,7 +3890,17 @@ PanTools.prototype.getRootDir = function (panType) {
                         list = result
                         resolve(formatBackData({ data: list, error: '' }))
                     })
-
+            } else if (panType == PanType.Ali) {
+                self.ali
+                    .getFileList({
+                        args: null,
+                        isRoot: true,
+                        page: 1,
+                    })
+                    .then(function (result) {
+                        list = result
+                        resolve(formatBackData({ data: list, error: '' }))
+                    })
             }
         } catch (error) {
             resolve(formatBackData({ data: list, error: '' }))
@@ -3034,7 +3940,17 @@ PanTools.prototype.getMountDir = function (args) {
                         list = result
                         resolve(formatBackData({ data: list, error: '' }))
                     })
-
+            } else if (args.data.panType == PanType.Ali) {
+                self.ali
+                    .getFileList({
+                        args: args.data,
+                        isRoot: false,
+                        page: args.page,
+                    })
+                    .then(function (result) {
+                        list = result
+                        resolve(formatBackData({ data: list, error: '' }))
+                    })
             }
         } catch (error) {
             resolve(formatBackData({ data: list, error: '' }))
@@ -3099,7 +4015,39 @@ PanTools.prototype.getMountFile = function (args) {
                         })
                 }
                 playData.playHeaders = self.uc.playHeaders
-
+            } else if (args.panType == PanType.Ali) {
+                if (args.dataType == PanDataType.Video) {
+                    self.ali
+                        .getDownload({
+                            fileId: args.data.file_id,
+                            isMount: true,
+                        })
+                        .then(function (rawUrls) {
+                            self.ali
+                                .getLiveTranscoding({
+                                    fileId: args.data.file_id,
+                                    isMount: true,
+                                })
+                                .then(function (liveUrls) {
+                                    playData.urls = [].concat(
+                                        rawUrls,
+                                        liveUrls
+                                    )
+                                    finalize()
+                                })
+                        })
+                } else if (args.dataType == PanDataType.Unknown) {
+                    self.ali
+                        .getDownload({
+                            fileId: args.data.file_id,
+                            isMount: true,
+                        })
+                        .then(function (urls) {
+                            playData.urls = urls
+                            finalize()
+                        })
+                }
+                playData.playHeaders = self.ali.playHeaders
             }
         } catch (error) {
             playData.error = error.toString()

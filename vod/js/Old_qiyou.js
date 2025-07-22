@@ -1,3 +1,4 @@
+//@deprecated:1
 class qiyouClass extends WebApiBase {
     constructor() {
         super()

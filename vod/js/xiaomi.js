@@ -3,6 +3,7 @@
 //@webSite:https://xiaomiai.site
 //@remark:
 //@order: B
+//@deprecated:1
 const appConfig = {
     _webSite: 'https://xiaomiai.site',
     /**

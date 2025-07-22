@@ -2,11 +2,13 @@
   {
     "api": "https://mozhuazy.com/api.php/provide/vod/",
     "name": "[采] 魔爪4k",
+    "order": "E",
     "type": 0
   },
   {
     "api": "https://json.heimuer.xyz/api.php/provide/vod/",
     "name": "[采] 黑木耳",
+    "order": "E",
     "type": 0
   }
 ]
