@@ -3,8 +3,8 @@
 //@version:1
 //@webSite:http://www.mifun.tw
 //@remark:
-//@deprecated:1
 //@order: D
+//@deprecated:1
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'
 import { } from '../../core/uz3lib.js'

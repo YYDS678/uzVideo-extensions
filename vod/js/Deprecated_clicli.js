@@ -3,8 +3,8 @@
 //@version:1
 //@webSite:https://www.clicli.pro
 //@remark:
-//@deprecated:1
 //@order: D
+//@deprecated:1
 // ignore
 
 // 适用于 把鼠标放在视频封面上 可以右键 复制正确链接的网站

@@ -1,11 +1,13 @@
-//@name:[盘] 六趣
+// ignore
+//@name:[盘] 百家
 //@version:1
-//@webSite:https://wp.0v.fit
+//@webSite:http://cj.jiexi.news
 //@remark:
-//@deprecated:1
 //@order: B
+//@deprecated:1
+// ignore
 const appConfig = {
-    _webSite: 'https://wp.0v.fit',
+    _webSite: 'http://cj.jiexi.news',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -40,23 +42,37 @@ async function getClassList(args) {
     backData.data = [
         {
             type_id: '1',
-            type_name: '六趣电影',
+            type_name: '电影',
             hasSubclass: false,
         },
         {
             type_id: '2',
-            type_name: '六趣剧集',
+            type_name: '剧集',
             hasSubclass: false,
         },
         {
             type_id: '4',
-            type_name: '六趣动漫',
+            type_name: '动漫',
+            hasSubclass: false,
+        },
+        {
+            type_id: '3',
+            type_name: '综艺',
+            hasSubclass: false,
+        },
+        {
+            type_id: '39',
+            type_name: '臻彩',
+            hasSubclass: false,
+        },
+        {
+            type_id: '38',
+            type_name: '天翼|123',
             hasSubclass: false,
         },
     ]
     return JSON.stringify(backData)
 }
-
 async function getSubclassList(args) {
     let backData = new RepVideoSubclassList()
     return JSON.stringify(backData)
@@ -65,7 +81,6 @@ async function getSubclassVideoList(args) {
     var backData = new RepVideoList()
     return JSON.stringify(backData)
 }
-
 /**
  * 获取分类视频列表
  * @param {UZArgs} args
@@ -195,7 +210,7 @@ async function searchVideo(args) {
             appConfig.webSite
         )}/index.php/vod/search/page/${args.page}/wd/${args.searchWord}.html`
         let repData = await req(searchUrl)
-        appConfig.checkVerify(searchUrl, repData.data)
+
         const $ = cheerio.load(repData.data)
         let items = $('.module-search-item')
 

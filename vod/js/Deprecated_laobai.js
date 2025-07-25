@@ -2,10 +2,10 @@
 //@version:2
 //@webSite:https://apk-lb-json.fodexin.com
 //@remark:
-//@deprecated:1
 //@type:100
 //@instance:laobai20240831
 //@order: C
+//@deprecated:1
 class laobaiClass extends WebApiBase {
     constructor() {
         super()

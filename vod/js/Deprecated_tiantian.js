@@ -2,10 +2,10 @@
 //@version:2
 //@webSite:http://op.ysdqjs.cn
 //@remark:
-//@deprecated:1
 //@type:100
 //@instance:tiantian20240629
 //@order: C
+//@deprecated:1
 // ignore
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

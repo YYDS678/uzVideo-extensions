@@ -3,7 +3,7 @@
 //@webSite:https://zy.xmm.hk/api.php/provide/vod
 //@remark:通用官采解析2，需配合网盘解析工具使用。在环境变量配置 采集解析地址。
 //@env:采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
-// @order: A
+//@order: A
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示

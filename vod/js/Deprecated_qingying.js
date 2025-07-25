@@ -2,8 +2,8 @@
 //@version:1
 //@webSite:https://revohd.com
 //@remark:
-//@deprecated:1
 //@order: B
+//@deprecated:1
 const appConfig = {
     _webSite: 'https://revohd.com',
     /**

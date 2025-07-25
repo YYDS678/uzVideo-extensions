@@ -1,13 +1,11 @@
-// ignore
-//@name:[盘] 百家
-//@version:1
-//@webSite:http://cj.jiexi.news
+//@name:[盘] 小米
+//@version:3
+//@webSite:https://xiaomiai.site
 //@remark:
-//@deprecated:1
 //@order: B
-// ignore
+//@deprecated:1
 const appConfig = {
-    _webSite: 'http://cj.jiexi.news',
+    _webSite: 'https://xiaomiai.site',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -42,32 +40,37 @@ async function getClassList(args) {
     backData.data = [
         {
             type_id: '1',
-            type_name: '电影',
+            type_name: '小米电影',
             hasSubclass: false,
         },
         {
             type_id: '2',
-            type_name: '剧集',
-            hasSubclass: false,
-        },
-        {
-            type_id: '4',
-            type_name: '动漫',
+            type_name: '小米剧集',
             hasSubclass: false,
         },
         {
             type_id: '3',
-            type_name: '综艺',
+            type_name: '小米动漫',
             hasSubclass: false,
         },
         {
-            type_id: '39',
-            type_name: '臻彩',
+            type_id: '4',
+            type_name: '小米综艺',
             hasSubclass: false,
         },
         {
-            type_id: '38',
-            type_name: '天翼|123',
+            type_id: '5',
+            type_name: '小米短剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '24',
+            type_name: '小米老剧',
+            hasSubclass: false,
+        },
+        {
+            type_id: '26',
+            type_name: '小米臻彩',
             hasSubclass: false,
         },
     ]
@@ -210,7 +213,6 @@ async function searchVideo(args) {
             appConfig.webSite
         )}/index.php/vod/search/page/${args.page}/wd/${args.searchWord}.html`
         let repData = await req(searchUrl)
-
         const $ = cheerio.load(repData.data)
         let items = $('.module-search-item')
 
