@@ -5,7 +5,7 @@
 //@remark:
 //@type:100
 //@instance:hjkk20240624
-//@order: C
+//@order: B
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
 import {} from '../../core/uz3lib.js'

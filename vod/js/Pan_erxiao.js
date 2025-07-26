@@ -3,7 +3,7 @@
 //@version:1
 //@webSite:https://2xiaopan.fun
 //@remark:
-//@order: B
+//@order: A06
 // ignore
 const appConfig = {
     _webSite: 'https://2xiaopan.fun',

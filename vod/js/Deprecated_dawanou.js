@@ -3,7 +3,7 @@
 //@version:1
 //@webSite:http://149.88.87.18:6688
 //@remark:
-//@order: B
+//@order: A
 //@deprecated:1
 // ignore
 const appConfig = {

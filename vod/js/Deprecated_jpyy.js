@@ -4,7 +4,7 @@
 //@remark:
 //@type:100
 //@instance:jpyy20240716
-//@order: C
+//@order: B
 //@deprecated:1
 class jpyyClass extends WebApiBase {
     constructor() {

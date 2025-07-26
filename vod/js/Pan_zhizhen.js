@@ -2,7 +2,7 @@
 //@version:4
 //@webSite:http://www.miqk.cc
 //@remark:
-//@order: B
+//@order: A07
 const appConfig = {
     _webSite: 'http://www.miqk.cc',
     /**

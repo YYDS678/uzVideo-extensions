@@ -4,7 +4,7 @@
 //@remark:
 //@type:100
 //@instance:www4kav20240705
-//@order: C
+//@order: B
 // ignore
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

@@ -2,7 +2,7 @@
 //@name:[直] 厂长影视
 //@version:2
 //@webSite:https://www.czzy77.com
-//@order: C
+//@order: B
 //@remark:
 //@deprecated:1
 import { } from '../../core/uzVideo.js';

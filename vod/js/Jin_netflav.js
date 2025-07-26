@@ -5,7 +5,7 @@
 //@type:100
 //@instance:netflav20240905
 //@isAV:1
-//@order: F
+//@order: E
 class netflavClass extends WebApiBase {
     constructor() {
         super()

@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:https://woog.nxog.eu.org
 //@remark:
-//@order: B
+//@order: A08
 const appConfig = {
     _webSite: 'https://woog.nxog.eu.org',
     /**

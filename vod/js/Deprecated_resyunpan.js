@@ -5,7 +5,7 @@
 //@remark:
 //@type:100
 //@instance:resYunPan20241120
-//@order: B
+//@order: A
 //@deprecated:1
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

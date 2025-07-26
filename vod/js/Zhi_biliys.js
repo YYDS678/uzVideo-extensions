@@ -3,7 +3,7 @@
 //@version:2
 //@webSite:https://xl01.com.de
 //@remark:
-//@order: C
+//@order: B
 // ignore
 const appConfig = {
     _webSite: 'https://www.xlys01.com',

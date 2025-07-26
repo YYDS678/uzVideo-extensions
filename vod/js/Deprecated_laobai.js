@@ -4,7 +4,7 @@
 //@remark:
 //@type:100
 //@instance:laobai20240831
-//@order: C
+//@order: B
 //@deprecated:1
 class laobaiClass extends WebApiBase {
     constructor() {

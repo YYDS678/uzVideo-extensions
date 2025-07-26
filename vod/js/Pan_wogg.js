@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:http://wogg.xxooo.cf
 //@remark:
-//@order: B
+//@order: A01
 const appConfig = {
     _webSite: 'http://wogg.xxooo.cf',
     /**

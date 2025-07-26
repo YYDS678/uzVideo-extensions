@@ -2,7 +2,7 @@
 //@version:1
 //@webSite:https://cj.rycjapi.com/api.php/provide/vod
 //@remark:地址输入自己搭建的 cms 采集地址，默认使用如意采集占位
-//@order: E
+//@order: D5
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示

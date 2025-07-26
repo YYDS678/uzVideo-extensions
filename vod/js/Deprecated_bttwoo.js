@@ -3,7 +3,7 @@
 //@version:2
 //@webSite:https://www.bttwoo.com
 //@remark:
-//@order: C
+//@order: B
 //@deprecated:1
 import { } from '../../core/uzVideo.js'
 import { } from '../../core/uzHome.js'

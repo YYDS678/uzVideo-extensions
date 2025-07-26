@@ -3,7 +3,7 @@
 //@version:1
 //@webSite:https://www.nanf.cc
 //@remark:
-//@order: B
+//@order: A14
 // 不支持导入，这里只是本地开发用于代码提示
 // 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
 import {} from '../../core/uzVideo.js'

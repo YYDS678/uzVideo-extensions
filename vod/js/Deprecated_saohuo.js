@@ -5,7 +5,7 @@
 //@remark:
 //@type:100
 //@instance:saohuo20240623
-//@order: C
+//@order: B
 //@deprecated:1
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'

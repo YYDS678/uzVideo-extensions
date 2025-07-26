@@ -3,7 +3,7 @@
 //@version:1
 //@webSite:http://cj.jiexi.news
 //@remark:
-//@order: B
+//@order: A
 //@deprecated:1
 // ignore
 const appConfig = {

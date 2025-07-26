@@ -2,7 +2,7 @@
 //@version:1
 //@webSite:http://1.95.79.193/
 //@remark:
-//@order: B
+//@order: A04
 const appConfig = {
     _webSite: 'http://1.95.79.193/',
     /**

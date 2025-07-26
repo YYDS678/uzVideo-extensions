@@ -4,7 +4,7 @@
 //@remark:
 //@type:100
 //@instance:tiantian20240629
-//@order: C
+//@order: B
 //@deprecated:1
 // ignore
 import {} from '../../core/uzVideo.js'

@@ -3,7 +3,7 @@
 //@version:3
 //@webSite:https://vip.omii.top
 //@remark:
-//@order: B
+//@order: A
 //@deprecated:1
 // ignore
 const appConfig = {

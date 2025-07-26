@@ -5,7 +5,7 @@
 //@remark:瓜子WEB
 //@type:100
 //@instance:gzys20240822
-//@order: C
+//@order: B
 
 import {} from '../../core/uzVideo.js'
 import {} from '../../core/uzHome.js'
