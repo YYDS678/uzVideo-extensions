@@ -33,6 +33,7 @@ jobs:
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
         git add uzAio.json uzAio_raw.json av_auto.json av_raw_auto.json local.json env.json README.md
+        git add panTools/panTools.json danMu/danMu.json recommend/douban.json vod/vod.json
         git add uzAio.zip
         git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
         git push

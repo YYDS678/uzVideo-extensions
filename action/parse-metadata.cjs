@@ -66,7 +66,7 @@ const parseComments = (filePath) => {
   // 获取当前分支名称，默认为 main
   const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
   const [owner, repo] = getRepoInfo()
-  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${kLocalPathTAG}${relativePath}`
+  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${kLocalPathTAG}${relativePath.replace(/\\/g, '/')}`
   return metadata
 }
 
@@ -111,7 +111,7 @@ const main = async () => {
           ...(metadata.order && { order: metadata.order }),
 
           api: metadata.api,
-          type: parseInt(metadata.type),
+          type: parseInt(metadata.type) || TYPE_MAPPING[dir] || 101,
         }
         if (parseInt(metadata.isAV) === 1) {
           avResultList.push(item)
@@ -177,13 +177,33 @@ const main = async () => {
   // 添加cms数据后再次排序vod
   allInOneResult.vod.sort(sortByOrder);
 
+  // 按指定顺序重新组织 allInOneResult
+  const orderedResult = {
+    panTools: allInOneResult.panTools || [],
+    danMu: allInOneResult.danMu || [],
+    recommend: allInOneResult.recommend || [],
+    live: allInOneResult.live || [],
+    vod: allInOneResult.vod || []
+  }
+
+  // 生成各个目录的单独JSON文件
+  const categoryDirs = ['panTools', 'danMu', 'recommend', 'vod']
+  categoryDirs.forEach(category => {
+    if (orderedResult[category] && orderedResult[category].length > 0) {
+      // recommend目录使用douban.json作为文件名
+      const fileName = category === 'recommend' ? 'douban.json' : `${category}.json`
+      const categoryPath = path.join(category, fileName)
+      fs.writeFileSync(categoryPath, JSON.stringify(orderedResult[category], null, 2).replaceAll(kLocalPathTAG, ''))
+    }
+  })
+
   // 写入整合后的uzAio.json
-  fs.writeFileSync('uzAio_raw.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ''))
+  fs.writeFileSync('uzAio_raw.json', JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, ''))
 
   // 写入整合后的uzAV.json
   fs.writeFileSync('av_raw_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
 
-  let sources = [...allInOneResult.vod, ...allInOneResult.panTools, ...allInOneResult.recommend, ...allInOneResult.danMu, ...allInOneResult.live, ...avResultList]
+  let sources = [...orderedResult.panTools, ...orderedResult.danMu, ...orderedResult.recommend, ...orderedResult.live, ...orderedResult.vod, ...avResultList]
 
   // 使用 JSDelivr CDN 加速
   const [owner, repo] = getRepoInfo()
@@ -195,7 +215,8 @@ const main = async () => {
     // 将 https://raw.githubusercontent.com/user/repo/branch/path 转换为 https://cdn.jsdelivr.net/gh/user/repo@branch/path
     item.api = item.api.replace(`${githubRawHost}/${owner}/${repo}/${branch}/`, jsdelivrCDN)
   })
-  fs.writeFileSync('uzAio.json', JSON.stringify(allInOneResult, null, 2).replaceAll(kLocalPathTAG, ''))
+
+  fs.writeFileSync('uzAio.json', JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, ''))
   fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
 
   let sourcesCopy = JSON.parse(JSON.stringify(sources))
@@ -230,10 +251,33 @@ const main = async () => {
   const includePaths = {
     directories: ['danMu', 'panTools', 'recommend', 'vod', 'live', 'cms'],
     files: ['local.json', 'env.json'],
+    excludeFiles: ['douban.json', 'panTools.json', 'danMu.json', 'vod.json', 'README.md']
   }
 
   const shouldInclude = (filePath) => {
     const relativePath = path.relative(process.cwd(), filePath)
+    const fileName = path.basename(relativePath)
+
+    // 检查是否是要排除的文件
+    if (includePaths.excludeFiles.includes(fileName)) {
+      return false
+    }
+
+    // 检查文件是否包含 @deprecated 标记
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      try {
+        const content = fs.readFileSync(filePath, 'utf8')
+        if (content.includes('@deprecated:')) {
+          const deprecated = extractValue(content, '@deprecated:')
+          if (deprecated && parseInt(deprecated) == 1) {
+            return false
+          }
+        }
+      } catch (error) {
+        // 如果读取文件失败，继续处理
+      }
+    }
+
     // 检查是否是指定的文件
     if (includePaths.files.includes(relativePath)) {
       return true

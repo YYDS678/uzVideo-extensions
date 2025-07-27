@@ -1,6 +1,6 @@
 # 视频源扩展 type:101
 
-[比较详细的 视频源扩展](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/eacg.js)
+[比较详细的 视频源扩展](https://github.com/YYDS678/uzVideo-extensions/tree/main/vod/js/Xiu_eacg.js)
 
 # 请为扩展添加以下注释，用于自动更新 json
 
