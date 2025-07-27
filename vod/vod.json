@@ -9,8 +9,8 @@
   },
   {
     "name": "[盘] 木偶",
-    "version": 2,
-    "webSite": "https://666.666291.xyz",
+    "version": 3,
+    "webSite": "http://123.666291.xyz",
     "order": "A02",
     "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Pan_mogg.js",
     "type": 101
