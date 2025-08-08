@@ -22,10 +22,10 @@
   "danMu": [
     {
       "name": "自定义弹幕扩展",
-      "version": 10,
+      "version": 12,
       "remark": "v1.6.60 及以上版本可用",
-      "env": "自定义弹幕解析接口##格式 线路名称1@地址1|线路名称2@地址2&&自定义弹幕屏蔽列表##使用|分隔，如：广告|推广|关注",
-      "codeID": "y4S7zyv2sSZhVen1FPn1NSYeCP3npPUN",
+      "env": "自定义弹幕解析接口##格式 线路名称1@地址1|线路名称2@地址2&&自定义弹幕屏蔽列表##使用|分隔，如：广告|推广|关注&&自定义弹幕采集线路##格式 线路名称1@地址1|线路名称2@地址2",
+      "codeID": "nbmzqa1J3WrVDUQmfO0nkdEAqAkBnvtB",
       "order": "A01",
       "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu4.txt",
       "type": 400
