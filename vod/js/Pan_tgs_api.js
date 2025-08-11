@@ -1,5 +1,5 @@
 //@name:[盘] TG纯搜
-//@version:5
+//@version:6
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜API地址##https://tgsou.252035.xyz
 //@remark:🍃豆儿出品，不属精品！免代理纯搜索，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个
@@ -92,10 +92,7 @@ const CLOUD_PROVIDERS = {
         name: 'UC',
         domains: ['drive.uc.cn']
     },
-    ali: {
-        name: '阿里',
-        domains: ['alipan.com', 'aliyundrive.com']
-    },
+
     pan123: {
         name: '123',
         domains: ['123pan.com', '123pan.cn', '123684.com', '123912.com', '123865.com']

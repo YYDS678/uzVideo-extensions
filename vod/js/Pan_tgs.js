@@ -1,5 +1,5 @@
 //@name:[盘] TG搜
-//@version:6
+//@version:7
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@alyp_4K_Movies&夸克剧集@alyp_TV&夸克动漫@alyp_Animation
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
@@ -97,10 +97,7 @@ const CLOUD_PROVIDERS = {
         name: 'UC',
         domains: ['drive.uc.cn']
     },
-    ali: {
-        name: '阿里',
-        domains: ['alipan.com']
-    },
+
     pan123: {
         name: '123',
         domains: ['123684.com', '123865.com', '123912.com', '123pan.com', '123pan.cn']
