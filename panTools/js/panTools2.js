@@ -1,5 +1,5 @@
 //@name:夸克|UC|天翼|123|解析 网盘解析工具
-//@version:23
+//@version:24
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
@@ -1045,7 +1045,7 @@ class qs {
 class Pan123 {
     constructor() {
         this.regex =
-            /https:\/\/(www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com)\/s\/([^\\/]+)/
+            /https:\/\/(www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn)\/s\/([^\\/]+)/
         this.api = 'https://www.123684.com/b/api/share/'
         this.loginUrl = 'https://login.123pan.com/api/user/sign_in'
         this.cate = ''
@@ -1119,6 +1119,8 @@ class Pan123 {
 
     getShareData(url) {
         let panUrl = decodeURIComponent(url.trim())
+        // 先清理尾部符号，确保后续处理正确
+        panUrl = panUrl.replace(/[#.,，/\s]+$/, '')
         this.SharePwd = ''
         // 支持 ;、,、，、空格后跟提取码
         let pwdMatch = panUrl.match(/[;，,\s]+[\u63d0\u53d6\u7801:：\s]*([a-zA-Z0-9]{4})/)
@@ -1135,7 +1137,6 @@ class Pan123 {
                 panUrl = panUrl.slice(0, firstChinese.index)
             }
         }
-        panUrl = panUrl.replace(/[.,，/]$/, '')
         panUrl = panUrl.trim()
         const matches = this.regex.exec(panUrl)
         if (!matches) {
@@ -1165,24 +1166,31 @@ class Pan123 {
             let cate = await this.getShareInfo(shareKey, this.SharePwd, 0, 0)
 
             if (cate && Array.isArray(cate)) {
-                await Promise.all(
-                    cate.map(async (item) => {
-                        if (!(item.filename in file)) {
-                            file[item.filename] = []
-                        }
+                // 检查是否为直接分享的视频文件
+                if (cate.length > 0 && cate[0].isDirect) {
+                    // 直接分享的视频文件，无需进一步处理文件夹
+                    file['root'] = cate
+                } else {
+                    // 文件夹结构，按原逻辑处理
+                    await Promise.all(
+                        cate.map(async (item) => {
+                            if (!(item.filename in file)) {
+                                file[item.filename] = []
+                            }
 
-                        const fileData = await this.getShareList(
-                            item.shareKey,
-                            item.SharePwd,
-                            item.next,
-                            item.fileId
-                        )
+                            const fileData = await this.getShareList(
+                                item.shareKey,
+                                item.SharePwd,
+                                item.next,
+                                item.fileId
+                            )
 
-                        if (fileData && fileData.length > 0) {
-                            file[item.filename].push(...fileData)
-                        }
-                    })
-                )
+                            if (fileData && fileData.length > 0) {
+                                file[item.filename].push(...fileData)
+                            }
+                        })
+                    )
+                }
             }
 
             let videos = []
@@ -1226,6 +1234,7 @@ class Pan123 {
 
     async getShareInfo(shareKey, SharePwd, next, ParentFileId) {
         let cate = []
+        let videos = []
         let list = await axios.get(this.api + 'get', {
             headers: {},
             params: {
@@ -1254,6 +1263,7 @@ class Pan123 {
                         this.fileName = item.FileName
                     }
                     if (item.Category === 0) {
+                        // 文件夹
                         cate.push({
                             filename: item.FileName,
                             shareKey: shareKey,
@@ -1261,8 +1271,26 @@ class Pan123 {
                             next: next,
                             fileId: item.FileId,
                         })
+                    } else if (item.Category === 2) {
+                        // 直接分享的视频文件
+                        videos.push({
+                            ShareKey: shareKey,
+                            FileId: item.FileId,
+                            S3KeyFlag: item.S3KeyFlag,
+                            Size: item.Size,
+                            Etag: item.Etag,
+                            FileName: item.FileName,
+                            isDirect: true, // 标记为直接分享的文件
+                        })
                     }
                 })
+
+                // 如果有直接分享的视频文件，优先返回
+                if (videos.length > 0) {
+                    return videos
+                }
+
+                // 否则处理文件夹
                 let result = await Promise.all(
                     cate.map(async (it) =>
                         this.getShareInfo(shareKey, SharePwd, next, it.fileId)
