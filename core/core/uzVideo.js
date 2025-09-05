@@ -116,6 +116,8 @@ class VideoDetail {
         this.vod_content = ''
         // 地区
         this.vod_area = ''
+        // 跳转搜索 v1.6.63 及以上版本
+        this.goSearch = false
         /**
          * 网盘分享链接列表
          * @type {string[]}
@@ -234,7 +236,7 @@ class RepVideoPlayUrl {
          * @type {object}
          * @property {string} url 嗅探的URL
          * @property {string} ua 嗅探的UA
-         * @property {number} timeOut 单次嗅探超时时间 单位秒 默认 12s
+         * @property {number} timeOut 单次嗅探超时时间 单位秒 默认 30s
          * @property {number} retry 重试次数 默认 1 次
          */
         this.sniffer = {}

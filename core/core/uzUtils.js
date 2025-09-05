@@ -459,12 +459,42 @@ async function openWebToBindEnv(options) {
 }
 
 /**
+ * Toast 弹窗的类型
+ * @readonly
+ * @enum {string}
+ */
+const ToastType = {
+    normal: 'normal',
+    info: 'info',
+    success: 'success',
+    error: 'error',
+}
+
+/**
+ * @typedef {object} ToastOptions
+ * @property {string} msg - 提示信息
+ * @property {number} [duration] - 持续时间
+ * @property {ToastType} [type] - 弹窗类型
+ */
+
+/**
  * toast 弹窗
- * @param {string} msg 提示信息
- * @param {number} duration 持续时间
- **/
+ * @param {string | ToastOptions} msg - 提示信息或包含信息的对象,ToastOptions v1.6.63 及以上版本
+ * @param {number} [duration=2] - 持续时间 (仅当第一个参数为字符串时有效)
+ */
 function toast(msg, duration = 2) {
-    sendMessage('toast', JSON.stringify({ msg: msg, duration: duration }))
+    let payload
+    if (typeof msg === 'object' && msg !== null) {
+        const isValidType = Object.values(ToastType).includes(msg.type)
+        payload = {
+            msg: msg.msg,
+            duration: msg.duration ?? duration,
+            type: isValidType ? msg.type : ToastType.normal,
+        }
+    } else {
+        payload = { msg: msg, duration: duration, type: ToastType.normal }
+    }
+    sendMessage('toast', JSON.stringify(payload))
 }
 
 // ignore
@@ -533,6 +563,7 @@ export {
     goToVerify,
     openWebToBindEnv,
     toast,
+    ToastType,
     kIsDesktop,
     kIsAndroid,
     kIsIOS,
