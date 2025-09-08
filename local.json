@@ -92,8 +92,8 @@
   },
   {
     "name": "[盘] 木偶",
-    "version": 3,
-    "webSite": "http://123.666291.xyz",
+    "version": 4,
+    "webSite": "https://666.666291.xyz",
     "order": "A02",
     "api": "vod/js/Pan_mogg.js",
     "type": 101
@@ -166,10 +166,10 @@
   },
   {
     "name": "[盘] 校长",
-    "version": 1,
+    "version": 2,
     "remark": "🍃豆儿出品，不属精品！",
     "webSite": "https://xzys.fun",
-    "codeID": "7T4PFJobJZegoH1hLUyEL1HOGSoNuwR6",
+    "codeID": "tW2AK2eUmsN6Bbnpu4TpQuxGiDoB0v1r",
     "order": "A11",
     "api": "vod/js/Pan_xzys.txt",
     "type": 101
@@ -227,20 +227,20 @@
   },
   {
     "name": "[盘] TG搜",
-    "version": 7,
+    "version": 8,
     "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
     "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
-    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman",
+    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk",
     "order": "A17",
     "api": "vod/js/Pan_tgs.js",
     "type": 101
   },
   {
     "name": "[盘] TG纯搜",
-    "version": 6,
+    "version": 7,
     "remark": "🍃豆儿出品，不属精品！免代理纯搜索，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个",
     "env": "TG搜API地址##https://tgsou.252035.xyz",
-    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&云巢@peccxinpd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman",
+    "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk",
     "order": "A18",
     "api": "vod/js/Pan_tgs_api.js",
     "type": 101
@@ -413,12 +413,6 @@
     "api": "https://mozhuazy.com/api.php/provide/vod/",
     "name": "[采] 魔爪4k",
     "order": "D3",
-    "type": 0
-  },
-  {
-    "api": "https://json.heimuer.xyz/api.php/provide/vod/",
-    "name": "[采] 黑木耳",
-    "order": "D4",
     "type": 0
   },
   {
