@@ -1,10 +1,10 @@
 //@name:[盘] 木偶
-//@version:3
-//@webSite:http://123.666291.xyz
+//@version:4
+//@webSite:https://666.666291.xyz
 //@remark:
 //@order: A02
 const appConfig = {
-    _webSite: 'http://123.666291.xyz',
+    _webSite: 'https://666.666291.xyz',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量

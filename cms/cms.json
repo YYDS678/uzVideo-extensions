@@ -4,11 +4,5 @@
     "name": "[采] 魔爪4k",
     "order": "D3",
     "type": 0
-  },
-  {
-    "api": "https://json.heimuer.xyz/api.php/provide/vod/",
-    "name": "[采] 黑木耳",
-    "order": "D4",
-    "type": 0
   }
 ]
