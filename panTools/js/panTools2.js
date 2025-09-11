@@ -1,5 +1,5 @@
 //@name:夸克|UC|天翼|123|百度|解析 网盘解析工具
-//@version:26
+//@version:27
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
@@ -62,19 +62,19 @@ const PanType = {
     /**
      * 123网盘
      **/
-    Pan123: '123网盘',
+    Pan123: '123',
 
     /**
      * 天翼网盘
      */
-    Pan189: '天翼网盘',
+    Pan189: '天翼',
 
     /**
      *  解析
      */
     JieXi: '采集解析',
 
-    Baidu: '百度网盘',
+    Baidu: '百度',
 }
 
 /**
@@ -2355,9 +2355,9 @@ class PanBaidu {
 
     async getShareToken(shareData) {
         // 先检查缓存，存在则直接返回
-        if (this.shareTokenCache[shareData.shareId]) {
-            return this.shareTokenCache[shareData.shareId]
-        }
+        // if (this.shareTokenCache[shareData.shareId]) {
+        //     return this.shareTokenCache[shareData.shareId]
+        // }
 
         // 缓存不存在时，执行获取令牌的逻辑
         try {
