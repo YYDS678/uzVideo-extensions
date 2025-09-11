@@ -1,7 +1,7 @@
 //@name:夸克|UC|天翼|123|百度|解析 网盘解析工具
 //@version:25
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
-//@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&UC_UT##播放视频自动获取，不可用时点击删除重新获取 cookie ，再重启app&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
+//@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
 // ignore
 import {
@@ -479,18 +479,14 @@ class QuarkUC {
 
         if (url.includes(kUC_UTKeyWord)) {
             if (this.ut.length < 1) {
-                this.ut = await getEnv(this.uzTag, 'UC_UT')
-                if (this.ut.length < 1) {
+
                     const data = await req(UCClient.apiUrl + 'file', {
                         responseType: ReqResponseType.plain,
                     })
                     if (data.data?.length > 0) {
                         this.ut = data.data
-                        await setEnv(this.uzTag, 'UC_UT', this.ut)
                     }
-                }
-            }
-            if (this.ut.length > 0) {
+            }else {
                 url = url.replace(kUC_UTKeyWord, this.ut)
             }
         }
@@ -2182,6 +2178,9 @@ class PanBaidu {
 
     set cookie(newCookie) {
         console.log('更新cookie')
+        if (newCookie && newCookie !== this._cookie) {
+            setEnv(this.uzTag, '百度网盘Cookie', newCookie)
+        }
         this._cookie = newCookie
     }
 
@@ -2556,6 +2555,8 @@ class PanBaidu {
     }
 
     async getPlayUrl(data) {
+        await this.clearSaveDir()
+
         let videoData = await this.getDownload(
             data.shareId,
             data.fid,
@@ -2733,22 +2734,6 @@ class PanBaidu {
 
         await this.getBdstoken()
         let bdstoken = this.bdstoken
-        if (!bdstoken) {
-            try {
-                const userInfo = await this.api(
-                    'api/gettemplatevariable?clienttype=0&app_id=250528&web=1&fields=["bdstoken","token","uk","isdocuser","servertime"]',
-                    {},
-                    { Cookie: this.cookie },
-                    'get'
-                )
-                if (userInfo && userInfo.result && userInfo.result.bdstoken) {
-                    bdstoken = userInfo.result.bdstoken
-                }
-            } catch (error) {
-                return
-            }
-        }
-
         if (!bdstoken) {
             return
         }
