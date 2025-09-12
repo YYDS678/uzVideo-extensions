@@ -1,5 +1,5 @@
 //@name:夸克|UC|天翼|123|百度|解析 网盘解析工具
-//@version:28
+//@version:29
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
@@ -441,6 +441,7 @@ class QuarkUC {
                 info.error = '转存失败，可能空间不足 或 cookie 错误～'
                 return info
             }
+            this.saveFileIdCaches = {}
             this.saveFileIdCaches[fileId] = saveFileId
 
             let urls = await this.getVideoPlayUrl({ fileId: fileId })
@@ -453,7 +454,6 @@ class QuarkUC {
             playData.error = error.toString()
         }
         playData.playHeaders = this.playHeaders
-        this.clearSaveDir()
         return playData
     }
 
@@ -563,21 +563,6 @@ class QuarkUC {
             }
         }
     }
-    async getVip() {
-        if (this.cookie == '') {
-            this.isVip = false
-            return
-        }
-        const listData = await this.api(
-            `member?${this.pr}&uc_param_str=&fetch_subscribe=true&_ch=home&fetch_identity=true`,
-            null,
-            3,
-            'get'
-        )
-        this.isVip =
-            listData.data?.member_type === 'EXP_SVIP' ||
-            listData.data?.member_type === 'SUPER_VIP'
-    }
 
     async listFile(shareData, videos, subtitles, shareId, folderId, page) {
         if (page == null) page = 1
@@ -680,31 +665,25 @@ class QuarkUC {
     async clearSaveDir() {
         if (this.saveDirId == null) return
         const listData = await this.api(
-            `file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,name:desc`,
-            null,
-            3,
-            'get'
-        )
-        if (
-            listData.data != null &&
-            listData.data.list != null &&
-            listData.data.list.length > 0
-        ) {
-            await this.api(`file/delete?${this.pr}`, {
+            `file/delete?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,name:desc`,
+            {
                 action_type: 2,
-                filelist: listData.data.list.map((v) => v.fid),
+                filelist: [this.saveDirId],
                 exclude_fids: [],
-            })
+            },
+            3,
+            'post'
+        )
+        if (listData.status === 200) {
+            this.saveDirId = null
         }
-        this.saveFileIdCaches = {}
+
     }
 
     /**
      * 创建保存目录
      */
     async createSaveDir() {
-        if (this.saveDirId != null) return
-        await this.getVip()
         const listData = await this.api(
             `file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,name:desc`,
             null,
