@@ -1,29 +1,12 @@
 [
   {
     "name": "自定义弹幕扩展",
-    "version": 13,
+    "version": 15,
     "remark": "v1.6.60 及以上版本可用",
     "env": "自定义弹幕解析接口##格式 线路名称1@地址1|线路名称2@地址2&&自定义弹幕屏蔽列表##使用|分隔，如：广告|推广|关注&&自定义弹幕采集线路##格式 线路名称1@地址1|线路名称2@地址2",
-    "codeID": "D9T0qMw4DBq9G5kJ0Grcl80XdWotNxRM",
+    "codeID": "LGHQZefspCPhRRPA9VWH3KFkn70UyYnw",
     "order": "A01",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu4.txt",
-    "type": 400
-  },
-  {
-    "name": "弹幕扩展",
-    "version": 11,
-    "remark": "搜不到就算了，不要那么执着",
-    "env": "弹幕解析地址##内置 4 条线路。格式 地址1;地址2",
-    "codeID": "4Y6DDMATfbw0Rg0Y2AOGpfmpU2cgspFf",
-    "order": "A02",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu2.txt",
-    "type": 400
-  },
-  {
-    "name": "弹幕扩展",
-    "version": 1,
-    "order": "A03",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/danMu/js/danMu.js",
+    "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/danMu/js/danMu4.txt",
     "type": 400
   }
 ]
