@@ -1,5 +1,15 @@
 [
   {
+    "name": "[荐] 豆瓣",
+    "version": 3,
+    "remark": "🍃豆儿出品，不属精品！",
+    "webSite": "https://movie.douban.com",
+    "codeID": "SiU95hHc6tmlpYMzdZ8CgCi6izNKs2dT",
+    "order": "A00",
+    "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Jian_douban2.txt",
+    "type": 101
+  },
+  {
     "name": "[盘] 玩偶",
     "version": 3,
     "webSite": "http://wogg.xxooo.cf",
@@ -41,8 +51,8 @@
   },
   {
     "name": "[盘] 二小",
-    "version": 1,
-    "webSite": "https://2xiaopan.fun",
+    "version": 2,
+    "webSite": "http://2xiaopan.fun",
     "order": "A06",
     "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Pan_erxiao.js",
     "type": 101
@@ -102,15 +112,14 @@
     "type": 101
   },
   {
-    "name": "[盘] 雷鲸",
-    "version": 4,
-    "remark": "来自proversion2024",
-    "webSite": "https://www.leijing.xyz",
-    "codeID": "GgryhjYVgQMDUw4f",
-    "instance": "leiJing20241126",
+    "name": "[盘] 雷鲸²",
+    "version": 1,
+    "remark": "🍃豆儿出品，不属精品！",
+    "webSite": "https://www.leijing.xyz/",
+    "codeID": "mQuJDktDs81PNT2i0XJ2Udvo1u9xrkA6",
     "order": "A13",
-    "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Pan_leijing.txt",
-    "type": 100
+    "api": "https://raw.githubusercontent.com/woleigedouer/uzVideo-extensions/main/vod/js/Pan_leijing2.txt",
+    "type": 101
   },
   {
     "name": "[盘] 南风",
@@ -153,7 +162,7 @@
     "type": 101
   },
   {
-    "name": "[盘] TG纯搜",
+    "name": "[盘] TG搜²",
     "version": 7,
     "remark": "🍃豆儿出品，不属精品！免代理纯搜索，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个",
     "env": "TG搜API地址##https://tgsou.252035.xyz",
