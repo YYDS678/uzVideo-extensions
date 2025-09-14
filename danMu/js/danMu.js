@@ -2,6 +2,7 @@
 //@version:1
 //@remark:
 //@order: A03
+//@deprecated:1
 // ignore
 import {} from '../../core/uz3lib.js'
 import {} from '../../core/uzUtils.js'

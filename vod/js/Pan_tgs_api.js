@@ -1,4 +1,4 @@
-//@name:[盘] TG纯搜
+//@name:[盘] TG搜²
 //@version:7
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk
 //@env:TG搜API地址##https://tgsou.252035.xyz

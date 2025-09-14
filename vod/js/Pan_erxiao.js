@@ -1,12 +1,12 @@
 // ignore
 //@name:[盘] 二小
-//@version:1
-//@webSite:https://2xiaopan.fun
+//@version:2
+//@webSite:http://2xiaopan.fun
 //@remark:
 //@order: A06
 // ignore
 const appConfig = {
-    _webSite: 'https://2xiaopan.fun',
+    _webSite: 'http://2xiaopan.fun',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
