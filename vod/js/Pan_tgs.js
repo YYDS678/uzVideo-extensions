@@ -1,5 +1,5 @@
 //@name:[盘] TG搜
-//@version:8
+//@version:9
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
@@ -248,12 +248,13 @@ async function getTGList(url, isSearchContext = false){
         const messageList = $('.tgme_widget_message_bubble')
         for (let i = 0; i < messageList.length; i++) {
             const message = messageList[i]
-            const aList = $(message).find('a')
+	            const messageContainer = $(message).closest('.tgme_widget_message')
+            const aList = messageContainer.find('a')
             const video = new VideoDetail()
 
             // --- 提取消息ID ---
-            const postIdStr = $(message).attr('data-post')?.split('/')?.[1];
-            video.message_id = parseInt(postIdStr) || 0; // 存储消息ID
+            const postIdStr = messageContainer.attr('data-post')?.split('/')?.[1];
+            video.message_id = parseInt(postIdStr || '0') || 0; // 存储消息ID
             // --- 提取消息ID结束 ---
 
             for (let j = 0; j < aList.length; j++) {
@@ -296,10 +297,15 @@ async function getTGList(url, isSearchContext = false){
                     .replace(/^(名称[：:])/, '')
                     .trim();
             }
+	                // 标题清理 v2：
+	                // 1) 去掉开头连续的 emoji/标点/空白，但保留各种左括号（避免残留“】”）
+	                cleanedTitle = cleanedTitle
+	                    .replace(/^[^\u4e00-\u9fa5A-Za-z0-9\(\[\{（【《「『〔〖〈﹝［]+/, '')
+	                    .trim();
 
             // 首先分配初始清理后的标题
             video.vod_name = cleanedTitle;
-            const ids = _getAllPanUrls(message)
+            const ids = _getAllPanUrls(messageContainer.html() || "")
             video.vod_id = JSON.stringify(ids)
 
             // --- 新的备注逻辑：从URL确定提供商 ---
