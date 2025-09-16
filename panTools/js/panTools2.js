@@ -1,5 +1,5 @@
 //@name:夸克|UC|天翼|123|百度|解析 网盘解析工具
-//@version:29
+//@version:30
 //@remark:iOS14 以上版本可用,App v1.6.54 及以上版本可用
 //@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
@@ -2092,8 +2092,6 @@ class PanBaidu {
         }
         this.apiUrl = 'https://pan.baidu.com/'
         this.shareTokenCache = {}
-        this.saveDirName = ''
-        this.saveDirId = null
         this.subtitleExts = ['.srt', '.ass', '.scc', '.stl', '.ttml']
         this.subvideoExts = [
             '.mp4',
@@ -2122,33 +2120,10 @@ class PanBaidu {
             '.dv',
             '.m2v',
         ]
-        // 2小时自动清理
-        // this.cleanupInterval = setInterval(() => {
-        //     this.clearSaveDir()
-        // }, 2 * 60 * 60 * 1000)
+
     }
 
     uzTag = ''
-
-    bdstoken = ''
-
-    async getBdstoken() {
-        if (this.bdstoken.length < 1) {
-            try {
-                const userInfo = await this.api(
-                    'api/gettemplatevariable?clienttype=0&app_id=250528&web=1&fields=["bdstoken","token","uk","isdocuser","servertime"]',
-                    {},
-                    { Cookie: this.cookie },
-                    'get'
-                )
-                if (userInfo && userInfo.result && userInfo.result.bdstoken) {
-                    this.bdstoken = userInfo.result.bdstoken
-                }
-            } catch (error) {
-                return
-            }
-        }
-    }
 
     // 获取完整的 cookie
     get cookie() {
@@ -2188,75 +2163,70 @@ class PanBaidu {
         }
     }
 
-    // async initBaidu(db, cfg) {
-    //     // 初始化百度云盘
-    //     if (this.cookie) {
-    //         await this.createSaveDir();
-    //     }
-    // }
 
-    async createSaveDir() {
-        // 创建保存目录
-        if (!this.cookie) {
-            return null
-        }
+
+    async getDirectPlayUrl(uk, shareid, fsid, randsk) {
+        // 获取原画直链地址（更稳定的播放方式）
         try {
-            await this.getBdstoken()
-            const listResp = await this.api(
-                'api/list',
-                {
-                    dir: '/',
-                    order: 'name',
-                    desc: 0,
-                    showempty: 0,
-                    web: 1,
-                    app_id: 250528,
-                },
-                { Cookie: this.cookie },
-                'get'
-            )
-
-            if (listResp.errno !== 0) {
+            const uid = await this.getUid()
+            if (!uid) {
                 return null
             }
 
-            const drpyDir = listResp.list.find(
-                (item) =>
-                    item.isdir === 1 &&
-                    item.server_filename === this.saveDirName
-            )
-
-            if (drpyDir) {
-                this.saveDirId = drpyDir.fs_id
-                return this.saveDirId
+            const headers = {
+                'User-Agent': 'netdisk;P2SP;2.2.91.136;android-android;',
+                'Cookie': this.cookie
             }
 
-            const createResp = await this.api(
-                `api/create?bdstoken=${this.bdstoken}`,
-                {
-                    path: `/${this.saveDirName}`,
-                    isdir: 1,
-                    block_list: '[]',
-                    // web: 1,
-                    // app_id: 250528,
-                },
-                {
-                    Cookie: this.cookie,
-                    Referer: ' https://pan.baidu.com/disk/main?from=1026962h',
-                },
-                'post'
-            )
+            const devuid = "73CED981D0F186D12BC18CAE1684FFD5|VSRCQTF6W"
+            const time = String(Date.now())
+            const bduss = this.cookie.match(/BDUSS=([^;]+)/)?.[1]
 
-            if (createResp.errno !== 0) {
+            if (!bduss) {
                 return null
             }
 
-            this.saveDirId = createResp.fs_id
-            return this.saveDirId
+            // 生成签名 - 完全按照 baidu.js 的实现
+            const rand = this.sha1(this.sha1(bduss) + uid + "ebrcUYiuxaZv2XGu7KIYKxUrqfnOfpDF" + time + devuid + "11.30.2ae5821440fab5e1a61a025f014bd8972")
+
+            const apiPath = `share/list?shareid=${shareid}&uk=${uk}&fid=${fsid}&sekey=${randsk}&origin=dlna&devuid=${devuid}&clienttype=1&channel=android_12_zhao_bd-netdisk_1024266h&version=11.30.2&time=${time}&rand=${rand}`
+
+            const response = await this.api(apiPath, {}, headers, 'get')
+
+            if (response.errno === 0 && response.list && response.list.length > 0) {
+                return response.list[0].dlink
+            }
+
+            return null
         } catch (error) {
             return null
         }
     }
+
+    sha1(message) {
+        // SHA1 哈希函数 - 完全按照 baidu.js 的实现
+        return Crypto.SHA1(message).toString()
+    }
+
+    async getUid() {
+        // 获取用户ID - 完全按照 baidu.js 的实现
+        try {
+            const response = await axios.get(
+                'https://mbd.baidu.com/userx/v1/info/get?appname=baiduboxapp&fields=%20%20%20%20%20%20%20%20%5B%22bg_image%22,%22member%22,%22uid%22,%22avatar%22,%20%22avatar_member%22%5D&client&clientfrom&lang=zh-cn&tpl&ttt',
+                {
+                    headers: {
+                        'User-Agent': this.baseHeader['User-Agent'],
+                        'Cookie': this.cookie
+                    }
+                }
+            )
+            return response.data?.data?.fields?.uid || null
+        } catch (error) {
+            return null
+        }
+    }
+
+
 
     async api(url, data = {}, headers = {}, method = 'post', retry = 3) {
         // 发送API请求
@@ -2448,7 +2418,6 @@ class PanBaidu {
                         file_name: item.server_filename,
                         size: item.size,
                         path: parentDrpyPath,
-                        full_path: `/${this.saveDirName}${parentDrpyPath}/${item.server_filename}`,
                         file: true,
                     }
 
@@ -2476,7 +2445,6 @@ class PanBaidu {
                         file_name: item.server_filename,
                         size: item.size,
                         path: '',
-                        full_path: `/${this.saveDirName}/${item.server_filename}`,
                         file: true,
                     }
 
@@ -2534,240 +2502,57 @@ class PanBaidu {
     }
 
     async getPlayUrl(data) {
-        await this.clearSaveDir()
+        // 直接获取原画播放地址，无需转存
+        if (!this.cookie) {
+            return {
+                urls: [],
+                error: '请在环境变量中添加百度网盘Cookie'
+            }
+        }
 
-        let videoData = await this.getDownload(
-            data.shareId,
-            data.fid,
-            data.file_name
-        )
+        try {
+            // 从缓存中获取分享信息
+            const cachedData = this.shareTokenCache[data.shareId]
+            if (!cachedData) {
+                return {
+                    urls: [],
+                    error: '未找到分享信息，请重新获取文件列表'
+                }
+            }
 
-        return {
-            urls: [
-                {
+            // 获取原画直链
+            const directUrl = await this.getDirectPlayUrl(
+                cachedData.uk,
+                cachedData.shareid,
+                data.fid,
+                cachedData.randsk
+            )
+
+            if (!directUrl) {
+                return {
+                    urls: [],
+                    error: '获取播放地址失败'
+                }
+            }
+
+            return {
+                urls: [{
                     name: '原画',
-                    url: videoData.dlink,
+                    url: directUrl,
                     headers: {
-                        'User-Agent':
-                            'netdisk;1.4.2;22021211RC;android-android;12;JSbridge4.4.0;jointBridge;1.1.0;',
-                        Referer: 'https://pan.baidu.com',
+                        'User-Agent': 'netdisk;P2SP;2.2.91.136;android-android;',
+                        'Referer': 'https://pan.baidu.com',
                     },
-                },
-            ],
-        }
-    }
-    async getDownload(shareId, fileId, filename) {
-        // 获取文件下载链接
-        if (!this.shareTokenCache[shareId]) {
-            return null
-        }
-
-        if (!fileId || !filename) {
-            return null
-        }
-
-        if (!this.cookie) {
-            return null
-        }
-
-        const shareData = {
-            shareId,
-            sharePwd: this.shareTokenCache[shareId].sharePwd || '',
-        }
-        const isSaved = await this.save(shareData, fileId)
-        if (!isSaved) {
-            return null
-        }
-
-        const headers = { ...this.baseHeader, Cookie: this.cookie || '' }
-        let retryCount = 1
-        const fullPath = `/${this.saveDirName}/${filename}`
-
-        while (retryCount >= 0) {
-            try {
-                const mediaInfo = await this.api(
-                    `api/mediainfo`,
-                    {
-                        type: 'M3U8_FLV_264_480',
-                        path: fullPath,
-                        clienttype: 80,
-                        origin: 'dlna',
-                    },
-                    headers,
-                    'get'
-                )
-                if (mediaInfo.info?.dlink) {
-                    return {
-                        dlink: mediaInfo.info.dlink,
-                        headers,
-                        full_path: fullPath,
-                    }
-                }
-
-                const downloadInfo = await this.api(
-                    `api/download`,
-                    {
-                        type: 'download',
-                        path: fullPath,
-                        app_id: 250528,
-                    },
-                    headers,
-                    'get'
-                )
-                if (downloadInfo.info?.dlink) {
-                    return {
-                        dlink: downloadInfo.info.dlink,
-                        headers,
-                        is_direct: true,
-                        full_path: fullPath,
-                    }
-                }
-
-                retryCount--
-                if (retryCount >= 0) {
-                    await this.delay(1000)
-                }
-            } catch (error) {
-                retryCount--
-                if (retryCount >= 0) await this.delay(1000)
-            }
-        }
-
-        return null
-    }
-
-    async save(shareData, fileFsId) {
-        // 保存文件到指定目录
-        if (!this.cookie) {
-            return false
-        }
-
-        if (!this.saveDirId) {
-            this.saveDirId = await this.createSaveDir()
-            if (!this.saveDirId) {
-                return false
-            }
-        }
-
-        if (!this.shareTokenCache[shareData.shareId]) {
-            await this.getShareToken(shareData)
-            if (!this.shareTokenCache[shareData.shareId]) {
-                return false
-            }
-        }
-
-        const headers = {
-            ...this.baseHeader,
-            Cookie: this.cookie || '',
-        }
-
-        const tokenData = await this.shareTokenCache[shareData.shareId]
-
-        try {
-            const transferResp = await this.api(
-                `share/transfer?shareid=${tokenData.shareid}&from=${tokenData.uk}&sekey=${tokenData.randsk}&ondup=newcopy&async=1&channel=chunlei&web=1&app_id=250528`,
-                {
-                    path: `/${this.saveDirName}`,
-                    fsidlist: JSON.stringify([fileFsId]),
-                },
-                {
-                    headers,
-                },
-                'post'
-            )
-            if (transferResp.errno === 0) {
-                return true
-            } else if (transferResp.errno === 113) {
-                return true
-            } else if (
-                transferResp.errno === -62 ||
-                transferResp.errno === -9
-            ) {
-                delete this.shareTokenCache[shareData.shareId]
-                return false
-            } else {
-                return false
+                }],
             }
         } catch (error) {
-            return false
+            return {
+                urls: [],
+                error: error.toString()
+            }
         }
     }
 
-    delay(ms) {
-        // 延迟函数
-        return new Promise((resolve) => setTimeout(resolve, ms))
-    }
-
-    async clearSaveDir() {
-        // 清理保存目录
-        if (!this.cookie) {
-            return
-        }
-
-        if (!this.saveDirId) {
-            this.saveDirId = await this.createSaveDir()
-            if (!this.saveDirId) {
-                return
-            }
-        }
-
-        await this.getBdstoken()
-        let bdstoken = this.bdstoken
-        if (!bdstoken) {
-            return
-        }
-
-        try {
-            const listResp = await this.api(
-                'api/list',
-                {
-                    dir: `/${this.saveDirName}`,
-                    order: 'time',
-                    desc: 1,
-                    showempty: 0,
-                    web: 1,
-                    app_id: 250528,
-                    channel: 'chunlei',
-                },
-                { Cookie: this.cookie },
-                'get'
-            )
-
-            if (listResp.errno !== 0) {
-                return
-            }
-
-            if (!listResp.list || listResp.list.length === 0) {
-                return
-            }
-
-            const headers = {
-                'User-Agent':
-                    'netdisk;1.4.2;22021211RC;android-android;12;JSbridge4.4.0;jointBridge;1.1.0;',
-                Cookie: this.cookie || '',
-            }
-
-            const filePaths = listResp.list.map(
-                (item) => `/${this.saveDirName}/${item.server_filename}`
-            )
-            const deleteResp = await this.api(
-                'api/filemanager?opera=delete',
-                {
-                    filelist: JSON.stringify(filePaths),
-                    bdstoken: bdstoken,
-                },
-                headers,
-                'post'
-            )
-
-            if (deleteResp.errno === 0) {
-                console.log('清理保存目录成功')
-            }
-        } catch (error) {
-            console.log('清理保存目录失败:', error.message)
-            return
-        }
-    }
 }
 
 //MARK: 网盘扩展统一入口
@@ -2904,7 +2689,7 @@ class PanTools {
         //MARK: 2. 请补充自定义转存文件夹名称
         this.quark.saveDirName = dirName
         this.uc.saveDirName = dirName
-        this.baidu.saveDirName = dirName
+        // 百度网盘不再需要转存文件夹
     }
 
     /**
@@ -2914,7 +2699,7 @@ class PanTools {
         //MARK: 3. 请实现清理转存文件夹
         await this.quark.clearSaveDir()
         await this.uc.clearSaveDir()
-        await this.baidu.clearSaveDir()
+        // 百度网盘不再需要清理转存文件夹
     }
 
     /**
