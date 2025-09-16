@@ -1,7 +1,7 @@
 [
   {
     "name": "夸克|UC|天翼|123|百度|解析 网盘解析工具",
-    "version": 29,
+    "version": 30,
     "remark": "iOS14 以上版本可用,App v1.6.54 及以上版本可用",
     "env": "百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2",
     "order": "A",
@@ -234,7 +234,7 @@
   },
   {
     "name": "[盘] TG搜",
-    "version": 8,
+    "version": 9,
     "remark": "格式 频道名称1@频道id1&频道名称2@频道id2",
     "env": "TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。",
     "webSite": "123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk",
