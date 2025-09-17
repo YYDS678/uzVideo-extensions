@@ -414,7 +414,7 @@ class Pan189 {
                         remark: `[${size}${unit}]`,
                         panType: this.getPanType(),
                         data: element,
-                        fromName: key,
+                        // fromName: key,
                     })
                 }
             }
