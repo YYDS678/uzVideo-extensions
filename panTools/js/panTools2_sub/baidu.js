@@ -568,7 +568,7 @@ class PanBaidu {
             element.shareId = shareData.shareId
             panVideos.push({
                 name: element.file_name,
-                panType: PanType.Baidu,
+                panType: this.getPanType(),
                 remark: remark,
                 data: element,
             })
