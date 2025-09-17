@@ -4,7 +4,7 @@
     "version": 4,
     "remark": "iOS14 以上版本可用",
     "codeID": "hZC5h9Id3nP6mwaolSXqNemBLQCMFqhw",
-    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/recommend/js/douban.txt",
+    "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/dev/recommend/js/douban.txt",
     "type": 200
   }
 ]
