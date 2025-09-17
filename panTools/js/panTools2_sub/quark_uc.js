@@ -50,8 +50,6 @@ class QuarkUC {
         this.saveFileIdCaches = {}
         this.saveDirId = null
         this.saveDirName = 'uz影视'
-        this.isVip = false
-        this.updateCookie = function () {}
     }
     uzTag = ''
     ut = ''
@@ -701,7 +699,7 @@ class QuarkUC {
      */
     getPanType(args) {
         // MARK: 需要实现
-        return this.isQuark ? 'Quark' : 'UC'
+        return this.isQuark ? '夸克' : 'UC'
     }
 
     getCookieName() {
