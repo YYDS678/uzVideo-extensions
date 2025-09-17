@@ -1,366 +1,454 @@
+/**
+ * uzVideo Extensions 构建脚本
+ * ----------------------------------------
+ * 功能：
+ * 1. 解析各目录下 JS/TXT 脚本的注释信息，提取元数据。
+ * 2. 按规则合并为 all-in-one JSON 配置。
+ * 3. 支持环境变量提取 (env.json)。
+ * 4. 自动替换子目录内容 (sub 文件夹)。
+ * 5. 生成压缩包 uzAio.zip。
+ * 6. 自动更新 README.md。
+ */
+
 const fs = require('fs')
 const path = require('path')
-const child_process = require('child_process')
 const archiver = require('archiver')
+const { transformSync } = require('esbuild')
+const child_process = require('child_process')
 
+// ================== 常量定义 ==================
+
+// 各目录对应的类型映射
 const TYPE_MAPPING = {
-  'danMu/js': 400,
-  'panTools/js': 300,
-  'recommend/js': 200,
-  'vod/js': 101,
+    'danMu/js': 400,
+    'panTools/js': 300,
+    'recommend/js': 200,
+    'vod/js': 101,
 }
 
-const kLocalPathTAG = '_localPathTAG_'
+const kLocalPathTAG = '_localPathTAG_' // 占位符，用于本地路径替换
 
-const getRepoInfo = () => {
-  if (process.env.GITHUB_REPOSITORY) {
-    return process.env.GITHUB_REPOSITORY.split('/')
-  }
-  try {
-    const gitUrl = require('child_process')
-      .execSync('git config --get remote.origin.url')
-      .toString()
-      .trim()
-  
-    // 支持 https://github.com/user/repo.git 和 git@github.com:user/repo.git 形式
-    // 同时匹配 SSH(git@host:owner/repo) 和 HTTPS(https://host/owner/repo) 格式
-    const matches = gitUrl.match(/(?:git@([^:]+):|https?:\/\/([^\/]+)\/)([^\/]+)\/([^\/.]+)(?:\.git)?$/)
+// ================== 工具函数 ==================
 
-    if (!matches || matches.length < 5) throw new Error('无法解析Git远程URL')
-
-    const host = matches[1] || matches[2]  // 匹配 SSH 或 HTTPS 的主机名
-    const owner = matches[3]
-    const repo = matches[4]
-  
-    return [owner, repo]  // 只需要返回拥有者和仓库名
-  } catch (error) {
-    throw new Error('获取仓库信息失败: ' + error.message)
-  }
-}
-
-const parseComments = (filePath) => {
-  const content = fs.readFileSync(filePath, 'utf8')
-  const deprecated = extractValue(content, '@deprecated:')
-  if (deprecated && parseInt(deprecated) == 1) return null
-
-  const metadata = {
-    name: extractValue(content, '@name:'),
-    webSite: extractValue(content, '@webSite:'),
-    version: extractValue(content, '@version:'),
-    remark: extractValue(content, '@remark:'),
-    env: extractValue(content, '@env:'),
-    codeID: extractValue(content, '@codeID:'),
-    type: extractValue(content, '@type:'),
-    instance: extractValue(content, '@instance:'),
-    isAV: extractValue(content, '@isAV:'),
-    order: extractValue(content, '@order:'),
-  }
-
-  if (!metadata.name) return null
-
-  const relativePath = path.relative(process.cwd(), filePath)
-  const dirPath = path.dirname(relativePath)
-  if (!metadata.type?.trim()) {
-    metadata.type = TYPE_MAPPING[dirPath]
-  }
-  // 获取当前分支名称，默认为 main
-  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
-  const [owner, repo] = getRepoInfo()
-  metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${kLocalPathTAG}${relativePath.replace(/\\/g, '/')}`
-  return metadata
-}
-
+/**
+ * 从内容中提取标记对应的值
+ * @param {string} content - 文件内容
+ * @param {string} tag - 形如 @name: 的标记
+ */
 const extractValue = (content, tag) => {
-  const regex = new RegExp(`^.*${tag}(.*)$`, 'm')
-  const match = content.match(regex)
-  return match ? match[1].trim() : ''
+    const regex = new RegExp(`^.*${tag}(.*)$`, 'm')
+    const match = content.match(regex)
+    return match ? match[1].trim() : ''
 }
-const main = async () => {
-  const directories = ['danMu/js', 'panTools/js', 'recommend/js', 'vod/js']
-  const allInOneResult = {}
-  const avResultList = []
 
-  directories.forEach((dir) => {
-    const fullPath = path.join(__dirname, '..', dir)
-    if (!fs.existsSync(fullPath)) return
+/**
+ * 获取当前仓库信息（owner/repo）
+ * - 优先读取 GitHub Actions 提供的环境变量
+ * - 其次尝试从 git remote.origin.url 中解析
+ */
+const getRepoInfo = () => {
+    if (process.env.GITHUB_REPOSITORY) {
+        return process.env.GITHUB_REPOSITORY.split('/')
+    }
+    try {
+        const gitUrl = child_process
+            .execSync('git config --get remote.origin.url')
+            .toString()
+            .trim()
 
-    const files = fs
-      .readdirSync(fullPath)
-      .filter((f) => f.endsWith('.js') || f.endsWith('.txt'))
-      .map((f) => ({
-        file: f,
-        stat: fs.statSync(path.join(fullPath, f)),
-      }))
-      // .sort((a, b) => b.stat.mtimeMs - a.stat.mtimeMs)
-      .map((f) => f.file)
+        // 支持两种形式：
+        // 1. https://github.com/user/repo.git
+        // 2. git@github.com:user/repo.git
+        const matches = gitUrl.match(
+            /(?:git@([^:]+):|https?:\/\/([^\/]+)\/)([^\/]+)\/([^\/.]+)(?:\.git)?$/
+        )
 
-    files.forEach((file) => {
-      const filePath = path.join(fullPath, file)
-      const metadata = parseComments(filePath)
-      if (metadata) {
-        const item = {
-          name: metadata.name,
-          ...(metadata.version && {
-            version: parseInt(metadata.version),
-          }),
-          ...(metadata.remark && { remark: metadata.remark }),
-          ...(metadata.env && { env: metadata.env }),
-          ...(metadata.webSite && { webSite: metadata.webSite }),
-          ...(metadata.codeID && { codeID: metadata.codeID }),
-          ...(metadata.instance && { instance: metadata.instance }),
-          ...(metadata.order && { order: metadata.order }),
-
-          api: metadata.api,
-          type: parseInt(metadata.type) || TYPE_MAPPING[dir] || 101,
+        if (!matches || matches.length < 5) {
+            throw new Error('无法解析Git远程URL')
         }
-        if (parseInt(metadata.isAV) === 1) {
-          avResultList.push(item)
-        } else {
-          const category = dir.split('/')[0]
-          allInOneResult[category] = allInOneResult[category] || []
-          allInOneResult[category].push(item)
-        }
-      }
-    })
-  })
 
-  // 定义排序函数
-  const sortByOrder = (a, b) => {
-    // 如果都有order，按order排序
+        const host = matches[1] || matches[2]
+        const owner = matches[3]
+        const repo = matches[4]
+        return [owner, repo]
+    } catch (error) {
+        throw new Error('获取仓库信息失败: ' + error.message)
+    }
+}
+
+// ================== 元数据处理 ==================
+
+/**
+ * 从 JS 文件注释中提取元数据
+ * @param {string} filePath - 文件路径
+ */
+const parseComments = (filePath) => {
+    const content = fs.readFileSync(filePath, 'utf8')
+
+    // 如果被标记为废弃，直接返回 null
+    const deprecated = extractValue(content, '@deprecated:')
+    if (deprecated && parseInt(deprecated) === 1) return null
+
+    // 提取注释中的元信息
+    const metadata = {
+        name: extractValue(content, '@name:'),
+        webSite: extractValue(content, '@webSite:'),
+        version: extractValue(content, '@version:'),
+        remark: extractValue(content, '@remark:'),
+        env: extractValue(content, '@env:'),
+        codeID: extractValue(content, '@codeID:'),
+        type: extractValue(content, '@type:'),
+        instance: extractValue(content, '@instance:'),
+        isAV: extractValue(content, '@isAV:'),
+        order: extractValue(content, '@order:'),
+    }
+
+    if (!metadata.name) return null
+
+    // 自动推导 type
+    const relativePath = path.relative(process.cwd(), filePath)
+    const dirPath = path.dirname(relativePath)
+    if (!metadata.type?.trim()) {
+        metadata.type = TYPE_MAPPING[dirPath]
+    }
+
+    // 获取当前分支，默认为 main
+    const branch = process.env.GITHUB_REF
+        ? process.env.GITHUB_REF.replace('refs/heads/', '')
+        : 'main'
+    const [owner, repo] = getRepoInfo()
+
+    // 构建远程原始文件 API 地址
+    metadata.api = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${kLocalPathTAG}${relativePath.replace(
+        /\\/g,
+        '/'
+    )}`
+
+    return metadata
+}
+
+// ================== 排序逻辑 ==================
+
+/**
+ * 排序函数，支持 order 分组与字母、长度排序
+ */
+const sortByOrder = (a, b) => {
     if (a.order && b.order) {
-      // 获取order的第一个字符(分类字母)
-      const aOrderChar = a.order.charAt(0);
-      const bOrderChar = b.order.charAt(0);
+        const aOrderChar = a.order.charAt(0)
+        const bOrderChar = b.order.charAt(0)
 
-      // 如果分类字母不同，按字母排序
-      if (aOrderChar !== bOrderChar) {
-        return aOrderChar.localeCompare(bOrderChar);
-      }
-
-      // 如果分类字母相同，按完整order值排序
-      const orderCompare = a.order.localeCompare(b.order);
-      if (orderCompare !== 0) {
-        return orderCompare;
-      }
-
-      // 如果order值也相同，按名称长度从短到长排序
-      if (a.name.length !== b.name.length) {
-        return a.name.length - b.name.length;
-      }
-
-      // 最后按名称排序
-      return a.name.localeCompare(b.name);
-    }
-    // 如果只有一个有order，有order的排前面
-    if (a.order) return -1;
-    if (b.order) return 1;
-    // 否则按name排序
-    return a.name.localeCompare(b.name);
-  };
-
-  // 为各个类别应用排序
-  for (const category of Object.keys(allInOneResult)) {
-    if (Array.isArray(allInOneResult[category])) {
-      allInOneResult[category].sort(sortByOrder);
-    }
-  }
-  
-  // avResultList 也按照order排序
-  avResultList.sort(sortByOrder);
-
-  const liveData = JSON.parse(fs.readFileSync('live/live.json', 'utf8'))
-  allInOneResult.live = liveData
-
-  const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'))
-  allInOneResult.vod.push(...cmsData)
-  
-  // 添加cms数据后再次排序vod
-  allInOneResult.vod.sort(sortByOrder);
-
-  // 按指定顺序重新组织 allInOneResult
-  const orderedResult = {
-    panTools: allInOneResult.panTools || [],
-    danMu: allInOneResult.danMu || [],
-    recommend: allInOneResult.recommend || [],
-    live: allInOneResult.live || [],
-    vod: allInOneResult.vod || []
-  }
-
-  // 生成各个目录的单独JSON文件
-  const categoryDirs = ['panTools', 'danMu', 'recommend', 'vod']
-  categoryDirs.forEach(category => {
-    if (orderedResult[category] && orderedResult[category].length > 0) {
-      // recommend目录使用douban.json作为文件名
-      const fileName = category === 'recommend' ? 'douban.json' : `${category}.json`
-      const categoryPath = path.join(category, fileName)
-      fs.writeFileSync(categoryPath, JSON.stringify(orderedResult[category], null, 2).replaceAll(kLocalPathTAG, ''))
-    }
-  })
-
-  // 写入整合后的uzAio.json
-  fs.writeFileSync('uzAio_raw.json', JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, ''))
-
-  // 写入整合后的uzAV.json
-  fs.writeFileSync('av_raw_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
-
-  let sources = [...orderedResult.panTools, ...orderedResult.danMu, ...orderedResult.recommend, ...orderedResult.live, ...orderedResult.vod, ...avResultList]
-
-  // 使用 JSDelivr CDN 加速
-  const [owner, repo] = getRepoInfo()
-  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
-  const githubRawHost = 'https://raw.githubusercontent.com'
-  const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
-
-  sources.forEach((item) => {
-    // 将 https://raw.githubusercontent.com/user/repo/branch/path 转换为 https://cdn.jsdelivr.net/gh/user/repo@branch/path
-    item.api = item.api.replace(`${githubRawHost}/${owner}/${repo}/${branch}/`, jsdelivrCDN)
-  })
-
-  fs.writeFileSync('uzAio.json', JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, ''))
-  fs.writeFileSync('av_auto.json', JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, ''))
-
-  let sourcesCopy = JSON.parse(JSON.stringify(sources))
-  let envList = []
-  const envSet = new Set() // 用于去重
-
-  sourcesCopy.forEach((item) => {
-    if (item.api.includes(kLocalPathTAG)) {
-      item.api = item.api.split(kLocalPathTAG)[1]
-    }
-    if (item.env?.length > 0) {
-      const longList = item.env.split('&&')
-      longList.forEach((env) => {
-        const oneEnv = env.split('##')
-        const envKey = oneEnv[0] // 使用环境变量名作为唯一标识
-
-        // 只有当环境变量名不存在时才添加
-        if (!envSet.has(envKey)) {
-          envSet.add(envKey)
-          envList.push({
-            name: oneEnv[0],
-            desc: oneEnv[1],
-            value: '',
-          })
+        if (aOrderChar !== bOrderChar) {
+            return aOrderChar.localeCompare(bOrderChar)
         }
-      })
+
+        const orderCompare = a.order.localeCompare(b.order)
+        if (orderCompare !== 0) return orderCompare
+
+        if (a.name.length !== b.name.length) {
+            return a.name.length - b.name.length
+        }
+
+        return a.name.localeCompare(b.name)
     }
-  })
+    if (a.order) return -1
+    if (b.order) return 1
+    return a.name.localeCompare(b.name)
+}
 
-  fs.writeFileSync('local.json', JSON.stringify(sourcesCopy, null, 2))
-  fs.writeFileSync('env.json', JSON.stringify(envList, null, 2))
-  const includePaths = {
-    directories: ['danMu', 'panTools', 'recommend', 'vod', 'live', 'cms'],
-    files: ['local.json', 'env.json'],
-    excludeFiles: ['douban.json', 'panTools.json', 'danMu.json', 'vod.json', 'README.md']
-  }
+// ================== 压缩打包逻辑 ==================
 
-  const shouldInclude = (filePath) => {
+/**
+ * 判断文件是否应该被包含进压缩包
+ */
+const shouldInclude = (filePath, includePaths) => {
     const relativePath = path.relative(process.cwd(), filePath)
     const fileName = path.basename(relativePath)
 
-    // 检查是否是要排除的文件
-    if (includePaths.excludeFiles.includes(fileName)) {
-      return false
-    }
+    if (includePaths.excludeFiles.includes(fileName)) return false
 
-    // 检查文件是否包含 @deprecated 标记
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-      try {
-        const content = fs.readFileSync(filePath, 'utf8')
-        if (content.includes('@deprecated:')) {
-          const deprecated = extractValue(content, '@deprecated:')
-          if (deprecated && parseInt(deprecated) == 1) {
-            return false
-          }
-        }
-      } catch (error) {
-        // 如果读取文件失败，继续处理
-      }
-    }
-
-    // 检查是否是指定的文件
-    if (includePaths.files.includes(relativePath)) {
-      return true
-    }
-
-    // 检查是否在指定的目录下
-    return includePaths.directories.some((dir) => relativePath.startsWith(dir))
-  }
-
-  // Create a zip archive
-  const output = fs.createWriteStream('uzAio.zip')
-  const archive = archiver('zip', {
-    zlib: { level: 9 }, // Set the compression level
-  })
-
-  output.on('close', () => {
-    console.log(archive.pointer() + ' total bytes')
-    console.log('uzAio.zip has been created')
-  })
-
-  archive.on('error', (err) => {
-    throw err
-  })
-
-  archive.on('warning', (err) => {
-    if (err.code === 'ENOENT') {
-      console.warn('Warning:', err)
-    } else {
-      throw err
-    }
-  })
-
-  archive.pipe(output)
-
-  try {
-    const walk = (directoryPath) => {
-      const files = fs.readdirSync(directoryPath)
-
-      files.forEach((file) => {
         try {
-          const filePath = path.join(directoryPath, file)
-          const stats = fs.statSync(filePath)
+            const content = fs.readFileSync(filePath, 'utf8')
+            if (content.includes('@deprecated:')) {
+                const deprecated = extractValue(content, '@deprecated:')
+                if (deprecated && parseInt(deprecated) === 1) return false
+            }
+        } catch {}
+    }
 
-          // 只处理包含的文件和目录
-          if (!shouldInclude(filePath)) {
-            return
-          }
+    if (includePaths.files.includes(relativePath)) return true
+    // 排除 _sub 目录下的文件
+    if (relativePath.includes('_sub')) return false
+    return includePaths.directories.some((dir) => relativePath.startsWith(dir))
+}
 
-          if (stats.isDirectory()) {
-            walk(filePath)
-          } else {
-            archive.file(filePath, {
-              name: path.relative(process.cwd(), filePath),
-            })
-          }
-        } catch (err) {
-          console.error(`Error processing ${file}:`, err)
+// ================== README 更新 ==================
+
+/**
+ * 更新 README.md 文件中的分支信息
+ */
+const updateMarkdownFiles = async () => {
+    const readmeContent = fs.readFileSync('readme/README.main.md', 'utf8')
+    const [owner, repo] = getRepoInfo()
+    const branch = process.env.GITHUB_REF
+        ? process.env.GITHUB_REF.replace('refs/heads/', '')
+        : 'main'
+
+    const cur = `${owner}/${repo}/refs/heads/${branch}`
+    const updatedContent = readmeContent.replaceAll(
+        'YYDS678/uzVideo-extensions/refs/heads/main',
+        cur
+    )
+    fs.writeFileSync('README.md', updatedContent)
+}
+
+// ================== 主函数 ==================
+
+const main = async () => {
+    // 1. 定义要扫描的目录
+    const directories = ['danMu/js', 'panTools/js', 'recommend/js', 'vod/js']
+    const allInOneResult = {}
+    const avResultList = []
+
+    // 2. 遍历目录，解析文件元数据
+    directories.forEach((dir) => {
+        const fullPath = path.join(__dirname, '..', dir)
+        if (!fs.existsSync(fullPath)) return
+
+        const files = fs
+            .readdirSync(fullPath)
+            .filter((f) => f.endsWith('.js') || f.endsWith('.txt'))
+            .map((f) => f)
+
+        files.forEach((file) => {
+            const filePath = path.join(fullPath, file)
+
+            // 如果存在同名_sub 文件夹，则拼接子内容
+            const subDir = path.join(
+                fullPath,
+                path.basename(file, '.js') + '_sub'
+            )
+            if (fs.existsSync(subDir)) {
+                let allFilesContent = ''
+                const subFiles = fs
+                    .readdirSync(subDir)
+                    .filter((f) => f.endsWith('.js') || f.endsWith('.txt'))
+
+                subFiles.forEach((subFile) => {
+                    const subFilePath = path.join(subDir, subFile)
+                    let subFileContent = fs.readFileSync(subFilePath, 'utf8')
+
+                    // 移除 // ignore 包裹的内容
+                    if (subFileContent.includes('// ignore')) {
+                        subFileContent = subFileContent.replace(
+                            /\/\/\s*ignore[\s\S]*?\/\/\s*ignore/g,
+                            ''
+                        )
+                    }
+
+                    // GitHub Actions 环境下压缩子文件
+                    if (process.env.GITHUB_ACTIONS) {
+                        try {
+                            subFileContent = transformSync(subFileContent, {
+                                minifyWhitespace: true,
+                                format: 'esm',
+                            }).code
+                        } catch (error) {
+                            console.warn('esbuild 压缩失败:', error.message)
+                        }
+                    }
+
+                    allFilesContent +=
+                        `\n// MARK: ${subFile}\n// 请勿直接修改，请修改 ${subFile} 文件\n// prettier-ignore\n` +
+                        subFileContent
+                })
+
+                // 将子文件内容替换进主文件
+                let fileContent = fs.readFileSync(filePath, 'utf8')
+                const tag = '//### 替换识别文本 ### uzVideo-Ext-Sub ###'
+                if (fileContent.includes(tag)) {
+                    fileContent = fileContent.replace(
+                        new RegExp(`${tag}[\\s\\S]*$`),
+                        tag
+                    )
+                    fileContent += '\n\n\n' + allFilesContent
+                    fs.writeFileSync(filePath, fileContent)
+                }
+            }
+
+            // 提取文件元数据
+            const metadata = parseComments(filePath)
+            if (metadata) {
+                const item = {
+                    name: metadata.name,
+                    ...(metadata.version && {
+                        version: parseInt(metadata.version),
+                    }),
+                    ...(metadata.remark && { remark: metadata.remark }),
+                    ...(metadata.env && { env: metadata.env }),
+                    ...(metadata.webSite && { webSite: metadata.webSite }),
+                    ...(metadata.codeID && { codeID: metadata.codeID }),
+                    ...(metadata.instance && { instance: metadata.instance }),
+                    ...(metadata.order && { order: metadata.order }),
+                    api: metadata.api,
+                    type: parseInt(metadata.type) || TYPE_MAPPING[dir] || 101,
+                }
+
+                if (parseInt(metadata.isAV) === 1) {
+                    avResultList.push(item)
+                } else {
+                    const category = dir.split('/')[0]
+                    allInOneResult[category] = allInOneResult[category] || []
+                    allInOneResult[category].push(item)
+                }
+            }
+        })
+    })
+
+    // 3. 各类数据排序
+    Object.keys(allInOneResult).forEach((cat) => {
+        if (Array.isArray(allInOneResult[cat])) {
+            allInOneResult[cat].sort(sortByOrder)
         }
-      })
+    })
+    avResultList.sort(sortByOrder)
+
+    // 4. 合并 live 和 cms 数据
+    const liveData = JSON.parse(fs.readFileSync('live/live.json', 'utf8'))
+    allInOneResult.live = liveData
+
+    const cmsData = JSON.parse(fs.readFileSync('cms/cms.json', 'utf8'))
+    allInOneResult.vod.push(...cmsData)
+    allInOneResult.vod.sort(sortByOrder)
+
+    // 5. 重新组织顺序
+    const orderedResult = {
+        panTools: allInOneResult.panTools || [],
+        danMu: allInOneResult.danMu || [],
+        recommend: allInOneResult.recommend || [],
+        live: allInOneResult.live || [],
+        vod: allInOneResult.vod || [],
+    }
+
+    // 6. 输出 JSON 文件（分类单独、整合、AV）
+    const categoryDirs = ['panTools', 'danMu', 'recommend', 'vod']
+    categoryDirs.forEach((category) => {
+        if (orderedResult[category]?.length > 0) {
+            const fileName =
+                category === 'recommend' ? 'douban.json' : `${category}.json`
+            fs.writeFileSync(
+                path.join(category, fileName),
+                JSON.stringify(orderedResult[category], null, 2).replaceAll(
+                    kLocalPathTAG,
+                    ''
+                )
+            )
+        }
+    })
+
+    fs.writeFileSync(
+        'uzAio_raw.json',
+        JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, '')
+    )
+    fs.writeFileSync(
+        'av_raw_auto.json',
+        JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, '')
+    )
+
+    // 7. 替换为 jsDelivr CDN 地址
+    const [owner, repo] = getRepoInfo()
+    const branch = process.env.GITHUB_REF
+        ? process.env.GITHUB_REF.replace('refs/heads/', '')
+        : 'main'
+    const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
+    const githubRawHost = 'https://raw.githubusercontent.com'
+
+    let sources = [
+        ...orderedResult.panTools,
+        ...orderedResult.danMu,
+        ...orderedResult.recommend,
+        ...orderedResult.live,
+        ...orderedResult.vod,
+        ...avResultList,
+    ]
+    sources.forEach((item) => {
+        item.api = item.api.replace(
+            `${githubRawHost}/${owner}/${repo}/${branch}/`,
+            jsdelivrCDN
+        )
+    })
+
+    fs.writeFileSync(
+        'uzAio.json',
+        JSON.stringify(orderedResult, null, 2).replaceAll(kLocalPathTAG, '')
+    )
+    fs.writeFileSync(
+        'av_auto.json',
+        JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, '')
+    )
+
+    // 8. 提取环境变量配置
+    let sourcesCopy = JSON.parse(JSON.stringify(sources))
+    let envList = []
+    const envSet = new Set()
+    sourcesCopy.forEach((item) => {
+        if (item.api.includes(kLocalPathTAG)) {
+            item.api = item.api.split(kLocalPathTAG)[1]
+        }
+        if (item.env?.length > 0) {
+            const longList = item.env.split('&&')
+            longList.forEach((env) => {
+                const [key, desc] = env.split('##')
+                if (!envSet.has(key)) {
+                    envSet.add(key)
+                    envList.push({ name: key, desc, value: '' })
+                }
+            })
+        }
+    })
+
+    fs.writeFileSync('local.json', JSON.stringify(sourcesCopy, null, 2))
+    fs.writeFileSync('env.json', JSON.stringify(envList, null, 2))
+
+    // 9. 打包为 zip
+    const includePaths = {
+        directories: ['danMu', 'panTools', 'recommend', 'vod', 'live', 'cms'],
+        files: ['local.json', 'env.json'],
+        excludeFiles: [
+            'douban.json',
+            'panTools.json',
+            'danMu.json',
+            'vod.json',
+            'README.md',
+        ],
+    }
+
+    const output = fs.createWriteStream('uzAio.zip')
+    const archive = archiver('zip', { zlib: { level: 9 } })
+    archive.pipe(output)
+
+    const walk = (directoryPath) => {
+        fs.readdirSync(directoryPath).forEach((file) => {
+            const filePath = path.join(directoryPath, file)
+            const stats = fs.statSync(filePath)
+            if (!shouldInclude(filePath, includePaths)) return
+
+            if (stats.isDirectory()) {
+                walk(filePath)
+            } else {
+                archive.file(filePath, {
+                    name: path.relative(process.cwd(), filePath),
+                })
+            }
+        })
     }
 
     walk(process.cwd())
-
-    // Finalize the archive
     await archive.finalize()
-  } catch (err) {
-    console.error('Error creating archive:', err)
-    throw err
-  }
+    console.log('✅ uzAio.zip 已生成')
 
-  await updateMarkdownFiles()
-}
-
-const updateMarkdownFiles = async () => {
-  // 读取 readme/README.main.md 文件
-  const readmeContent = fs.readFileSync('readme/README.main.md', 'utf8')
-  const [owner, repo] = getRepoInfo()
-  const branch = process.env.GITHUB_REF ? process.env.GITHUB_REF.replace('refs/heads/', '') : 'main'
-  console.log(process.env.GITHUB_REF)
-  const cur = `${owner}/${repo}/refs/heads/${branch}`
-  const updatedContent = readmeContent.replaceAll('YYDS678/uzVideo-extensions/refs/heads/main', cur)
-  // 写入 README.md 文件
-  fs.writeFileSync('README.md', updatedContent)
+    // 10. 更新 README.md
+    await updateMarkdownFiles()
 }
 
 main()
