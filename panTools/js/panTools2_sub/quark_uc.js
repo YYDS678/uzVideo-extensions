@@ -577,6 +577,7 @@ class QuarkUC {
                 }
                 mountList.push({
                     name: element.file_name,
+                    panType: this.getPanType(),
                     dataType: dataType,
                     data: {
                         fid: element.fid,
@@ -782,10 +783,20 @@ class QuarkUC {
     async getPanMountRootDir() {
         // MARK: 推荐实现
         await this.initPan()
-        return await this.getFileList({
-            pdir_fid: '0',
-            page: 1,
-        })
+        let data = []
+        let error = ''
+        try {
+            data = await this.getFileList({
+                pdir_fid: '0',
+                page: 1,
+            })
+        } catch (error) {
+            error = error
+        }
+        return {
+            data: data,
+            error: error,
+        }
     }
 
     /**
@@ -797,10 +808,21 @@ class QuarkUC {
     async getPanMountSubDir(args) {
         await this.initPan()
         // MARK: 推荐实现
-        return await getFileList({
-            pdir_fid: args.data.fid,
-            page: args.page,
-        })
+        try {
+            let data = await this.getFileList({
+                pdir_fid: args.data.fid,
+                page: args.page,
+            })
+            return {
+                data: data,
+                error: '',
+            }
+        } catch (error) {
+            return {
+                data: [],
+                error: error,
+            }
+        }
     }
 
     /**
@@ -810,7 +832,19 @@ class QuarkUC {
      */
     async getPanMountFile(args) {
         // MARK: 推荐实现
-        return await this.getVideoPlayUrl({ fileId: args.fid, isMount: true })
+        try {
+            let urls = await this.getVideoPlayUrl({
+                fileId: args.fid,
+                isMount: true,
+            })
+            let playData = new PanPlayInfo()
+            playData.urls = urls
+            return playData
+        } catch (error) {
+            return {
+                error: error,
+            }
+        }
     }
 }
 
