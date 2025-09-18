@@ -577,7 +577,6 @@ class QuarkUC {
                 }
                 mountList.push({
                     name: element.file_name,
-                    panType: this.getPanType(),
                     dataType: dataType,
                     data: {
                         fid: element.fid,
@@ -735,6 +734,9 @@ class QuarkUC {
      */
     async parseShareUrl(args) {
         // MARK: 需要实现
+        if (!this.isQuark) {
+            args.url = args.url.split('?')[0]
+        }
         return await this.getFilesByShareUrl(args.url)
     }
 
