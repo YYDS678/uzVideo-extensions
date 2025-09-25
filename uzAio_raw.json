@@ -439,6 +439,14 @@
       "order": "D5",
       "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/Cai_cmsUser.js",
       "type": 101
+    },
+    {
+      "name": "[直] omofun",
+      "version": 1,
+      "webSite": "http://101.42.227.94:11024",
+      "codeID": "z5nxgZSWE8ipZYvGtImsRFu73TOB45fZ",
+      "api": "https://raw.githubusercontent.com/YYDS678/uzVideo-extensions/main/vod/js/Zhi_omofun.txt",
+      "type": 101
     }
   ]
 }
