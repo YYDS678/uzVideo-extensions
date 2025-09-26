@@ -33,6 +33,7 @@ jobs:
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
         git add README.md
+        git add *.js
         git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
         git push
 
@@ -53,11 +54,8 @@ jobs:
           uzAio_raw.json
           av_auto.json
           av_raw_auto.json
-          local.json
-          env.json
-          README.md
           panTools/panTools.json
           danMu/danMu.json
-          recommend/douban.json
+          recommend/recommend.json
           vod/vod.json
           uzAio.zip

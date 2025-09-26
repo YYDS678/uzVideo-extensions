@@ -248,6 +248,7 @@ const main = async () => {
 
                     // GitHub Actions 环境下压缩子文件
                     if (process.env.GITHUB_ACTIONS) {
+                        console.log('GitHub Actions 压缩子文件:', subFile)
                         try {
                             subFileContent = transformSync(subFileContent, {
                                 minifyWhitespace: true,
@@ -334,8 +335,7 @@ const main = async () => {
     const categoryDirs = ['panTools', 'danMu', 'recommend', 'vod']
     categoryDirs.forEach((category) => {
         if (orderedResult[category]?.length > 0) {
-            const fileName =
-                category === 'recommend' ? 'douban.json' : `${category}.json`
+            const fileName = `${category}.json`
             fs.writeFileSync(
                 path.join(category, fileName),
                 JSON.stringify(orderedResult[category], null, 2).replaceAll(
@@ -415,7 +415,7 @@ const main = async () => {
         directories: ['danMu', 'panTools', 'recommend', 'vod', 'live', 'cms'],
         files: ['local.json', 'env.json'],
         excludeFiles: [
-            'douban.json',
+            'recommend.json',
             'panTools.json',
             'danMu.json',
             'vod.json',
