@@ -194,9 +194,9 @@ const updateMarkdownFiles = async () => {
         ? process.env.GITHUB_REF.replace('refs/heads/', '')
         : 'main'
 
-    const cur = `${owner}/${repo}/refs/heads/${branch}`
+    const cur = `${owner}/${repo}/releases/download/uzVideo-Extensions-${branch}`
     const updatedContent = readmeContent.replaceAll(
-        'YYDS678/uzVideo-extensions/refs/heads/main',
+        'YYDS678/uzVideo-extensions/releases/download/uzVideo-Extensions-main',
         cur
     )
     fs.writeFileSync('README.md', updatedContent)
