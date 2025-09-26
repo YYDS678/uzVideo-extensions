@@ -4,6 +4,7 @@
 //@webSite:https://www.vdm5.com
 //@remark:
 //@order: C
+//@deprecated:1
 // ignore
 
 // ignore
