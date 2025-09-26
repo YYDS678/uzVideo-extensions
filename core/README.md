@@ -140,19 +140,19 @@ graph TD
 
 ## 模板
 
-[网盘工具扩展 type:300 模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panTools.js)
+[网盘工具扩展 type:300 主模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panBase.js)
+[网盘工具扩展 type:300 子模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panSub.js)
 
 ## 说明
 
-1. 固定实例名称为 `uzPanToolsInstance`
-2. uz 运行时仅存在一个网盘工具，请尽量整合所有的解析在 PanTools
-3. 流程图
+> 目前已经存在较为综合的网盘扩展。所以建议直接在 [panTools2_sub](https://github.com/YYDS678/uzVideo-extensions/tree/main/panTools/panTools2_sub) 中创建新的[子模块](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panSub.js)，对 [panTools2](https://github.com/YYDS678/uzVideo-extensions/tree/main/panTools/panTools2.js) 进行扩展
 
-```mermaid
-graph TD
-A[开始] --> B[uz 调用 getShareVideos 获取视频列表] --> C[uz 调用 getPlayInfo 获取播放信息] --> D[结束]
-
-```
+1. 创建主模板 `panTools_xxx.js` [主模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panBase.js)
+2. 创建子模块文件夹 `panTools_xxx_sub`，注意保持名称一致
+3. 在子模块文件夹内创建子模板 `xxx.js` [子模板](https://github.com/YYDS678/uzVideo-extensions/tree/main/core/template/panSub.js)
+4. 修改主模板顶部注释
+5. 实现子模板相关功能
+6. 运行 `parse-metadata.js` 自动合并子模板到主模板中
 
 # danMu(弹幕 type:400) 扩展
 
