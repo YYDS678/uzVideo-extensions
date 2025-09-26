@@ -6,6 +6,7 @@
 //@remark:🍃豆儿出品，不属精品！
 //@codeID:tW2AK2eUmsN6Bbnpu4TpQuxGiDoB0v1r
 //@order: A11
+//@deprecated:1
 
 // ignore
 
