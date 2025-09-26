@@ -8,13 +8,13 @@ jobs:
   generate-metadata:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 确保 GITHUB_TOKEN 具有写入权限
+      contents: write
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # 获取完整的 Git 历史，避免 push 失败
+        fetch-depth: 0
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
@@ -32,8 +32,32 @@ jobs:
       run: |
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
-        git add uzAio.json uzAio_raw.json av_auto.json av_raw_auto.json local.json env.json README.md
-        git add panTools/panTools.json danMu/danMu.json recommend/douban.json vod/vod.json
-        git add uzAio.zip
+        git add README.md
         git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
         git push
+
+
+    - name: 🚀 Upload JSON to GitHub Release
+      uses: ncipollo/release-action@v1.18.0
+      with:
+        tag: uzVideo-Extensions-${{ github.ref_name }}   # 根据分支名生成 tag
+        name: "uzVideo-Extensions (${{ github.ref_name }})"
+        body: "这些文件由 GitHub Actions 在分支 ${{ github.ref_name }} 自动生成。"
+        allowUpdates: true
+        replacesArtifacts: true
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: |
+          uzAio.json
+          uzAio_raw.json
+          av_auto.json
+          av_raw_auto.json
+          local.json
+          env.json
+          README.md
+          panTools/panTools.json
+          danMu/danMu.json
+          recommend/douban.json
+          vod/vod.json
+          uzAio.zip
