@@ -1,6 +1,6 @@
 //@name:[盘] TG搜²
 //@version:7
-//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk
+//@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk&移动@ydypzyfx
 //@env:TG搜API地址##https://tgsou.252035.xyz
 //@remark:🍃豆儿出品，不属精品！免代理纯搜索，格式 频道名称@频道id|搜索数量&频道名称@频道id，支持自定义每频道搜索数量，默认3个
 //@order: A18
@@ -49,7 +49,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // ignore
 
 const appConfig = {
-    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk',
+    _webSite: '123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman&百度¹@bdwpzhpd&百度²@BaiduCloudDisk&移动@ydypzyfx',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -99,6 +99,10 @@ const CLOUD_PROVIDERS = {
     pan123: {
         name: '123',
         domains: ['123pan.com', '123pan.cn', '123684.com', '123912.com', '123865.com']
+    },
+    yidong: {
+        name: '移动',
+        domains: ['caiyun.139.com', 'yun.139.com']
     }
 };
 
