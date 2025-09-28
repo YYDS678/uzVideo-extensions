@@ -1,5 +1,5 @@
 //@name:[盘] 木偶
-//@version:4
+//@version:5
 //@webSite:https://666.666291.xyz
 //@remark:
 //@order: A02
@@ -56,12 +56,7 @@ async function getClassList(args) {
             type_id: '4',
             type_name: '木偶纪录',
             hasSubclass: false,
-        },
-        {
-            type_id: '27',
-            type_name: '天翼专区',
-            hasSubclass: false,
-        },
+        }
     ]
     return JSON.stringify(backData)
 }
