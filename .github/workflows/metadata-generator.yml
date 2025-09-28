@@ -2,6 +2,14 @@ name: Metadata JSON Generator
 
 on:
   push:
+    paths:
+      - 'cms/*'
+      - 'danMu/*'
+      - 'live/*'
+      - 'panTools/*'
+      - 'recommend/*'
+      - 'vod/*'
+      
   workflow_dispatch:
 
 jobs:
@@ -34,7 +42,7 @@ jobs:
         git config --global user.email 'action@github.com'
         git add README.md
         git add *.js
-        git commit -m '该文件自动生成，无需手动修改。' || echo 'No changes to commit'
+        git commit -m '该文件由 GitHub Actions 通过 parse-metadata.cjs 生成修改。' || echo 'No changes to commit'
         git push
 
 
@@ -43,7 +51,7 @@ jobs:
       with:
         tag: uzVideo-Extensions-${{ github.ref_name }}   # 根据分支名生成 tag
         name: "uzVideo-Extensions (${{ github.ref_name }})"
-        body: "这些文件由 GitHub Actions 在分支 ${{ github.ref_name }} 自动生成。"
+        body: "Release ${{ github.ref_name }} 。"
         allowUpdates: true
         replacesArtifacts: true
         draft: false
