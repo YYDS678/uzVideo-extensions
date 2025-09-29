@@ -117,7 +117,6 @@ class PanBaidu {
      * @returns {Promise<boolean>} 返回一个 Promise，resolve 返回 true 表示可以解析，false 表示不能解析
      */
     async canParse(args) {
-        await this.initBaidu()
         if (args.url.includes('pan.baidu.com')) {
             return true
         } else {
