@@ -3,12 +3,12 @@ name: Metadata JSON Generator
 on:
   push:
     paths:
-      - 'cms/*'
-      - 'danMu/*'
-      - 'live/*'
-      - 'panTools/*'
-      - 'recommend/*'
-      - 'vod/*'
+      - 'cms/**'
+      - 'danMu/**'
+      - 'live/**'
+      - 'panTools/**'
+      - 'recommend/**'
+      - 'vod/**'
       
   workflow_dispatch:
 
@@ -41,7 +41,7 @@ jobs:
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
         git add README.md
-        git add *.js
+        git add **/*.js
         git commit -m '该文件由 GitHub Actions 通过 parse-metadata.cjs 生成修改。' || echo 'No changes to commit'
         git push
 
