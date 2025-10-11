@@ -1,6 +1,6 @@
-//@name:[解] 小猫咪
-//@version:5
-//@webSite:https://zy.xmm.hk/api.php/provide/vod
+//@name:[解] 金蝉
+//@version:6
+//@webSite:https://zy.jinchancaiji.com/api.php/provide/vod
 //@remark:通用官采解析1，需配合网盘解析工具使用。每次消耗所有解析次数！
 //@order: D1
 
@@ -48,7 +48,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // ignore
 
 const appConfig = {
-    _webSite: 'https://zy.xmm.hk/api.php/provide/vod',
+    _webSite: 'https://zy.jinchancaiji.com/api.php/provide/vod',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
