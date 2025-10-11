@@ -282,6 +282,7 @@ class PanYun {
         // 支持多种格式的分享链接
         const patterns = [
             this.regex,                                                    // yun.139.com/shareweb/#/w/i/
+            /https:\/\/yun\.139\.com\/sharewap\/#\/m\/i\?([^&]+)/,         // yun.139.com/sharewap/#/m/i?
             /https:\/\/caiyun\.139\.com\/m\/i\?([^&]+)/,                   // caiyun.139.com/m/i?
             /https:\/\/caiyun\.139\.com\/w\/i\/([^&\/]+)/                  // caiyun.139.com/w/i/
         ]

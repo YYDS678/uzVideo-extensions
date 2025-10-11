@@ -343,13 +343,22 @@ class Pan189 {
                     this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
                 this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
             } else {
-                const matches_ = url.match(
-                    /https:\/\/cloud\.189\.cn\/t\/([^&]+)/
-                )
-                this.shareCode = matches_ ? matches_[1] : null
-                const accessCodeMatch =
-                    this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
-                this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
+                // 支持多种短链接格式
+                const patterns = [
+                    /https:\/\/cloud\.189\.cn\/t\/([^&]+)/,                      // cloud.189.cn/t/
+                    /https:\/\/h5\.cloud\.189\.cn\/share\.html#\/t\/([^&]+)/    // h5.cloud.189.cn/share.html#/t/
+                ]
+                
+                for (const pattern of patterns) {
+                    const matches_ = url.match(pattern)
+                    if (matches_ && matches_[1]) {
+                        this.shareCode = matches_[1]
+                        const accessCodeMatch =
+                            this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
+                        this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
+                        break
+                    }
+                }
             }
             if (accessCode) {
                 this.accessCode = accessCode
