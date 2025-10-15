@@ -124,6 +124,44 @@ class SearchParameters {
          * v1.6.60 及以上版本可用
          */
         this.line = ''
+
+        /**
+         * 搜索视频平台名称(getVideoPlatformList 返回的数据，调用 getVideoList 时传入)
+         * v1.6.66 及以上版本可用
+         */
+        this.videoPlatformName = ''
+
+        /**
+         * 弹幕视频信息 调用 getVideoEpisodes 时传入
+         * @type {DanVideo}
+         * v1.6.66 及以上版本可用
+         */
+        this.danVideo = null
+
+        /**
+         * 不为空时，表示用户手动选择匹配 的视频信息 搜索弹幕时传入，getVideoEpisodes 返回的数据
+         * @type {DanVideo}
+         * v1.6.66 及以上版本可用
+         */
+        this.danEpisode = null
+    }
+}
+
+class DanEpisode {
+    constructor() {
+        this.vod_name = ''
+        this.vod_remarks = ''
+        this.extData = {}
+    }
+}
+
+/**
+ * 弹幕视频信息
+ */
+class DanVideo extends DanEpisode {
+    constructor() {
+        super()
+        this.vod_pic = ''
     }
 }
 
@@ -141,12 +179,50 @@ async function getLines() {
 }
 
 /**
+ * 获取搜索资源平台名称列表 (可选)
+ * @returns {Promise<{data: string[], error: string}>} result - 返回一个包含平台信息列表的 Promise 对象
+ */
+async function getVideoPlatformList() {
+    return formatBackData({
+        data: [],
+        error: '',
+    })
+}
+
+/**
+ * 获取视频列表 (可选，getVideoPlatformList 返回数据时，会调用该方法)
+ * 根据搜索参数获取匹配的视频列表
+ * @param {SearchParameters} args - 获取视频列表的参数
+ * @returns {Promise<{data: DanVideo [], error: string}>} result - 包含视频列表和错误信息的Promise对象
+ */
+async function getVideoList(args) {
+    return formatBackData({
+        data: [],
+        error: '',
+    })
+}
+
+/**
+ * 获取剧集列表 (可选)
+ * @param {SearchParameters} args
+ * @returns {Promise<{data: DanEpisode[], error: string}>} result - 获取剧集列表的返回结果
+ */
+async function getVideoEpisodes(args) {
+    return formatBackData({
+        data: [],
+        error: '',
+    })
+}
+
+/**
  * 搜索弹幕
  * @param {SearchParameters} item - 包含搜索参数的对象
  * @returns {Promise<BackData>} backData - 返回一个 Promise 对象
  */
 async function searchDanMu(item) {
     let backData = new BackData()
+
+    // item.danEpisode 不为空时，表示用户手动搜索匹配的视频
     try {
         let all = []
         //MARK: - 实现你的弹幕搜索逻辑
