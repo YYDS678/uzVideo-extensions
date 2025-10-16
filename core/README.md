@@ -214,6 +214,7 @@ A2[用户手动操作，选择剧集] --> BB[uz 调用 getVideoPlatformList 获�
 
 1. 弹幕扩展新增 `getVideoPlatformList`、`getVideoList`、`getVideoEpisodes` 方法，用于选择平台、视频、剧集。
 2. SearchParameters 新增 `danEpisode`、`danVideo`、`videoPlatformName` 字段，用于选择剧集。
+3. 所有的图片链接支持拼接请求头(json string 格式)。使用 `#headers#` 作为拼接标识。 示例 `https://example.com/image.png#headers#{"a":1,"b":"2"}`
 
 ## v1.6.63
 
