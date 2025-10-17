@@ -7,7 +7,7 @@
   },
   {
       "name": "🎥网络直播",
-      "api": "https://tv.iill.top/m3u/Live",
+      "api": "https://m.iill.top/Live.m3u",
       "type": 10,
       "remark": "来自 YanG-1989 大佬 https://github.com/YanG-1989"
   },
