@@ -51,7 +51,7 @@ jobs:
       with:
         tag: uzVideo-Extensions-${{ github.ref_name }}   # 根据分支名生成 tag
         name: "uzVideo-Extensions (${{ github.ref_name }})"
-        body: "Release ${{ github.ref_name }} 。"
+        body: "Release ${{ github.ref_name }}"
         allowUpdates: true
         replacesArtifacts: true
         draft: false
