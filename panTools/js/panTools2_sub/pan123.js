@@ -80,7 +80,7 @@ class Pan123 {
     async canParse(args) {
         // MARK: 需要实现
         let regex =
-            /https:\/\/(www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn)\/s\/([^\\/]+)/
+            /https:\/\/(www\.)?123(684|865|912|pan)\.(com|cn)\/s\/([^\\/]+)/
 
         return regex.test(args.url)
     }
@@ -158,7 +158,7 @@ class Pan123 {
 
     constructor() {
         this.regex =
-            /https:\/\/(www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn)\/s\/([^\\/]+)/
+            /https:\/\/(www\.)?123(684|865|912|pan)\.(com|cn)\/s\/([^\\/]+)/
         this.api = 'https://www.123684.com/b/api/share/'
         this.loginUrl = 'https://login.123pan.com/api/user/sign_in'
         this.cate = ''
