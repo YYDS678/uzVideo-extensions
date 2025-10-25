@@ -12,11 +12,12 @@ import {
     PanListDetail,
     panSubClasses,
 } from '../panTools2.js'
-import { axios, qs, base64Decode, base64Encode } from './common.js'
+import { axios, qs, base64Decode, base64Encode, delay, findBestLCS, generateDeviceID, generateReqId, generateXPanToken } from './common.js'
 
 // ignore
 
 // 抄自 https://github.com/jadehh/TVSpider
+// 集成了 CatPawOpen-main/nodejs/src/util/uc.js 的 Open API 支持
 
 class QuarkClient {
     static apiUrl = 'https://drive-pc.quark.cn/1/clouddrive/'
@@ -40,6 +41,22 @@ class UCClient {
         Referer: 'https://drive.uc.cn',
         'Content-Type': 'application/json',
     }
+
+    // UC Open API 配置
+    static Addition = {
+        DeviceID: '07b48aaba8a739356ab8107b5e230ad4',
+        RefreshToken: '',
+        AccessToken: ''
+    }
+
+    static conf = {
+        api: 'https://open-api-drive.uc.cn',
+        clientID: '5acf882d27b74502b7040b0c65519aa7',
+        signKey: 'l3srvtd7p42l0d0x1u8d7yc8ye9kki4d',
+        appVer: '1.6.8',
+        channel: 'UCTVOFFICIALWEB',
+        codeApi: 'http://api.extscreen.com/ucdrive',
+    }
 }
 
 class QuarkUC {
@@ -53,6 +70,8 @@ class QuarkUC {
     }
     uzTag = ''
     ut = ''
+    token = '' // UC Open API token
+    subtitleExts = ['.srt', '.ass', '.scc', '.stl', '.ttml']
 
     get apiUrl() {
         if (this.isQuark) {
@@ -219,7 +238,12 @@ class QuarkUC {
         } catch (error) {
             playData.error = error.toString()
         }
-        playData.playHeaders = this.playHeaders
+        // 检查是否有 Open API 返回的 URL
+        const hasOpenAPI = playData.urls.some(u => u.isOpenAPI)
+        if (!hasOpenAPI) {
+            // 只有在没有 Open API URL 时才设置 playHeaders
+            playData.playHeaders = this.playHeaders
+        }
         return playData
     }
 
@@ -251,7 +275,9 @@ class QuarkUC {
                 if (data.data?.length > 0) {
                     this.ut = data.data
                 }
-            } else {
+            }
+            // 替换 URL 中的 UT 占位符
+            if (this.ut.length > 0) {
                 url = url.replace(kUC_UTKeyWord, this.ut)
             }
         }
@@ -353,10 +379,11 @@ class QuarkUC {
         const items = listData.data.list || []
         if (items.length === 0) return []
         const subDir = []
+        const videoExts = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.m3u8', '.ts', '.rmvb', '.rm', '.mpeg', '.mpg', '.m4v', '.webm']
         for (const item of items) {
             if (item.dir === true) {
                 subDir.push(item)
-            } else if (item.file === true && item.obj_category === 'video') {
+            } else if (item.file === true && (item.category === 1 || item.obj_category === 'video' || videoExts.some(ext => item.file_name?.toLowerCase().endsWith(ext)))) {
                 if (parseInt(item.size.toString()) < 1024 * 1024 * 5) continue
                 item.stoken = this.shareTokenCache[shareData.shareId].stoken
                 videos.push({
@@ -649,7 +676,77 @@ class QuarkUC {
      */
     async getDownload(args) {
         let isMount = args.isMount ?? false
+
+        // UC 网盘优先尝试使用 Open API token 方式
+        if (!this.isQuark && this.token && this.token.length > 0) {
+            try {
+                const pathname = '/file'
+                const timestamp = Math.floor(Date.now() / 1000).toString() + '000'
+                const deviceID = UCClient.Addition.DeviceID || generateDeviceID(timestamp)
+                const reqId = generateReqId(deviceID, timestamp)
+                const x_pan_token = generateXPanToken('GET', pathname, timestamp, UCClient.conf.signKey)
+
+                const config = {
+                    method: 'GET',
+                    url: `${UCClient.conf.api}/file`,
+                    params: {
+                        req_id: reqId,
+                        access_token: this.token,
+                        app_ver: UCClient.conf.appVer,
+                        device_id: deviceID,
+                        device_brand: 'Xiaomi',
+                        platform: 'tv',
+                        device_name: 'M2004J7AC',
+                        device_model: 'M2004J7AC',
+                        build_device: 'M2004J7AC',
+                        build_product: 'M2004J7AC',
+                        device_gpu: 'Adreno (TM) 550',
+                        activity_rect: '{}',
+                        channel: UCClient.conf.channel,
+                        method: 'streaming',
+                        group_by: 'source',
+                        fid: isMount ? args.fileId : this.saveFileIdCaches[args.fileId],
+                        resolution: 'low,normal,high,super,2k,4k',
+                        support: 'dolby_vision'
+                    },
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Linux; U; Android 9; zh-cn; RMX1931 Build/PQ3A.190605.05081124) AppleWebKit/533.1 (KHTML, like Gecko) Mobile Safari/533.1',
+                        'Connection': 'Keep-Alive',
+                        'Accept-Encoding': 'gzip',
+                        'x-pan-tm': timestamp,
+                        'x-pan-token': x_pan_token,
+                        'content-type': 'text/plain;charset=UTF-8',
+                        'x-pan-client-id': UCClient.conf.clientID
+                    }
+                }
+
+                const response = await axios.request(config)
+                if (response.status === 200 && response.data?.data?.video_info) {
+                    const videoInfo = response.data.data.video_info.filter((t) => t.accessable)[0]
+                    if (videoInfo && videoInfo.url) {
+                        // Open API 返回的 URL 已包含认证参数
+                        // 参考 CatPawOpen: 当使用 token 时，不设置 header
+                        // 同时标记这是 Open API 返回的 URL，以便在 getPlayUrl 中不设置 playHeaders
+                        return [
+                            {
+                                name: '原画',
+                                url: videoInfo.url,
+                                headers: {},
+                                priority: 9999,
+                                isOpenAPI: true,  // 标记为 Open API
+                            }
+                        ]
+                    }
+                }
+            } catch (error) {
+                UZUtils.debugLog('UC Open API 获取下载地址失败:', error)
+                // 失败后继续尝试传统方式
+            }
+        }
+
+        // 传统 cookie 方式
         try {
+            // this.pr 中已经包含了 UT 参数（如果有的话）
             const down = await this.api(
                 `file/download?${this.pr}&uc_param_str=`,
                 {
@@ -658,6 +755,7 @@ class QuarkUC {
                         : [this.saveFileIdCaches[args.fileId]],
                 }
             )
+
             if (
                 down.data != null &&
                 down.data.length > 0 &&
@@ -676,13 +774,26 @@ class QuarkUC {
                     },
                 ]
             }
-        } catch (error) {}
+        } catch (error) {
+            UZUtils.debugLog('获取下载地址失败:', error)
+        }
         return []
     }
 
     async initPan() {
         if (this.cookie.length < 1) {
             this.cookie = await this.getPanEnv(this.getCookieName())
+        }
+
+        // UC 网盘额外初始化 token
+        // UT 会在 api 方法中动态获取，无需从环境变量读取
+        if (!this.isQuark) {
+            if (this.token.length < 1) {
+                const token = await this.getPanEnv('UC_Token')
+                if (token && token.length > 0) {
+                    this.token = token
+                }
+            }
         }
     }
 
