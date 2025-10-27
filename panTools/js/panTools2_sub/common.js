@@ -98,8 +98,73 @@ class qs {
         return obj
     }
 }
+
+/**
+ * 延迟函数
+ * @param {number} ms 延迟毫秒数
+ * @returns {Promise<void>}
+ */
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/**
+ * 查找最佳LCS匹配
+ * @param {Object} mainItem 主项目，需要有 name 属性
+ * @param {Array} targetItems 目标项目数组，每项需要有 name 属性
+ * @returns {Object} 返回 {allLCS, bestMatch, bestMatchIndex}
+ */
+function findBestLCS(mainItem, targetItems) {
+    const results = []
+    let bestMatchIndex = 0
+
+    for (let i = 0; i < targetItems.length; i++) {
+        const currentLCS = UZUtils.lcs(mainItem.name, targetItems[i].name)
+        results.push({ target: targetItems[i], lcs: currentLCS })
+        if (currentLCS.length > results[bestMatchIndex].lcs.length) {
+            bestMatchIndex = i
+        }
+    }
+
+    const bestMatch = results[bestMatchIndex]
+
+    return { allLCS: results, bestMatch: bestMatch, bestMatchIndex: bestMatchIndex }
+}
+
+/**
+ * 生成设备ID
+ * @param {string} timestamp 时间戳
+ * @returns {string} 设备ID（MD5前16位）
+ */
+function generateDeviceID(timestamp) {
+    return Crypto.MD5(timestamp).toString().slice(0, 16)
+}
+
+/**
+ * 生成请求ID
+ * @param {string} deviceID 设备ID
+ * @param {string} timestamp 时间戳
+ * @returns {string} 请求ID（MD5前16位）
+ */
+function generateReqId(deviceID, timestamp) {
+    return Crypto.MD5(deviceID + timestamp).toString().slice(0, 16)
+}
+
+/**
+ * 生成X-Pan-Token签名
+ * @param {string} method HTTP方法
+ * @param {string} pathname 路径名
+ * @param {string} timestamp 时间戳
+ * @param {string} key 签名密钥
+ * @returns {string} SHA256签名
+ */
+function generateXPanToken(method, pathname, timestamp, key) {
+    const data = method + '&' + pathname + '&' + timestamp + '&' + key
+    return Crypto.SHA256(data).toString()
+}
+
 // ignore
 
-export { axios, qs, base64Decode, base64Encode }
+export { axios, qs, base64Decode, base64Encode, delay, findBestLCS, generateDeviceID, generateReqId, generateXPanToken }
 
 // ignore

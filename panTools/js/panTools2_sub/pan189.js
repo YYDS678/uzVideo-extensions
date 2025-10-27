@@ -336,30 +336,55 @@ class Pan189 {
 
     async getShareID(url, accessCode) {
         try {
+            // 优先级：外部传入 > URL参数pwd > shareCode中的访问码 > 括号中的访问码
+            
+            // 1. 从URL参数中提取密码 (?pwd=xxx 或 &pwd=xxx)
+            const pwdMatch = url.match(/[?&]pwd=([^&]+)/);
+            if (pwdMatch && pwdMatch[1]) {
+                this.accessCode = pwdMatch[1];
+            }
+
+            // 2. 提取 shareCode（完整内容，可能包含访问码）
             const matches = this.regex.exec(url)
             if (matches && matches[1]) {
-                this.shareCode = matches[1]
-                const accessCodeMatch =
-                    this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
-                this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
+                let rawCode = matches[1]
+                
+                // 从 rawCode 中提取访问码（各种格式）
+                if (!this.accessCode) {
+                    // 格式1: "（访问码：pu0o）" 或 "(访问码：pu0o)"
+                    const accessCodeMatch1 = rawCode.match(/[（(]\s*访问码[：:]\s*([a-zA-Z0-9]+)\s*[）)]/)
+                    // 格式2: 空格后的 "访问码：vkf5" 或 "访问码:vkf5"
+                    const accessCodeMatch2 = rawCode.match(/\s+访问码[：:]\s*([a-zA-Z0-9]+)/)
+                    
+                    if (accessCodeMatch1) {
+                        this.accessCode = accessCodeMatch1[1]
+                    } else if (accessCodeMatch2) {
+                        this.accessCode = accessCodeMatch2[1]
+                    }
+                }
+                
+                // 清理 shareCode：只保留开头的字母数字部分
+                // 遇到空格、括号或中文就停止
+                const cleanMatch = rawCode.match(/^([a-zA-Z0-9]+)/)
+                this.shareCode = cleanMatch ? cleanMatch[1] : rawCode.trim()
+                    
             } else {
                 // 支持多种短链接格式
                 const patterns = [
-                    /https:\/\/cloud\.189\.cn\/t\/([^&]+)/,                      // cloud.189.cn/t/
-                    /https:\/\/h5\.cloud\.189\.cn\/share\.html#\/t\/([^&]+)/    // h5.cloud.189.cn/share.html#/t/
+                    /https:\/\/cloud\.189\.cn\/t\/([a-zA-Z0-9]+)/,                      // cloud.189.cn/t/
+                    /https:\/\/h5\.cloud\.189\.cn\/share\.html#\/t\/([a-zA-Z0-9]+)/    // h5.cloud.189.cn/share.html#/t/
                 ]
                 
                 for (const pattern of patterns) {
                     const matches_ = url.match(pattern)
                     if (matches_ && matches_[1]) {
                         this.shareCode = matches_[1]
-                        const accessCodeMatch =
-                            this.shareCode.match(/访问码：([a-zA-Z0-9]+)/)
-                        this.accessCode = accessCodeMatch ? accessCodeMatch[1] : ''
                         break
                     }
                 }
             }
+            
+            // 3. 外部传入的 accessCode 优先级最高
             if (accessCode) {
                 this.accessCode = accessCode
             }
@@ -367,11 +392,36 @@ class Pan189 {
     }
 
     fileName = ''
+    
+    /**
+     * 判断文件是否为视频文件（根据扩展名）
+     * @param {string} filename - 文件名
+     * @returns {boolean} 是否为视频文件
+     */
+    isVideoFile(filename) {
+        if (!filename) return false
+        const videoExtensions = [
+            '.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.webm', '.m4v',
+            '.rmvb', '.rm', '.3gp', '.ts', '.mpg', '.mpeg', '.f4v', '.m3u8',
+            '.iso', '.vob', '.asf', '.dat'
+            // 注意：.iso 等部分格式可能无法播放，但仍显示在列表中让用户知晓
+        ]
+        const lowerName = filename.toLowerCase()
+        return videoExtensions.some(ext => lowerName.endsWith(ext))
+    }
+    
     async getShareData(shareUrl, accessCode) {
         try {
+            // 重置状态，避免上次解析的残留数据影响本次
+            this.shareCode = ''
+            this.accessCode = ''
+            this.shareId = ''
+            this.shareMode = ''
+            this.isFolder = ''
+            this.fileName = ''
+            
             let file = {}
             let fileData = []
-            this.fileName = ''
             let fileId = await this.getShareInfo(shareUrl, accessCode)
 
             if (fileId) {
@@ -448,14 +498,14 @@ class Pan189 {
             } else {
                 this.shareCode = shareUrl
             }
-            if (accessCode) {
+            if (this.accessCode) {
                 let check = await axios.get(
                     `${this.api}/open/share/checkAccessCode.action?shareCode=${this.shareCode}&accessCode=${this.accessCode}`,
                     {
                         headers: this.normalHeaders,
                     }
                 )
-                if (check.status === 200) {
+                if (check.status === 200 && check.data?.shareId) {
                     this.shareId = check.data.shareId
                 }
                 let resp = await axios.get(
@@ -465,6 +515,10 @@ class Pan189 {
                     }
                 )
                 let fileId = resp.data.fileId
+                // 如果 checkAccessCode 没有返回 shareId，从 getShareInfoByCodeV2 获取
+                if (!this.shareId && resp.data?.shareId) {
+                    this.shareId = resp.data.shareId
+                }
                 this.shareMode = resp.data.shareMode
                 this.isFolder = resp.data.isFolder
                 if (this.fileName.length < 1) {
@@ -577,7 +631,9 @@ class Pan189 {
             }
             for (let index = 0; index < fileList.length; index++) {
                 const element = fileList[index]
-                if (element.mediaType === 3) {
+                // 检查是否为视频文件：mediaType === 3 或 文件扩展名匹配
+                const isVideo = element.mediaType === 3 || this.isVideoFile(element.name)
+                if (isVideo) {
                     videos.push({
                         name: element.name,
                         fileId: element.id,
