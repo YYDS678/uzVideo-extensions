@@ -1,5 +1,5 @@
 //@name:[盘] TG搜
-//@version:10
+//@version:11
 //@webSite:123资源@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&百度@bdwpzhpd&移动@ydypzyfx&夸克百度@Aliyun_4K_Movies&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman
 //@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
@@ -108,6 +108,14 @@ const CLOUD_PROVIDERS = {
     yidong: {
         name: '移动',
         domains: ['caiyun.139.com', 'yun.139.com']
+    },
+    '115': {
+        name: '115',
+        domains: ['115cdn.com', '115.com', 'anxia.com']
+    },
+    pikpak: {
+        name: 'PikPak',
+        domains: ['pikpak.me']
     }
 };
 
