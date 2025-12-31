@@ -1,7 +1,7 @@
 // ignore
 //@name:[直] 瓜子¹
-//@version:3
-//@webSite:https://api.gudvxty.com
+//@version:4
+//@webSite:http://api.gudvxty.com
 //@remark:瓜子APP
 //@codeID:ra5Z3wtXKshzSMK2
 //@type:100
