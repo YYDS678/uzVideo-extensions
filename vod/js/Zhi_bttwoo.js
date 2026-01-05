@@ -1,14 +1,11 @@
 // ignore
+
 //@name:[直] 两个BT
-//@version:2
+//@version:3
 //@webSite:https://www.bttwoo.com
 //@remark:
 //@order: B
-//@deprecated:1
-import { } from '../../core/uzVideo.js'
-import { } from '../../core/uzHome.js'
-import { } from '../../core/uz3lib.js'
-import { } from '../../core/uzUtils.js'
+
 // ignore
 
 
@@ -251,16 +248,59 @@ async function getVideoPlayUrl(args) {
 
         let data = html.data
         if (data) {
-            let isPlayable = data.split('window.wp_nonce=')[1]
-            if (isPlayable) {
-                let text = isPlayable.split('eval')[0]
-                let code = text.match(/var .*?=.*?"(.*?)"/)[1]
-                let key = text.match(/var .*?=md5.enc.Utf8.parse\("(.*?)"/)[1]
-                let iv = text.match(/var iv=.*?\((\d+)/)[1]
+            let playurl = ''
 
-                text = aesCbcDecode(code, key, iv)
-                let playurl = text.match(/url: "(.*?)"/)[1]
+            let mysvgMatch = data.match(/const\s+mysvg\s*=\s*['"]([^'"]+)['"]/)
+            let bodyMatch = data.match(/const\s+body\s*=\s*\{([\s\S]*?)\}\s*;/)
+            if (mysvgMatch && bodyMatch) {
+                let body = {}
+                let fieldRegex = /([a-zA-Z0-9_]+)\s*:\s*(['"])([^'"]*)\2/g
+                let fieldMatch = null
+                while ((fieldMatch = fieldRegex.exec(bodyMatch[1])) !== null) {
+                    body[fieldMatch[1]] = fieldMatch[3]
+                }
 
+                if (Object.keys(body).length > 0) {
+                    let postHeaders = {
+                        ...appConfig.headers,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        Referer: url,
+                        Origin: appConfig.webSite,
+                    }
+                    let postRes = await req(mysvgMatch[1], {
+                        method: 'POST',
+                        headers: postHeaders,
+                        data: JSON.stringify(body),
+                    })
+                    let postData = postRes.data
+                    if (typeof postData === 'string') {
+                        try {
+                            postData = JSON.parse(postData)
+                        } catch (e) {}
+                    }
+                    playurl = postData?.url || postData?.data?.url || ''
+                }
+            }
+
+            if (!playurl) {
+                let isPlayable = data.split('window.wp_nonce=')[1]
+                if (isPlayable) {
+                    let text = isPlayable.split('eval')[0]
+                    let codeMatch = text.match(/var .*?=.*?"(.*?)"/)
+                    let keyMatch = text.match(/var .*?=md5.enc.Utf8.parse\("(.*?)"/)
+                    let ivMatch = text.match(/var iv=.*?\((\d+)/)
+
+                    if (codeMatch && keyMatch && ivMatch) {
+                        text = aesCbcDecode(codeMatch[1], keyMatch[1], ivMatch[1])
+                        let playMatch = text.match(/url: "(.*?)"/)
+                        if (playMatch) {
+                            playurl = playMatch[1]
+                        }
+                    }
+                }
+            }
+
+            if (playurl) {
                 backData.data = playurl
                 // } else backData.error = '該片需兩個BT的VIP會員才能收看'
             } else backData.data = 'https://bit.ly/3BlS71b'

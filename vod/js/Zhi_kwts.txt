@@ -1,10 +1,11 @@
 // ignore
 
-//@name:酷我听书
+//@name:[直] 酷我听书
 //@webSite:http://tingshu.kuwo.cn
-//@version:1
+//@version:2
 //@remark:🍃豆儿出品，不属精品！
 //@codeID:USdWmrhBwHEAElFD428HKfByc0WbhzTw
+//@order: B
 
 // ignore
 
