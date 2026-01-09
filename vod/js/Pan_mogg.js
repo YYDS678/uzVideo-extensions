@@ -1,5 +1,5 @@
 //@name:[盘] 木偶
-//@version:5
+//@version:6
 //@webSite:https://666.666291.xyz
 //@remark:
 //@order: A02
@@ -55,6 +55,16 @@ async function getClassList(args) {
         {
             type_id: '4',
             type_name: '木偶纪录',
+            hasSubclass: false,
+        },
+        {
+            type_id: '29',
+            type_name: '木偶综艺',
+            hasSubclass: false,
+        },
+        {
+            type_id: '25',
+            type_name: '115臻享',
             hasSubclass: false,
         }
     ]
