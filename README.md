@@ -14,7 +14,7 @@
 # 订阅
 
 ```
-https://github.com/YYDS678/uzVideo-extensions/releases/download/uzVideo-Extensions-main/uzAio.zip
+https://github.com/YYDS678/uzVideo-extensions/releases/download/uzVideo-Extensions-logo/uzAio.zip
 ```
 
 # 添加方式
@@ -39,8 +39,6 @@ uz 影视 -> 设置 -> 数据管理 -> 订阅 -> + -> 输入链接 -> 确定
 //@codeID:
 // 使用的环境变量，没有的话就不填
 //@env:
-// 扩展 logo，存放在 logo 文件夹下，或者完整的链接(png格式)
-//@logo:
 // 是否是AV 1是  0否
 //@isAV:0
 //是否弃用 1是  0否
