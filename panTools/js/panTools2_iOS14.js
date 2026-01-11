@@ -1,8 +1,8 @@
 //@name:夸克|UC|天翼|123|百度|移动|pikpak|115|解析
-//@version:38
-//@remark:iOS 15 及以上版本可用
+//@version:1
+//@remark:iOS 14 及以下版本专用
 //@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&UC_Token##UC网盘 Open API Token（可选，优先使用）&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&115Cookie##用于播放115网盘视频&&PikPakToken##用于存储登录信息,Bearer 开头&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
-//@order: A
+//@order: B
 
 // ignore
 import {
@@ -227,9 +227,9 @@ class PanTools {
          * 扩展运行标识 ** uzApp 运行时自动赋值，请勿修改 **
          */
         this._uzTag = ''
+        this.panToolsHandlers = []
+        this._isInitSuccess = false
     }
-
-    panToolsHandlers = []
 
     /**
      * 扩展运行标识 ** uzApp 运行时自动赋值，请勿修改 **
@@ -243,7 +243,6 @@ class PanTools {
         return this._uzTag
     }
 
-    _isInitSuccess = false
     async initHandlers() {
         var dirName = await getEnv(this.uzTag, '转存文件夹名称')
         if (dirName == null || dirName === '') {
@@ -515,11 +514,6 @@ export {
 // 抄自 https://github.com/hjdhnx/drpy-node/
 class PanBaidu {
     /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
-
-    /**
      * 获取实例
      *
      * @param {Object} args - 函数参数对象
@@ -651,6 +645,11 @@ class PanBaidu {
 
     ////////////////////////////////////////
     constructor() {
+        /**
+         * 运行时标识符，会自动赋值一次，请勿修改
+         */
+        this.uzTag = ''
+
         // 初始化百度云盘处理类
         this.cookie = ''
         this.regex = /https:\/\/pan\.baidu\.com\/s\/([^\\|#/]+)/
@@ -692,8 +691,6 @@ class PanBaidu {
             '.m2v',
         ]
     }
-
-    uzTag = ''
 
     async initBaidu() {
         if (this.cookie.length < 1) {
@@ -741,7 +738,7 @@ class PanBaidu {
 
             const devuid = '73CED981D0F186D12BC18CAE1684FFD5|VSRCQTF6W'
             const time = String(Date.now())
-            const bduss = this.cookie.match(/BDUSS=([^;]+)/)?.[1]
+            const bduss = (this.cookie.match(/BDUSS=([^;]+)/) || [])[1]
 
             if (!bduss) {
                 return null
@@ -792,7 +789,11 @@ class PanBaidu {
                     },
                 }
             )
-            return response.data?.data?.fields?.uid || null
+            return response.data &&
+                response.data.data &&
+                response.data.data.fields
+                ? response.data.data.fields.uid
+                : null
         } catch (error) {
             return null
         }
@@ -1052,7 +1053,12 @@ class PanBaidu {
         let panVideos = []
         for (let index = 0; index < videosWithSubtitles.length; index++) {
             const element = videosWithSubtitles[index]
-            let size = (element.size ?? 0) / 1024 / 1024
+            let size =
+                (element.size !== undefined && element.size !== null
+                    ? element.size
+                    : 0) /
+                1024 /
+                1024
             let unit = 'MB'
             if (size >= 1000) {
                 size = size / 1024
@@ -1307,10 +1313,12 @@ function generateXPanToken(method, pathname, timestamp, key) {
 
 // 解析
 class JieXi {
-    /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
+    constructor() {
+        /**
+         * 运行时标识符，会自动赋值一次，请勿修改
+         */
+        this.uzTag = ''
+    }
 
     /**
      * 获取实例
@@ -1582,13 +1590,21 @@ try {
     UZUtils.debugLog('115 获取 BigInteger 失败:', e.toString())
 }
 
+const PAN115_G_KTS = new Uint8Array([
+    0xf0, 0xe5, 0x69, 0xae, 0xbf, 0xdc, 0xbf, 0x8a, 0x1a, 0x45, 0xe8, 0xbe, 0x7d, 0xa6, 0x73, 0xb8,
+    0xde, 0x8f, 0xe7, 0xc4, 0x45, 0xda, 0x86, 0xc4, 0x9b, 0x64, 0x8b, 0x14, 0x6a, 0xb4, 0xf1, 0xaa,
+    0x38, 0x01, 0x35, 0x9e, 0x26, 0x69, 0x2c, 0x86, 0x00, 0x6b, 0x4f, 0xa5, 0x36, 0x34, 0x62, 0xa6,
+    0x2a, 0x96, 0x68, 0x18, 0xf2, 0x4a, 0xfd, 0xbd, 0x6b, 0x97, 0x8f, 0x4d, 0x8f, 0x89, 0x13, 0xb7,
+    0x6c, 0x8e, 0x93, 0xed, 0x0e, 0x0d, 0x48, 0x3e, 0xd7, 0x2f, 0x88, 0xd8, 0xfe, 0xfe, 0x7e, 0x86,
+    0x50, 0x95, 0x4f, 0xd1, 0xeb, 0x83, 0x26, 0x34, 0xdb, 0x66, 0x7b, 0x9c, 0x7e, 0x9d, 0x7a, 0x81,
+    0x32, 0xea, 0xb6, 0x33, 0xde, 0x3a, 0xa9, 0x59, 0x34, 0x66, 0x3b, 0xaa, 0xba, 0x81, 0x60, 0x48,
+    0xb9, 0xd5, 0x81, 0x9c, 0xf8, 0x6c, 0x84, 0x77, 0xff, 0x54, 0x78, 0x26, 0x5f, 0xbe, 0xe8, 0x1e,
+    0x36, 0x9f, 0x34, 0x80, 0x5c, 0x45, 0x2c, 0x9b, 0x76, 0xd5, 0x1b, 0x8f, 0xcc, 0xc3, 0xb8, 0xf5,
+])
+
 // 115网盘
 // 参考 https://github.com/gendago/CatPawOpen
 class Pan115 {
-    /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
 
     /**
      * 获取实例
@@ -1723,13 +1739,18 @@ class Pan115 {
     ////////////////////////////////////////
 
     constructor() {
+        /**
+         * 运行时标识符，会自动赋值一次，请勿修改
+         */
+        this.uzTag = ''
+        this.cookie = ''
+        this.G_kts = PAN115_G_KTS
+        this._RSA_e = null
+        this._RSA_n = null
         // 支持更宽松的 URL 格式，密码部分可能包含特殊字符
         this.regex = /https:\/\/(?:115|anxia|115cdn)\.com\/s\/([a-zA-Z0-9]+)(?:\?password=([^&#\s]+))?/
         this.cookieKey = '115Cookie'
     }
-
-    uzTag = ''
-    cookie = ''
 
     /**
      * 初始化，获取 Cookie
@@ -1744,7 +1765,10 @@ class Pan115 {
      * 判断是否为媒体文件
      */
     isMediaFile(filename) {
-        const ext = filename?.slice(filename?.lastIndexOf('.') + 1)?.toLowerCase()
+        const lastDot = filename ? filename.lastIndexOf('.') : -1
+        const ext = lastDot !== -1
+            ? filename.slice(lastDot + 1).toLowerCase()
+            : ''
         return ['mp4', 'webm', 'avi', 'wmv', 'flv', 'mov', 'mkv', 'mpeg', '3gp', 'ts', 'm2ts', 'mp3', 'wav', 'aac', 'iso'].includes(ext)
     }
 
@@ -1805,7 +1829,11 @@ class Pan115 {
 
                 // 检查分享链接状态
                 if (responseData.data.share_state === 7) {
-                    const forbidReason = responseData.data.shareinfo?.forbid_reason || '链接已过期'
+                    const forbidReason =
+                        responseData.data.shareinfo &&
+                        responseData.data.shareinfo.forbid_reason
+                            ? responseData.data.shareinfo.forbid_reason
+                            : '链接已过期'
                     throw new Error(forbidReason)
                 }
 
@@ -1929,23 +1957,7 @@ class Pan115 {
     ////////////////////////////////////////
     // 115 加密/解密算法
     ////////////////////////////////////////
-
-    // 115 密钥表
-    G_kts = new Uint8Array([
-        0xf0, 0xe5, 0x69, 0xae, 0xbf, 0xdc, 0xbf, 0x8a, 0x1a, 0x45, 0xe8, 0xbe, 0x7d, 0xa6, 0x73, 0xb8,
-        0xde, 0x8f, 0xe7, 0xc4, 0x45, 0xda, 0x86, 0xc4, 0x9b, 0x64, 0x8b, 0x14, 0x6a, 0xb4, 0xf1, 0xaa,
-        0x38, 0x01, 0x35, 0x9e, 0x26, 0x69, 0x2c, 0x86, 0x00, 0x6b, 0x4f, 0xa5, 0x36, 0x34, 0x62, 0xa6,
-        0x2a, 0x96, 0x68, 0x18, 0xf2, 0x4a, 0xfd, 0xbd, 0x6b, 0x97, 0x8f, 0x4d, 0x8f, 0x89, 0x13, 0xb7,
-        0x6c, 0x8e, 0x93, 0xed, 0x0e, 0x0d, 0x48, 0x3e, 0xd7, 0x2f, 0x88, 0xd8, 0xfe, 0xfe, 0x7e, 0x86,
-        0x50, 0x95, 0x4f, 0xd1, 0xeb, 0x83, 0x26, 0x34, 0xdb, 0x66, 0x7b, 0x9c, 0x7e, 0x9d, 0x7a, 0x81,
-        0x32, 0xea, 0xb6, 0x33, 0xde, 0x3a, 0xa9, 0x59, 0x34, 0x66, 0x3b, 0xaa, 0xba, 0x81, 0x60, 0x48,
-        0xb9, 0xd5, 0x81, 0x9c, 0xf8, 0x6c, 0x84, 0x77, 0xff, 0x54, 0x78, 0x26, 0x5f, 0xbe, 0xe8, 0x1e,
-        0x36, 0x9f, 0x34, 0x80, 0x5c, 0x45, 0x2c, 0x9b, 0x76, 0xd5, 0x1b, 0x8f, 0xcc, 0xc3, 0xb8, 0xf5,
-    ])
-
-    // RSA 公钥指数和模数 (使用 JSEncrypt 的 BigInteger)
-    _RSA_e = null
-    _RSA_n = null
+    // 115 密钥表已移到 PAN115_G_KTS
 
     get RSA_e() {
         if (this._RSA_e === null) {
@@ -2133,11 +2145,6 @@ if (BigInteger !== null) {
 // 抄自 https://github.com/hjdhnx/drpy-node/
 class Pan123 {
     /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
-
-    /**
      * 获取实例
      *
      * @param {Object} args - 函数参数对象
@@ -2271,17 +2278,21 @@ class Pan123 {
     ////////////////////////////////////////
 
     constructor() {
+        /**
+         * 运行时标识符，会自动赋值一次，请勿修改
+         */
+        this.uzTag = ''
         this.regex =
             /https:\/\/(www\.)?123(684|865|912|pan)\.(com|cn)\/s\/([^\\/]+)/
         this.api = 'https://www.123684.com/b/api/share/'
         this.loginUrl = 'https://login.123pan.com/api/user/sign_in'
         this.cate = ''
+        this.password = ''
+        this.passport = ''
+        this.authKey = '123panAuth'
+        this.auth = ''
+        this.fileName = ''
     }
-    uzTag = ''
-    password = ''
-    passport = ''
-    authKey = '123panAuth'
-    auth = ''
 
     async init() {
         try {
@@ -2293,7 +2304,7 @@ class Pan123 {
                 this.auth = auth
             }
 
-            if (this.auth?.length > 0) {
+            if (this.auth && this.auth.length > 0) {
                 const CryptoJS = Crypto
                 let info = JSON.parse(
                     CryptoJS.enc.Base64.parse(this.auth.split('.')[1]).toString(
@@ -2336,7 +2347,7 @@ class Pan123 {
 
         let auth = (await axios.request(config)).data
 
-        if (auth?.data?.token) {
+        if (auth && auth.data && auth.data.token) {
             this.auth = auth.data.token
 
             await UZUtils.setStorage({
@@ -2381,7 +2392,6 @@ class Pan123 {
         return shareKey
     }
 
-    fileName = ''
     async getFilesByShareUrl(shareUrl) {
         try {
             const shareKey = this.getShareData(shareUrl)
@@ -2475,7 +2485,7 @@ class Pan123 {
                 orderBy: 'file_name',
                 orderDirection: 'asc',
                 shareKey: shareKey,
-                SharePwd: SharePwd ?? '',
+                SharePwd: SharePwd !== undefined && SharePwd !== null ? SharePwd : '',
                 ParentFileId: ParentFileId,
                 Page: '1',
             },
@@ -2539,33 +2549,39 @@ class Pan123 {
     async getShareList(shareKey, SharePwd, next, ParentFileId) {
         try {
             let video = []
-            let infoList = (
-                await axios.get(this.api + 'get', {
-                    headers: {},
-                    params: {
-                        limit: '100',
-                        next: next,
-                        orderBy: 'file_name',
-                        orderDirection: 'asc',
-                        shareKey: shareKey,
-                        SharePwd: SharePwd ?? '',
-                        ParentFileId: ParentFileId,
-                        Page: '1',
-                    },
-                })
-            ).data?.data?.InfoList
-            infoList?.forEach((it) => {
-                if (it.Category === 2) {
-                    video.push({
-                        ShareKey: shareKey,
-                        FileId: it.FileId,
-                        S3KeyFlag: it.S3KeyFlag,
-                        Size: it.Size,
-                        Etag: it.Etag,
-                        FileName: it.FileName,
-                    })
-                }
+            const listResp = await axios.get(this.api + 'get', {
+                headers: {},
+                params: {
+                    limit: '100',
+                    next: next,
+                    orderBy: 'file_name',
+                    orderDirection: 'asc',
+                    shareKey: shareKey,
+                    SharePwd: SharePwd !== undefined && SharePwd !== null ? SharePwd : '',
+                    ParentFileId: ParentFileId,
+                    Page: '1',
+                },
             })
+            let infoList =
+                listResp &&
+                listResp.data &&
+                listResp.data.data
+                    ? listResp.data.data.InfoList
+                    : null
+            if (infoList) {
+                infoList.forEach((it) => {
+                    if (it.Category === 2) {
+                        video.push({
+                            ShareKey: shareKey,
+                            FileId: it.FileId,
+                            S3KeyFlag: it.S3KeyFlag,
+                            Size: it.Size,
+                            Etag: it.Etag,
+                            FileName: it.FileName,
+                        })
+                    }
+                })
+            }
             return video
         } catch (error) {
             return []
@@ -2596,8 +2612,11 @@ class Pan123 {
             }
             const resp = await axios.request(config)
 
-            let down = resp?.data?.data
-            let url = down?.DownloadURL
+            let down =
+                resp && resp.data && resp.data.data
+                    ? resp.data.data
+                    : null
+            let url = down && down.DownloadURL ? down.DownloadURL : ''
 
             if (url.length < 1) {
                 return []
@@ -2638,18 +2657,23 @@ class Pan123 {
                     shareKey: shareKey,
                 },
             }
-            let down = (await axios.request(config))?.data?.data
-                ?.video_play_info
+            const playResp = await axios.request(config)
+            let down =
+                playResp && playResp.data && playResp.data.data
+                    ? playResp.data.data.video_play_info
+                    : null
             let videoinfo = []
-            down?.forEach((item) => {
-                if (item.url !== '') {
-                    videoinfo.push({
-                        name: item.resolution,
-                        url: item.url,
-                        priority: item.height,
-                    })
-                }
-            })
+            if (down) {
+                down.forEach((item) => {
+                    if (item.url !== '') {
+                        videoinfo.push({
+                            name: item.resolution,
+                            url: item.url,
+                            priority: item.height,
+                        })
+                    }
+                })
+            }
 
             return videoinfo
         } catch (error) {
@@ -2693,11 +2717,6 @@ panSubClasses.push(Pan123)
 // 抄自 https://github.com/hjdhnx/drpy-node/
 
 class Pan189 {
-    /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
-
     /**
      * 获取实例
      *
@@ -2830,6 +2849,7 @@ class Pan189 {
         return new PanPlayInfo()
     }
     constructor() {
+        this.uzTag = ''
         this.regex = /https:\/\/cloud\.189\.cn\/web\/share\?code=([^&]+)/ //https://cloud.189.cn/web/share?code=qI3aMjqYRrqa
         this.config = {
             clientId: '538135150693412',
@@ -2851,16 +2871,16 @@ class Pan189 {
         this.shareMode = ''
         this.isFolder = ''
         this.index = 0
-    }
-
-    account = ''
-    password = ''
-    cookie = ''
-    authKey = '189panAuth'
-    normalHeaders = {
-        'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        Accept: 'application/json;charset=UTF-8',
+        this.account = ''
+        this.password = ''
+        this.cookie = ''
+        this.authKey = '189panAuth'
+        this.normalHeaders = {
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+            Accept: 'application/json;charset=UTF-8',
+        }
+        this.fileName = ''
     }
 
     async logout() {
@@ -2903,7 +2923,10 @@ class Pan189 {
             // 获取最后请求url中的参数reqId和lt
             const lastReq = resp.redirects.pop()
 
-            const lastReqUrl = lastReq.location ?? lastReq.url
+            const lastReqUrl =
+                lastReq.location !== undefined && lastReq.location !== null
+                    ? lastReq.location
+                    : lastReq.url
 
             let Reqid = lastReqUrl.match(/reqId=(\w+)/)[1]
             let Lt = lastReqUrl.match(/lt=(\w+)/)[1]
@@ -2977,11 +3000,13 @@ class Pan189 {
                     maxRedirects: 0,
                 })
 
+                const setCookie =
+                    resp.headers && resp.headers['set-cookie']
+                        ? resp.headers['set-cookie']
+                        : null
                 cookies +=
                     '; ' +
-                        resp.headers?.['set-cookie']
-                            ?.map((it) => it.split(';')[0])
-                            .join(';') ?? ''
+                    (setCookie ? setCookie.map((it) => it.split(';')[0]).join(';') : '')
                 this.cookie = cookies
 
                 await UZUtils.setStorage({
@@ -3065,8 +3090,7 @@ class Pan189 {
         } catch (error) {}
     }
 
-    fileName = ''
-    
+
     /**
      * 判断文件是否为视频文件（根据扩展名）
      * @param {string} filename - 文件名
@@ -3133,8 +3157,9 @@ class Pan189 {
 
             let videos = []
             for (let key in file) {
-                for (let i = 0; i < file[key]?.length; i++) {
-                    const element = file[key][i]
+                const list = file[key] || []
+                for (let i = 0; i < list.length; i++) {
+                    const element = list[i]
                     let size = element.size / 1024 / 1024
                     let unit = 'MB'
                     if (size >= 1000) {
@@ -3179,7 +3204,7 @@ class Pan189 {
                         headers: this.normalHeaders,
                     }
                 )
-                if (check.status === 200 && check.data?.shareId) {
+                if (check.status === 200 && check.data && check.data.shareId) {
                     this.shareId = check.data.shareId
                 }
                 let resp = await axios.get(
@@ -3190,7 +3215,7 @@ class Pan189 {
                 )
                 let fileId = resp.data.fileId
                 // 如果 checkAccessCode 没有返回 shareId，从 getShareInfoByCodeV2 获取
-                if (!this.shareId && resp.data?.shareId) {
+                if (!this.shareId && resp.data && resp.data.shareId) {
                     this.shareId = resp.data.shareId
                 }
                 this.shareMode = resp.data.shareMode
@@ -3237,11 +3262,14 @@ class Pan189 {
 
             let resp = await req(url, options)
 
-            const text = resp?.data ?? ''
+            const text =
+                resp && resp.data !== undefined && resp.data !== null
+                    ? resp.data
+                    : ''
             const json = JSONbig.parse(text)
 
-            const data = json?.fileListAO
-            let folderList = data?.folderList
+            const data = json && json.fileListAO ? json.fileListAO : null
+            let folderList = data && data.folderList ? data.folderList : null
             if (!folderList) {
                 return null
             }
@@ -3295,11 +3323,13 @@ class Pan189 {
                 return await this.getShareFile(fileId, pageNum, retry + 1)
             }
 
-            let json = JSONbig.parse(resp.data ?? '')
+            let json = JSONbig.parse(
+                resp.data !== undefined && resp.data !== null ? resp.data : ''
+            )
 
             let videos = []
-            const data = json?.fileListAO
-            let fileList = data?.fileList
+            const data = json && json.fileListAO ? json.fileListAO : null
+            let fileList = data && data.fileList ? data.fileList : null
             if (!fileList) {
                 return null
             }
@@ -3316,7 +3346,10 @@ class Pan189 {
                     })
                 }
             }
-            const totalCount = data?.count ?? 0
+            const totalCount =
+                data && data.count !== undefined && data.count !== null
+                    ? data.count
+                    : 0
             if (totalCount > pageSize * pageNum) {
                 let result = await this.getShareFile(fileId, pageNum + 1)
                 if (result) {
@@ -3413,11 +3446,6 @@ panSubClasses.push(Pan189)
 // 抄自 https://github.com/hjdhnx/drpy-node/
 
 class PanYun {
-    /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
-
     /**
      * 获取实例
      *
@@ -3550,6 +3578,10 @@ class PanYun {
 
     ////////////////////////////////////////
     constructor() {
+        /**
+         * 运行时标识符，会自动赋值一次，请勿修改
+         */
+        this.uzTag = ''
         // 移动云盘分享链接的正则表达式
         this.regex = /https:\/\/yun.139.com\/shareweb\/#\/w\/i\/([^&]+)/
         // AES加密密钥
@@ -3764,7 +3796,7 @@ class PanYun {
             }
 
             // 检查响应是否成功
-            const statusCode = resp?.code
+            const statusCode = resp ? resp.code : undefined
 
             // 检查是否有数据
             if (!resp || resp.data === null || resp.data === undefined) {
@@ -3874,8 +3906,9 @@ class PanYun {
             // 标准化返回格式
             let videos = []
             for (let key in file) {
-                for (let i = 0; i < file[key]?.length; i++) {
-                    const element = file[key][i]
+                const list = file[key] || []
+                for (let i = 0; i < list.length; i++) {
+                    const element = list[i]
                     
                     // 构建 remark，与其他网盘保持一致的格式（只显示文件大小）
                     let remark = '[移动]'  // 默认显示网盘类型
@@ -3934,7 +3967,7 @@ class PanYun {
             if (!json || !json.caLst) {
                 return null
             }
-            const caLst = json?.caLst
+            const caLst = json && json.caLst ? json.caLst : null
             const names = caLst.map(it => it.caName)
             const rootPaths = caLst.map(it => it.path)
             // 过滤不需要的目录
@@ -4166,11 +4199,6 @@ panSubClasses.push(PanYun)
 // 作者：你猜
 class PanPikPak {
     /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
-
-    /**
      * 获取实例
      *
      * @param {Object} args - 函数参数对象
@@ -4249,6 +4277,13 @@ class PanPikPak {
     async clearPanSaveDir() {}
 
     constructor() {
+        this.uzTag = ''
+        this.auth = ''
+        this.captcha_token = ''
+        this.fileIds = ''
+        this.parentId = ''
+        this.ids = []
+        this.index = 0
         this.regex = /https:\/\/mypikpak.com\/s\/(.*)\?act=play/
         this.api = 'https://api-drive.mypikpak.com/drive/v1/share'
         this.share_api = 'https://keepshare.org/ai1uqv5a/'
@@ -4261,14 +4296,6 @@ class PanPikPak {
             'accept-language': 'zh-CN',
         }
     }
-
-    // --- 类属性 ---
-    auth = ''
-    captcha_token = ''
-    fileIds = ''
-    parentId = ''
-    ids = []
-    index = 0
 
     /**
      * 初始化，检查并验证Token
@@ -4696,10 +4723,16 @@ class PanPikPak {
                     let links = []
                     if (file.data.web_content_link)
                         links.push(file.data.web_content_link)
-                    if (file.data?.links?.['application/octet-stream']?.url)
+                    if (
+                        file.data &&
+                        file.data.links &&
+                        file.data.links['application/octet-stream'] &&
+                        file.data.links['application/octet-stream'].url
+                    ) {
                         links.push(
                             file.data.links['application/octet-stream'].url
                         )
+                    }
                     return links
                 }
             }
@@ -4718,44 +4751,41 @@ panSubClasses.push(PanPikPak)
 // 抄自 https://github.com/jadehh/TVSpider
 // 集成了 CatPawOpen-main/nodejs/src/util/uc.js 的 Open API 支持
 
-class QuarkClient {
-    static apiUrl = 'https://drive-pc.quark.cn/1/clouddrive/'
-    static pr = 'pr=ucpro&fr=pc'
-    static httpHeaders = {
-        'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
-        Referer: 'https://pan.quark.cn/',
-        'Content-Type': 'application/json',
-    }
+class QuarkClient {}
+QuarkClient.apiUrl = 'https://drive-pc.quark.cn/1/clouddrive/'
+QuarkClient.pr = 'pr=ucpro&fr=pc'
+QuarkClient.httpHeaders = {
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
+    Referer: 'https://pan.quark.cn/',
+    'Content-Type': 'application/json',
 }
 
 const kUC_UTKeyWord = 'kUC_UTKeyWord'
-class UCClient {
-    static apiUrl = 'https://pc-api.uc.cn/1/clouddrive/'
+class UCClient {}
+UCClient.apiUrl = 'https://pc-api.uc.cn/1/clouddrive/'
+UCClient.pr = 'pr=UCBrowser&fr=pc&sys=darwin&ve=1.8.6&ut=' + kUC_UTKeyWord
+UCClient.httpHeaders = {
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
+    Referer: 'https://drive.uc.cn',
+    'Content-Type': 'application/json',
+}
 
-    static pr = 'pr=UCBrowser&fr=pc&sys=darwin&ve=1.8.6&ut=' + kUC_UTKeyWord
-    static httpHeaders = {
-        'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch',
-        Referer: 'https://drive.uc.cn',
-        'Content-Type': 'application/json',
-    }
+// UC Open API 配置
+UCClient.Addition = {
+    DeviceID: '07b48aaba8a739356ab8107b5e230ad4',
+    RefreshToken: '',
+    AccessToken: ''
+}
 
-    // UC Open API 配置
-    static Addition = {
-        DeviceID: '07b48aaba8a739356ab8107b5e230ad4',
-        RefreshToken: '',
-        AccessToken: ''
-    }
-
-    static conf = {
-        api: 'https://open-api-drive.uc.cn',
-        clientID: '5acf882d27b74502b7040b0c65519aa7',
-        signKey: 'l3srvtd7p42l0d0x1u8d7yc8ye9kki4d',
-        appVer: '1.6.8',
-        channel: 'UCTVOFFICIALWEB',
-        codeApi: 'http://api.extscreen.com/ucdrive',
-    }
+UCClient.conf = {
+    api: 'https://open-api-drive.uc.cn',
+    clientID: '5acf882d27b74502b7040b0c65519aa7',
+    signKey: 'l3srvtd7p42l0d0x1u8d7yc8ye9kki4d',
+    appVer: '1.6.8',
+    channel: 'UCTVOFFICIALWEB',
+    codeApi: 'http://api.extscreen.com/ucdrive',
 }
 
 class QuarkUC {
@@ -4766,11 +4796,12 @@ class QuarkUC {
         this.saveFileIdCaches = {}
         this.saveDirId = null
         this.saveDirName = 'uz影视'
+        this.uzTag = ''
+        this.ut = ''
+        this.token = '' // UC Open API token
+        this.subtitleExts = ['.srt', '.ass', '.scc', '.stl', '.ttml']
+        this.fileName = ''
     }
-    uzTag = ''
-    ut = ''
-    token = '' // UC Open API token
-    subtitleExts = ['.srt', '.ass', '.scc', '.stl', '.ttml']
 
     get apiUrl() {
         if (this.isQuark) {
@@ -4825,7 +4856,6 @@ class QuarkUC {
                 : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) uc-cloud-drive/1.8.6 Chrome/100.0.4896.160 Electron/18.3.5.16-b62cf9c50d Safari/537.36 Channel/ucpan_other_ch',
         }
     }
-    fileName = ''
     /**
      * 获取文件列表
      * @param {string} shareUrl
@@ -4869,7 +4899,12 @@ class QuarkUC {
             const item = videos[index]
             // 复制 item
             const element = JSON.parse(JSON.stringify(item))
-            let size = (element.size ?? 0) / 1024 / 1024
+            let size =
+                (element.size !== undefined && element.size !== null
+                    ? element.size
+                    : 0) /
+                1024 /
+                1024
             let unit = 'MB'
             if (size >= 1000) {
                 size = size / 1024
@@ -4971,7 +5006,7 @@ class QuarkUC {
                 const data = await req(UCClient.apiUrl + 'file', {
                     responseType: ReqResponseType.plain,
                 })
-                if (data.data?.length > 0) {
+                if (data.data && data.data.length > 0) {
                     this.ut = data.data
                 }
             }
@@ -5053,10 +5088,17 @@ class QuarkUC {
                 }
             )
             if (this.fileName.length < 1) {
-                this.fileName = shareToken?.data?.title
+                this.fileName =
+                    shareToken && shareToken.data && shareToken.data.title
+                        ? shareToken.data.title
+                        : ''
             }
-            if (shareToken?.data != null && shareToken?.data?.stoken != null) {
-                this.shareTokenCache[shareData.shareId] = shareToken?.data
+            if (
+                shareToken &&
+                shareToken.data != null &&
+                shareToken.data.stoken != null
+            ) {
+                this.shareTokenCache[shareData.shareId] = shareToken.data
             }
         }
     }
@@ -5082,7 +5124,7 @@ class QuarkUC {
         for (const item of items) {
             if (item.dir === true) {
                 subDir.push(item)
-            } else if (item.file === true && (item.category === 1 || item.obj_category === 'video' || videoExts.some(ext => item.file_name?.toLowerCase().endsWith(ext)))) {
+            } else if (item.file === true && (item.category === 1 || item.obj_category === 'video' || videoExts.some(ext => item.file_name && item.file_name.toLowerCase().endsWith(ext)))) {
                 if (parseInt(item.size.toString()) < 1024 * 1024 * 5) continue
                 item.stoken = this.shareTokenCache[shareData.shareId].stoken
                 videos.push({
@@ -5278,13 +5320,18 @@ class QuarkUC {
                 'get'
             )
 
-            let list = resData.data?.list ?? []
+            let list = resData.data && resData.data.list ? resData.data.list : []
             let mountList = []
             for (let index = 0; index < list.length; index++) {
                 const element = list[index]
 
                 let remark = ''
-                let size = (element.size ?? 0) / 1024 / 1024
+                let size =
+                    (element.size !== undefined && element.size !== null
+                        ? element.size
+                        : 0) /
+                    1024 /
+                    1024
                 let unit = 'MB'
                 if (size != 0) {
                     if (size >= 1000) {
@@ -5329,7 +5376,7 @@ class QuarkUC {
      * priority: 优先级
      */
     async getLiveTranscoding(args) {
-        let isMount = args.isMount ?? false
+        let isMount = args.isMount !== undefined ? args.isMount : false
         const transcoding = await this.api(`file/v2/play?${this.pr}`, {
             fid: isMount ? args.fileId : this.saveFileIdCaches[args.fileId],
             resolutions: 'normal,low,high,super,2k,4k',
@@ -5345,13 +5392,19 @@ class QuarkUC {
         }
         if (transcoding.data != null && transcoding.data.video_list != null) {
             for (const video of transcoding.data.video_list) {
-                const resoultion = video.video_info?.resoultion
-                const priority = video.video_info?.width
-                const url = video.video_info?.url
+                const videoInfo = video.video_info || {}
+                const resoultion = videoInfo.resoultion
+                const priority = videoInfo.width
+                const url = videoInfo.url
                 if (resoultion && url) {
+                    const name =
+                        nameMap[resoultion] !== undefined &&
+                        nameMap[resoultion] !== null
+                            ? nameMap[resoultion]
+                            : resoultion
                     urls.push({
                         url: url,
-                        name: nameMap[resoultion] ?? resoultion,
+                        name: name,
                         headers: this.playHeaders,
                         priority: priority,
                     })
@@ -5374,7 +5427,7 @@ class QuarkUC {
      * priority: 优先级
      */
     async getDownload(args) {
-        let isMount = args.isMount ?? false
+        let isMount = args.isMount !== undefined ? args.isMount : false
 
         // UC 网盘优先尝试使用 Open API token 方式
         if (!this.isQuark && this.token && this.token.length > 0) {
@@ -5420,7 +5473,12 @@ class QuarkUC {
                 }
 
                 const response = await axios.request(config)
-                if (response.status === 200 && response.data?.data?.video_info) {
+                if (
+                    response.status === 200 &&
+                    response.data &&
+                    response.data.data &&
+                    response.data.data.video_info
+                ) {
                     const videoInfo = response.data.data.video_info.filter((t) => t.accessable)[0]
                     if (videoInfo && videoInfo.url) {
                         // Open API 返回的 URL 已包含认证参数
@@ -5495,11 +5553,6 @@ class QuarkUC {
             }
         }
     }
-
-    /**
-     * 运行时标识符，会自动赋值一次，请勿修改
-     */
-    uzTag = ''
 
     /**
      * 返回网盘类型 PanType ,请勿与其他平台的冲突

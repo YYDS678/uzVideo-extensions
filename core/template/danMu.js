@@ -84,6 +84,13 @@ class DanMu {
          * @type {number}
          */
         this.time = 0
+
+
+        /**
+         * 弹幕颜色 支持 10 进制 16 进制
+         * @type {string}
+         */
+        this.color = ''
     }
 }
 
