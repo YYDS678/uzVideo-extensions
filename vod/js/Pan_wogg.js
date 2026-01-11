@@ -2,6 +2,7 @@
 //@version:3
 //@webSite:http://wogg.xxooo.cf
 //@remark:
+//@logo:wanou.png
 //@order: A01
 const appConfig = {
     _webSite: 'http://wogg.xxooo.cf',

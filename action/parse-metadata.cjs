@@ -101,6 +101,7 @@ const parseComments = (filePath) => {
         instance: extractValue(content, '@instance:'),
         isAV: extractValue(content, '@isAV:'),
         order: extractValue(content, '@order:'),
+        logo: extractValue(content, '@logo:'),
     }
 
     if (!metadata.name) return null
@@ -210,6 +211,15 @@ const main = async () => {
     const allInOneResult = {}
     const avResultList = []
 
+
+    const [owner, repo] = getRepoInfo()
+    const branch = process.env.GITHUB_REF
+        ? process.env.GITHUB_REF.replace('refs/heads/', '')
+        : 'main'
+    const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
+    const githubRawHost = 'https://raw.githubusercontent.com'
+
+
     // 2. 遍历目录，解析文件元数据
     directories.forEach((dir) => {
         const fullPath = path.join(__dirname, '..', dir)
@@ -294,6 +304,12 @@ const main = async () => {
                     api: metadata.api,
                     type: parseInt(metadata.type) || TYPE_MAPPING[dir] || 101,
                 }
+                if (metadata.logo) {
+                    item.logo = metadata.logo
+                    if (!item.logo.startsWith("http")) {
+                        item.logo =  `${githubRawHost}/${owner}/${repo}/${branch}/logo/${metadata.logo}`
+                    }
+                }
 
                 if (parseInt(metadata.isAV) === 1) {
                     avResultList.push(item)
@@ -355,13 +371,6 @@ const main = async () => {
         JSON.stringify(avResultList, null, 2).replaceAll(kLocalPathTAG, '')
     )
 
-    // 7. 替换为 jsDelivr CDN 地址
-    const [owner, repo] = getRepoInfo()
-    const branch = process.env.GITHUB_REF
-        ? process.env.GITHUB_REF.replace('refs/heads/', '')
-        : 'main'
-    const jsdelivrCDN = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/`
-    const githubRawHost = 'https://raw.githubusercontent.com'
 
     let sources = [
         ...orderedResult.panTools,
@@ -371,11 +380,18 @@ const main = async () => {
         ...orderedResult.vod,
         ...avResultList,
     ]
+    // 7. 替换为 jsDelivr CDN 地址
     sources.forEach((item) => {
         item.api = item.api.replace(
             `${githubRawHost}/${owner}/${repo}/${branch}/`,
             jsdelivrCDN
         )
+        if (item.logo) {
+            item.logo = item.logo.replace(
+                `${githubRawHost}/${owner}/${repo}/${branch}/`,
+                jsdelivrCDN
+            )
+        }
     })
 
     fs.writeFileSync(

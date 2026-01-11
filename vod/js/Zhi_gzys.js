@@ -5,6 +5,7 @@
 //@remark:瓜子WEB
 //@type:100
 //@instance:gzys20240822
+//@logo:guazi2.png
 //@order: B
 
 import {} from '../../core/uzVideo.js'

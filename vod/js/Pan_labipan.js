@@ -2,6 +2,7 @@
 //@version:5
 //@webSite:http://feimao888.fun
 //@remark:
+//@logo:labi.png
 //@order: A03
 const appConfig = {
     _webSite: 'http://feimao888.fun',
