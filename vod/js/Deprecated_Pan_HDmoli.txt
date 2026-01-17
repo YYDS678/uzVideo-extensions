@@ -6,6 +6,7 @@
 //@remark:🍃豆儿出品，不属精品！支持在线播放和网盘
 //@codeID:OAxUOePWsN3I7NQfNIO9Il1I1cgolbSa
 //@order: A12
+//@deprecated:1
 
 // ignore
 
