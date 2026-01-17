@@ -2,7 +2,7 @@
 
 //@name:[直] 奇优
 //@webSite:http://www.qiyoudy4.com
-//@version:1
+//@version:2
 //@remark:
 //@order: B
 
@@ -225,6 +225,7 @@ async function getVideoDetail(args) {
             let playlist = $('.stui-content__playlist')
             let vod_play_url = []
             playlist.each((index, element) => {
+                if (index === 0) return // 屏蔽第一条播放线路
                 let eps = $(element).find('li a')
                 let temp = ''
                 eps.each((_, e) => {
