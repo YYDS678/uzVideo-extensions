@@ -762,9 +762,6 @@ class QuarkUC {
                 down.data[0].download_url != null
             ) {
                 let priority = 9999
-                if (this.isQuark && down.data[0].video_width > 2000) {
-                    priority = 0
-                }
                 return [
                     {
                         name: '原画',

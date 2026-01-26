@@ -2,7 +2,7 @@
 //@name:[盘] 多多
 //@webSite:https://tv.yydsys.top
 //@remark:
-//@order: A09
+//@order: A04
 const appConfig = {
     _webSite: 'https://tv.yydsys.top',
     /**
