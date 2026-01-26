@@ -1,5 +1,5 @@
 //@name:夸克|UC|天翼|123|百度|移动|pikpak|115|解析
-//@version:38
+//@version:39
 //@remark:iOS 15 及以上版本可用
 //@env:百度网盘Cookie##用于播放百度网盘视频&&UCCookie##用于播放UC网盘视频&&UC_Token##UC网盘 Open API Token（可选，优先使用）&&夸克Cookie##用于播放Quark网盘视频&&转存文件夹名称##在各网盘转存文件时使用的文件夹名称&&123网盘账号##用于播放123网盘视频&&123网盘密码##用于播放123网盘视频&&天翼网盘账号##用于播放天翼网盘视频&&天翼网盘密码##用于播放天翼网盘视频&&115Cookie##用于播放115网盘视频&&PikPakToken##用于存储登录信息,Bearer 开头&&采集解析地址##内置两个，失效不要反馈。格式：名称1@地址1;名称2@地址2
 //@order: A
@@ -5461,9 +5461,6 @@ class QuarkUC {
                 down.data[0].download_url != null
             ) {
                 let priority = 9999
-                if (this.isQuark && down.data[0].video_width > 2000) {
-                    priority = 0
-                }
                 return [
                     {
                         name: '原画',
