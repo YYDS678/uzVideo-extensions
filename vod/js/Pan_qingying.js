@@ -1,9 +1,8 @@
-//@name:[盘] Revohd
+//@name:[盘] 清影
 //@version:3
 //@webSite:http://www.revohd.com
-//@remark:
-//@author:白猫
-//@order: A02
+//@remark:🙀是白猫呀！！！
+//@order: A20
 const appConfig = {
     _webSite: 'http://www.revohd.com',
     /**
@@ -28,6 +27,9 @@ const appConfig = {
     },
 }
 
+// 全局变量
+let hasShownWelcome = false  // 标记是否已显示欢迎提示
+
 /**
  * 异步获取分类列表的方法。
  * @param {UZArgs} args
@@ -35,6 +37,11 @@ const appConfig = {
  */
 async function getClassList(args) {
     var backData = new RepVideoClassList()
+    // 首次加载时显示欢迎提示
+    if (!hasShownWelcome) {
+        hasShownWelcome = true
+        toast("🙀白猫出品，三无产品！！！", 3)  // 显示3秒
+    }
     backData.data = [
         {
             type_id: '1',
@@ -79,13 +86,13 @@ async function getSubclassVideoList(args) {
 async function getVideoList(args) {
     var backData = new RepVideoList()
     let url = ''
-    
+
     if (args.url) {
         // 分类页面，如：/vod/show/id/1/page/2.html
-        url = UZUtils.removeTrailingSlash(appConfig.webSite) + 
-              `/vod/show/id/${args.url}/page/${args.page}.html`
+        url = UZUtils.removeTrailingSlash(appConfig.webSite) +
+            `/vod/show/id/${args.url}/page/${args.page}.html`
     }
-    
+
     try {
         const pro = await req(url)
         backData.error = pro.error
@@ -94,25 +101,25 @@ async function getVideoList(args) {
         if (pro.data) {
             const $ = cheerio.load(pro.data)
             let vodItems = $('.module-items .module-item')
-            
+
             vodItems.each((_, e) => {
                 let videoDet = new VideoDetail()
-                
+
                 // 获取链接
                 const link = $(e).find('.module-item-pic a').attr('href')
                 videoDet.vod_id = link
-                
+
                 // 获取剧名
-                videoDet.vod_name = $(e).find('.module-item-pic img').attr('alt') || 
-                                   $(e).find('.module-item-titlebox a').attr('title') ||
-                                   $(e).find('.module-item-pic a').attr('title')
-                
+                videoDet.vod_name = $(e).find('.module-item-pic img').attr('alt') ||
+                    $(e).find('.module-item-titlebox a').attr('title') ||
+                    $(e).find('.module-item-pic a').attr('title')
+
                 // 获取图片
                 videoDet.vod_pic = UZUtils.removeTrailingSlash(appConfig.webSite) + $(e).find('.module-item-pic img').attr('data-src')
-                
+
                 // 获取豆瓣评分/备注
                 videoDet.vod_remarks = $(e).find('.module-item-caption span').first().text()
-       
+
                 videos.push(videoDet)
             })
         }
@@ -140,19 +147,19 @@ async function getVideoDetail(args) {
             const $ = cheerio.load(proData)
             let vodDetail = new VideoDetail()
             vodDetail.vod_id = args.url
-            
+
             // 获取剧名
             vodDetail.vod_name = $('.page-title a').text()
-            
+
             // 获取图片
             vodDetail.vod_pic = UZUtils.removeTrailingSlash(appConfig.webSite) + $('.module-item-pic img').attr('data-src')
-            
+
             // 获取详细信息
             $('.video-info-items').each((_, item) => {
                 const title = $(item).find('.video-info-itemtitle').text() ||
-                             $(item).find('.video-info-item[title]').text()
+                    $(item).find('.video-info-item[title]').text()
                 const value = $(item).find('.video-info-item').last().text().trim()
-                
+
                 if (title.includes('导演')) {
                     vodDetail.vod_director = $(item).find('a').map((i, el) => $(el).text().trim()).get().join(', ')
                 } else if (title.includes('主演')) {
@@ -164,20 +171,20 @@ async function getVideoDetail(args) {
                     vodDetail.vod_remarks = $(item).find('font').text() || value
                 }
             })
-            
+
             // 获取剧情简介
-            vodDetail.vod_content  = $('.video-info-content span').text()
-            
+            vodDetail.vod_content = $('.video-info-content span').text()
+
             // 获取网盘链接
             const panUrls = []
-            
+
             $('.module-row-title p').each((_, el) => {
                 const url = $(el).text().trim()
                 if (url) {
                     panUrls.push(url)
                 }
             })
-        
+
             vodDetail.panUrls = panUrls
             backData.data = vodDetail
         }
@@ -207,45 +214,45 @@ async function searchVideo(args) {
     var backData = new RepVideoList()
     try {
         let searchUrl = UZUtils.removeTrailingSlash(appConfig.webSite) +
-                       `/vodsearch/-------------.html?wd=${encodeURIComponent(args.searchWord)}`
-        
+            `/vodsearch/-------------.html?wd=${encodeURIComponent(args.searchWord)}`
+
         if (args.page && args.page > 1) {
             searchUrl += `&page=${args.page}`
         }
-        
+
         let repData = await req(searchUrl)
 
         const $ = cheerio.load(repData.data)
-        
+
         // 尝试多种选择器来获取搜索结果
         let items = $('.module-search-item, .module-item')
-        
+
         if (items.length === 0) {
             // 如果没有特定class，尝试通用的项目选择器
             items = $('.module-items .module-item, .vod-item, .video-item')
         }
-        
+
         items.each((_, item) => {
             let video = new VideoDetail()
-            
+
             // 获取链接
             const link = $(item).find('a').first().attr('href')
             if (link) video.vod_id = link
-            
+
             // 获取剧名
-            video.vod_name =$(item).find('.video-info h3 a').attr('title')
+            video.vod_name = $(item).find('.video-info h3 a').attr('title')
 
             // 获取图片
-            video.vod_pic =  UZUtils.removeTrailingSlash(appConfig.webSite) + $('.module-item-pic img').attr('data-src')
-            
+            video.vod_pic = UZUtils.removeTrailingSlash(appConfig.webSite) + $('.module-item-pic img').attr('data-src')
+
             // 获取备注/评分
             video.vod_remarks = $('.module-item-caption span').first().text()
-            
+
             if (video.vod_id && video.vod_name) {
                 backData.data.push(video)
             }
         })
-        
+
     } catch (error) {
         backData.error = '搜索失败: ' + error
     }

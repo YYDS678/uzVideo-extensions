@@ -1,9 +1,8 @@
 //@name:[盘] 奕搜
-//@version:1
+//@version:2
 //@webSite:https://ysso.cc
-//@remark: 
-//@author:白猫
-//@order: A01
+//@remark: 🙀是白猫呀！！！
+//@order: A02
 const appConfig = {
     _webSite: 'https://ysso.cc',
     /**
@@ -30,6 +29,10 @@ const appConfig = {
     },
 }
 
+// 全局变量
+let hasShownWelcome = false  // 标记是否已显示欢迎提示
+
+
 /**
  * 从标题文本中提取备注信息
  * 优先级：更新集数 > 评分 > 年份
@@ -37,6 +40,11 @@ const appConfig = {
  * @returns {string} - 备注信息
  */
 function extractRemarkFromTitle(titleText) {
+    // 首次加载时显示欢迎提示
+    if (!hasShownWelcome) {
+        hasShownWelcome = true
+        toast("🙀白猫出品，三无产品！！！", 3)  // 显示3秒
+    }
     // 提取所有方括号内的内容
     const bracketContents = []
     const regex = /\[(.*?)\]/g
@@ -270,9 +278,9 @@ async function getVideoDetail(args) {
             $('a[target="_blank"]').each((_, el) => {
                 let href = $(el).attr('href')
                 if (href) {
-                     panUrls.push(`${href}`)
-                    }
+                    panUrls.push(`${href}`)
                 }
+            }
             )
 
             // 如果网站有提取码，尝试从文本中捕获
@@ -322,11 +330,11 @@ async function searchVideo(args) {
         for (const item of items) {
             let video = new VideoDetail()
 
-            // 获取链接 - 从左侧图片链接或标题链接获取
+            // 获取链接
             let link = $(item).find('.left_ly a').attr('href') || $(item).find('.text_title_p a').attr('href')
             video.vod_id = link
 
-            // 获取标题 - 从text_title_p中获取，移除mark标签
+            // 获取标题
             let titleElement = $(item).find('.text_title_p')
             // 移除mark标签并获取文本
             titleElement.find('mark').each((_, mark) => {

@@ -1,9 +1,8 @@
-//@name:[盘] 人人电影
-//@version:1
+//@name:[盘] 人人电影网
+//@version:2
 //@webSite:https://www.rrdynb.com
-//@remark: 
-//@author:白猫
-//@order:A01
+//@remark:🙀是白猫呀！！！
+//@order:A22
 const appConfig = {
     _webSite: 'https://www.rrdynb.com',
     get webSite() {
@@ -21,11 +20,19 @@ const appConfig = {
     },
 }
 
+// 全局变量
+let hasShownWelcome = false  // 标记是否已显示欢迎提示
+
 /**
  * 获取分类列表
  */
 async function getClassList(args) {
     var backData = new RepVideoClassList()
+    // 首次加载时显示欢迎提示
+    if (!hasShownWelcome) {
+        hasShownWelcome = true
+        toast("🙀白猫出品，三无产品！！！", 3)  // 显示3秒
+    }
     backData.data = [
         {
             type_id: 'movie/list_2',
@@ -44,7 +51,7 @@ async function getClassList(args) {
         },
         {
             type_id: '/zongyi/list_10',
-            type_name: '综艺',
+            type_name: '老电影',
             hasSubclass: false,
         },
     ]
@@ -90,15 +97,19 @@ async function getVideoList(args) {
 
                 // 标题清洗：取《》内的内容，如果没《》，则直接取完整title
                 let rawTitle = $link.attr('title') || $link.text()
-                let titleMatch = rawTitle.match(/《(.*?)》/)
-                if (titleMatch) {
+                let titleMatch = rawTitle.match(/《(.*?)》/) || rawTitle.match(/「(.*?)」/)
+                if (rawTitle) {
                     videoDet.vod_name = titleMatch[1]
+                } else if (rawTitle) {
+                    video.vod_name = rawTitle.replace(/[《,<font color='red'>,</font>]/g, '')
+                } else {
+                    video.vod_name = rawTitle
                 }
 
-                // 图片: 在 .pure-u-5-24 下的 img
+                // 图片
                 videoDet.vod_pic = $(e).find('.pure-img').attr('data-original')
 
-                // 备注/评分: 定位 .dou b
+                // 备注/评分
                 let score = $(e).find('.dou b').text()
                 videoDet.vod_remarks = score
 
@@ -128,13 +139,13 @@ async function getVideoDetail(args) {
             let vodDetail = new VideoDetail()
             vodDetail.vod_id = args.url
 
-            // 标题定位: .movie-des h1
+            // 标题
             vodDetail.vod_name = $('.movie-des h1').text().trim()
 
-            // 图片: 尝试从详情页获取，如果获取不到可以使用列表页的逻辑
+            // 图片
             vodDetail.vod_pic = $('.movie-img img').attr('src')
 
-            // 详情定位: .movie-txt
+            // 详情
             let $txtDiv = $('.movie-txt')
             vodDetail.vod_content = $txtDiv.text().trim()
 
@@ -202,11 +213,13 @@ async function searchVideo(args) {
 
             // 标题清洗
             let rawTitle = $link.attr('title') || $link.text()
-            let titleMatch = rawTitle.match(/《(.*?)》/)
-            if (titleMatch) {
+            let titleMatch = rawTitle.match(/《(.*?)》/) || rawTitle.match(/「(.*?)」/)
+            if (rawTitle) {
                 video.vod_name = titleMatch[1].replace(/[<font color='red'>,</font>]/g, '')
+            } else if (rawTitle) {
+                video.vod_name = rawTitle.replace(/[《,<font color='red'>,</font>]/g, '')
             } else {
-                video.vod_name = rawTitle.split('百度云')[0].trim()
+                video.vod_name = rawTitle
             }
 
             video.vod_pic = $(item).find('.pure-u-5-24 img').attr('data-original')
