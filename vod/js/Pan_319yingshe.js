@@ -1,9 +1,8 @@
-//@name:319影社
-//@version:1.1
+//@name:[盘] 319影社
+//@version:2
 //@webSite:https://www.319312.com
-//@remark:
-//@author:白猫
-//@order: A01
+//@remark:🙀是白猫呀！！！
+//@order: A21
 const appConfig = {
     _webSite: 'https://www.319312.com',
     /**
@@ -28,11 +27,20 @@ const appConfig = {
     },
 }
 
+
+// 全局变量
+let hasShownWelcome = false  // 标记是否已显示欢迎提示
+
 /**
  * 获取分类列表
  */
 async function getClassList(args) {
     var backData = new RepVideoClassList()
+    // 首次加载时显示欢迎提示
+    if (!hasShownWelcome) {
+        hasShownWelcome = true
+        toast("🙀白猫出品，三无产品！！！", 3)  // 显示3秒
+    }
     backData.data = [
         {
             type_id: 'zuixin',
@@ -129,7 +137,7 @@ async function getSubclassVideoList(args) {
 async function getVideoList(args) {
     var backData = new RepVideoList()
 
-    // 拼接URL，适配 https://www.319312.com/juqing/page/2 的格式
+    // 拼接URL，适配 /juqing/page/2 的格式
     let url = combineUrl(args.url)
     if (args.page > 1) {
         url += `/page/${args.page}`
@@ -143,15 +151,15 @@ async function getVideoList(args) {
         if (pro.data) {
             const $ = cheerio.load(pro.data)
             let vodItems = $('.container .list-item')
-            
+
             vodItems.each((_, e) => {
                 let videoDet = new VideoDetail()
-                
+
                 // 1. 获取链接和原始标题
                 let linkTag = $(e).find('a.list-goto')
                 let rawTitle = linkTag.attr('title') || ''
                 videoDet.vod_id = linkTag.attr('href')
-                
+
                 // 2. 标题清洗：[剧情电影]《暮色围城》(2025)... -> 提取《》内的内容
                 let titleMatch = rawTitle.match(/《(.*?)》/)
                 if (titleMatch && titleMatch[1]) {
@@ -168,7 +176,7 @@ async function getVideoList(args) {
                         videoDet.vod_pic = urlMatch[1]
                     }
                 }
-                
+
                 // 取消备注功能，不设置 vod_remarks
                 // videoDet.vod_remarks = rawTitle
 
@@ -188,20 +196,20 @@ async function getVideoList(args) {
 async function getVideoDetail(args) {
     var backData = new RepVideoDetail()
     try {
-        // args.url 已经是完整的链接 (从列表页获取的 href)
+        // args.url 已经是完整的链接 
         let webUrl = args.url
         if (!webUrl.startsWith('http')) {
-             webUrl = combineUrl(webUrl)
+            webUrl = combineUrl(webUrl)
         }
-        
+
         let pro = await req(webUrl)
         backData.error = pro.error
-        
+
         if (pro.data) {
             const $ = cheerio.load(pro.data)
             let vodDetail = new VideoDetail()
             vodDetail.vod_id = webUrl
-            
+
             // 标题清洗逻辑同列表页
             let pageTitle = $('head title').text()
             let titleMatch = pageTitle.match(/《(.*?)》/)
@@ -221,38 +229,38 @@ async function getVideoDetail(args) {
                 } else if (text.includes('主演')) {
                     vodDetail.vod_actor = text.replace('主演', '').replace(/[:：]/, '').trim()
                 } else if (text.includes('类型')) {
-                     vodDetail.type_name = text.replace('类型', '').replace(/[:：]/, '').trim()
+                    vodDetail.type_name = text.replace('类型', '').replace(/[:：]/, '').trim()
                 }
             })
 
             // 优化核心剧情提取 - 获取两个段落的内容
             let plotHeader = $('.post-content h2').filter((i, el) => $(el).text().includes('核心剧情'))
             if (plotHeader.length > 0) {
-                // 获取核心剧情h2后面的所有p标签，直到下一个h2
+                // 获取核心剧情
                 let nextH2 = plotHeader.nextAll('h2').first()
                 let paragraphs = plotHeader.nextUntil(nextH2, 'p')
-                
+
                 // 提取前两个段落的内容
                 let plotContent = []
                 paragraphs.each((index, el) => {
-                    if (index < 2) { 
+                    if (index < 2) {
                         let text = $(el).text().trim()
                         if (text) {
                             plotContent.push(text)
                         }
                     }
                 })
-                
+
                 // 将两个段落合并，用换行符分隔
                 vodDetail.vod_content = plotContent.join('\n')
-                
+
                 // 如果没有获取到内容，使用备选方案
                 if (!vodDetail.vod_content) {
                     vodDetail.vod_content = $('.post-content').text().substring(0, 200) + '...'
                 }
             } else {
-                 // 备选方案：直接取post-content下的纯文本
-                 vodDetail.vod_content = $('.post-content').text().substring(0, 200) + '...'
+                // 备选方案：直接取post-content下的纯文本
+                vodDetail.vod_content = $('.post-content').text().substring(0, 200) + '...'
             }
 
             // 播放链接
@@ -266,7 +274,7 @@ async function getVideoDetail(args) {
                     panUrls.push(href)
                 }
             })
-            
+
             vodDetail.panUrls = panUrls
             backData.data = vodDetail
         }
@@ -284,7 +292,7 @@ async function getVideoPlayUrl(args) {
     var backData = new RepVideoPlayUrl()
     // 此处直接返回网盘链接，由播放器/UZ解析
     if (args.url) {
-         backData.data = args.url
+        backData.data = args.url
     }
     return JSON.stringify(backData)
 }
@@ -301,20 +309,20 @@ async function searchVideo(args) {
         if (args.page > 1) {
             searchUrl = appConfig.webSite + `/page/${args.page}/?s=${args.searchWord}`
         }
-        
+
         let repData = await req(searchUrl)
 
         const $ = cheerio.load(repData.data)
         // 搜索结果
         let vodItems = $('.container .list-item')
-        
+
         vodItems.each((_, e) => {
             let videoDet = new VideoDetail()
-            
+
             let linkTag = $(e).find('a.list-title')
             let rawTitle = linkTag.text() || ''
             videoDet.vod_id = linkTag.attr('href')
-            
+
             // 标题清洗
             let titleMatch = rawTitle.match(/《(.*?)》/)
             videoDet.vod_name = titleMatch ? titleMatch[1] : rawTitle
@@ -327,10 +335,10 @@ async function searchVideo(args) {
                     videoDet.vod_pic = urlMatch[1]
                 }
             }
-            
+
             // 不设置 vod_remarks
             // videoDet.vod_remarks = rawTitle
-            
+
             backData.data.push(videoDet)
         })
     } catch (error) {
