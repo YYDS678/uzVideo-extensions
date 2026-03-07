@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:https://4ktop.com
 //@remark: 🙀是白猫呀！！！
-//@order:A04
+//@order:A22
 //@codeID:
 //@env:
 //@isAV:0

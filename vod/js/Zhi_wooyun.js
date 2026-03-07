@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:https://wooyun.tv
 //@remark: 🙀是白猫呀！！！
-//@order:A06
+//@order:B
 //@codeID:
 //@env:
 //@isAV:0

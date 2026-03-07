@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:https://www.rrdynb.com
 //@remark: 🙀是白猫呀！！！
-//@order:A07
+//@order:A24
 //@codeID:
 //@env:
 //@isAV:0
