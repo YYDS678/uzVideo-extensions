@@ -219,6 +219,7 @@ class RepVideoPlayUrl {
          * @property {string} name 名称 4k 高清 之类
          * @property {string} url 播放地址
          * @property {string} audioUrl 音频地址
+         * @property {string} subtitleUrl 字幕地址
          * @property {string} platformUrl 视频官方平台链接
          * @property {object} headers 播放头
          * @property {number} priority 优先级

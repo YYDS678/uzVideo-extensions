@@ -121,13 +121,24 @@ class RepHome {
  * 首页扩展，固定实例名称为 uzHomeJs,（例如 const uzHomeJs = new UZHomeJS();）
  */
 class UZHome {
+
+  /**
+   * 获取搜索建议
+   * @param {{keyword: string}} args 
+   * @returns {Promise<{data: string[], error: string}>}
+   */
+  async getSearchSuggest(args) {
+    let backData = { data: [], error: "" };
+    return JSON.stringify(backData);
+  }
+
   /**
    * 获取首页
    * @returns {Promise<RepHome>}
    */
   async getHome() {
-    let repData = new RepHome();
-    return JSON.stringify(repData);
+    let backData = new RepHome();
+    return JSON.stringify(backData);
   }
 
   /**
@@ -136,8 +147,8 @@ class UZHome {
    * @returns {Promise<RepTabList>}
    */
   async getTab(args) {
-    let repData = new RepTabList();
-    return JSON.stringify(repData);
+    let backData = new RepTabList();
+    return JSON.stringify(backData);
   }
 
   /**
@@ -147,7 +158,7 @@ class UZHome {
    * @returns {Promise<RepVideoList>}返回筛选列表
    */
   async getFilterList(args) {
-    let repData = new RepVideoList();
-    return JSON.stringify(repData);
+    let backData = new RepVideoList();
+    return JSON.stringify(backData);
   }
 }

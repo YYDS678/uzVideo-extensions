@@ -25,7 +25,9 @@ class UZUtils {
         return
         // ignore
 
-        sendMessage('debugLog', JSON.stringify([...arguments]))
+        if (kIsDebug) {
+            sendMessage('debugLog', JSON.stringify([...arguments]))
+        }
     }
 
     /**
@@ -540,6 +542,8 @@ const kLocale = 'zh-CN'
  * @type {number} 当前版本
  */
 const kAppVersion = 1643
+
+const kIsDebug = true
 // ignore
 
 /**
