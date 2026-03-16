@@ -2,7 +2,7 @@
 //@version:3
 //@webSite:https://4ktop.com
 //@remark: 🙀是白猫呀！！！
-//@order:A22
+//@order:A04
 //@codeID:
 //@env:
 //@isAV:0
@@ -61,9 +61,11 @@ function parseModuleItems($, elements) {
       const aTag = node.find('a').first()
       const img = node.find('.module-item-pic img').first()
 
+
       const v = new VideoDetail()
       v.vod_id = aTag.attr('href') || ''
       v.vod_name = img.attr('alt') || ''
+      v.topRightRemarks = node.find(".module-item-douban").text().trim()
       v.vod_pic = toAbsoluteUrl(img.attr('data-original') || img.attr('src') || '')
       v.vod_remarks = node.find('.module-item-note').text().trim()
       return v
@@ -98,7 +100,7 @@ async function getClassList(args) {
 
     if (!hasShownWelcome) {
       hasShownWelcome = true
-      toast('🙀白猫出品,三无产品!!!', 3)
+      toast('🙀白猫出品,三无产品！！！', 3)
     }
 
     backData.data = [

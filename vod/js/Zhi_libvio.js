@@ -2,11 +2,12 @@
 //@version:3
 //@webSite:https://libvio.mov/
 //@remark: 🙀是白猫呀！！！
-//@order:B
+//@order:A04
 //@codeID:
 //@env:
 //@isAV:0
 //@deprecated:0
+
 
 const appConfig = {
   _webSite: 'https://libvio.mov/',
@@ -16,7 +17,6 @@ const appConfig = {
   set webSite(value) {
     this._webSite = value
   },
-
   _uzTag: '',
   get uzTag() {
     return this._uzTag
@@ -26,12 +26,51 @@ const appConfig = {
   },
 }
 
-/** 通用：去掉末尾斜杠（高复用） */
+let hasShownWelcome = false
+let cachedCookie = ''
+let cookieFetched = false
+
+/** 通用:去掉末尾斜杠 */
 function removeTrailingSlash(url) {
   return (url || '').replace(/\/+$/, '')
 }
 
-/** 通用：列表卡片解析（分类列表/搜索复用） */
+/** 统一UA */
+function getUA() {
+  return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36'
+}
+
+/** 访问首页，获取cookie */
+async function fetchCookieIfNeeded() {
+  if (cookieFetched && cachedCookie) return cachedCookie
+  try {
+    const homeUrl = removeTrailingSlash(appConfig.webSite) + '/'
+    const resp = await req(homeUrl, {
+      headers: { 'User-Agent': getUA() },
+    })
+    const setCookie = (resp.headers && (resp.headers['set-cookie'] || resp.headers['Set-Cookie'])) || []
+    if (Array.isArray(setCookie)) {
+      cachedCookie = setCookie.map(c => c.split(';')[0]).join('; ')
+    } else if (typeof setCookie === 'string') {
+      cachedCookie = setCookie.split(',').map(c => c.split(';')[0]).join('; ')
+    }
+  } catch (e) { }
+  cookieFetched = true
+  return cachedCookie
+}
+
+/** 统一请求头 */
+async function buildHeaders(referer) {
+  const cookie = await fetchCookieIfNeeded()
+  const headers = {
+    Referer: referer || appConfig.webSite,
+    'User-Agent': getUA(),
+  }
+  if (cookie) headers['Cookie'] = cookie
+  return headers
+}
+
+/** 通用:列表卡片解析(分类列表/搜索复用) */
 function parseVideoCard($, element) {
   const $item = $(element)
   const $detailLink = $item.find('a[href*="/detail/"]').first()
@@ -53,19 +92,25 @@ function parseVideoCard($, element) {
 
   const remark = ($item.find('.pic-text').first().text() || '').trim()
   const score = ($item.find('.pic-tag').first().text() || '').trim()
-  video.vod_remarks = score && score !== '0.0' ? `${remark} ${score}`.trim() : remark
 
+  video.vod_remarks = remark
+  if (score && score !== '0.0') {
+    video.topRightRemarks = score
+    video.vod_douban_score = score
+  }
   return video
 }
 
-/**
- * 异步获取分类列表的方法。
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoClassList())>}
- */
 async function getClassList(args) {
   var backData = new RepVideoClassList()
   try {
+    if (!hasShownWelcome) {
+      hasShownWelcome = true
+      toast('🙀白猫出品,三无产品!!!', 3)
+    }
+    // 先请求首页获取cookie
+    await fetchCookieIfNeeded()
+
     backData.data = [
       { type_id: '1', type_name: '电影', hasSubclass: false },
       { type_id: '2', type_name: '剧集', hasSubclass: false },
@@ -78,11 +123,6 @@ async function getClassList(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 获取二级分类列表筛选列表的方法。
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoSubclassList())>}
- */
 async function getSubclassList(args) {
   var backData = new RepVideoSubclassList()
   try {
@@ -93,11 +133,6 @@ async function getSubclassList(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 获取分类视频列表
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoList())>}
- */
 async function getVideoList(args) {
   var backData = new RepVideoList()
   try {
@@ -105,9 +140,10 @@ async function getVideoList(args) {
     const page = args.page || 1
     const url = `${removeTrailingSlash(appConfig.webSite)}/type/${categoryId}-${page}.html`
 
-    const response = await req(url)
-    backData.error = response.error
+    const headers = await buildHeaders(url)
+    const response = await req(url, { headers })
 
+    backData.error = response.error
     const $ = cheerio.load(response.data || '')
     $('ul li').each((_, element) => {
       const video = parseVideoCard($, element)
@@ -119,11 +155,6 @@ async function getVideoList(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 获取二级分类视频列表 或 筛选视频列表
- * @param {UZSubclassVideoListArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoList())>}
- */
 async function getSubclassVideoList(args) {
   var backData = new RepVideoList()
   try {
@@ -134,19 +165,16 @@ async function getSubclassVideoList(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 获取视频详情
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoDetail())>}
- */
 async function getVideoDetail(args) {
   var backData = new RepVideoDetail()
   try {
     const videoId = args.url || ''
     const url = `${removeTrailingSlash(appConfig.webSite)}/detail/${videoId}.html`
-    const response = await req(url)
-    backData.error = response.error
 
+    const headers = await buildHeaders(url)
+    const response = await req(url, { headers })
+
+    backData.error = response.error
     const $ = cheerio.load(response.data || '')
     const video = new VideoDetail()
     video.vod_id = videoId
@@ -160,42 +188,17 @@ async function getVideoDetail(args) {
       else video.vod_pic = pic
     }
 
-    $('p.data').each((_, element) => {
-      const text = $(element).text() || ''
-      if (text.includes('主演:')) {
-        const match = text.match(/主演:([^\/]+).*导演:(.+)/)
-        if (match) {
-          video.vod_actor = (match[1] || '').trim()
-          video.vod_director = (match[2] || '').trim()
-        }
-      }
-    })
-
-    const content = ($('.desc.detail .detail-content').first().text() || '').trim()
-    const sketch = ($('.desc.detail .detail-sketch').first().text() || '').trim()
-    video.vod_content = content || sketch
-
     const playFromList = []
     const playUrlList = []
+    const panUrls = []
 
-    $('.stui-vodlist__head').each((_, element) => {
-      const $head = $(element)
-      const rawName = ($head.find('h3').first().text() || '').trim()
+    $('.playlist-panel').each((_, panel) => {
+      const $panel = $(panel)
+      const rawName = ($panel.find('.panel-head h3').first().text() || '').trim()
       if (!rawName) return
 
-      const upper = rawName.toUpperCase()
-      const isBlocked =
-        upper.includes('下载'.toUpperCase()) ||
-        upper.includes('UC') ||
-        upper.includes('夸克'.toUpperCase()) ||
-        upper.includes('网盘'.toUpperCase()) ||
-        upper.includes('百度'.toUpperCase()) ||
-        upper.includes('115')
-
-      const fromName = isBlocked ? `❌ ${rawName}` : rawName
       const episodes = []
-
-      $head.find('.stui-content__playlist li a[href*="/play/"]').each((__, a) => {
+      $panel.find('ul li a').each((__, a) => {
         const $a = $(a)
         const epName = ($a.text() || '').trim()
         const href = $a.attr('href') || ''
@@ -203,11 +206,22 @@ async function getVideoDetail(args) {
       })
 
       if (episodes.length > 0) {
-        playFromList.push(fromName)
+        playFromList.push(rawName)
         playUrlList.push(episodes.join('#'))
       }
+
+      $panel.find('a.netdisk-item').each((__, a) => {
+        const href = ($(a).attr('href') || '').trim()
+        if (href) panUrls.push(href)
+      })
+
+      $panel.find('.netdisk-url').each((__, el) => {
+        const urlText = ($(el).text() || '').trim()
+        if (urlText) panUrls.push(urlText)
+      })
     })
 
+    video.panUrls = Array.from(new Set(panUrls))
     video.vod_play_from = playFromList.join('$$$')
     video.vod_play_url = playUrlList.join('$$$')
     backData.data = video
@@ -217,15 +231,9 @@ async function getVideoDetail(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 获取视频的播放地址
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoPlayUrl())>}
- */
 async function getVideoPlayUrl(args) {
   var backData = new RepVideoPlayUrl()
   try {
-    // 内联：构建播放页绝对地址
     const inputUrl = (args.url || '').trim()
     let fullUrl = ''
     if (inputUrl.startsWith('http')) fullUrl = inputUrl
@@ -233,15 +241,8 @@ async function getVideoPlayUrl(args) {
     else fullUrl = `${removeTrailingSlash(appConfig.webSite)}/${inputUrl}`
 
     const fromName = ((args.from || args.flag || '') + '').toUpperCase()
+    const headers = await buildHeaders(fullUrl)
 
-    // 内联：请求头
-    const headers = {
-      Referer: fullUrl || appConfig.webSite,
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
-    }
-
-    // 1) 取播放页并解析 player_aaaa
     const playResp = await req(fullUrl, { headers })
     const html = playResp.data || ''
 
@@ -257,8 +258,6 @@ async function getVideoPlayUrl(args) {
 
     let player = null
     const raw = match[1].trim()
-
-    // 优先标准 JSON，失败后做轻量规范化（不使用 Function/eval）
     try {
       player = JSON.parse(raw)
     } catch (_) {
@@ -270,8 +269,6 @@ async function getVideoPlayUrl(args) {
     }
 
     let finalUrl = player.url || ''
-
-    // 2) 按线路走代理解析
     if (fromName.includes('BD5') || fromName.includes('BD') || fromName.includes('HD5')) {
       let proxyPath = ''
       let varNames = []
@@ -294,10 +291,10 @@ async function getVideoPlayUrl(args) {
         `&id=${encodeURIComponent(player.id || '')}` +
         `&nid=${encodeURIComponent(player.nid || '')}`
 
-      const proxyResp = await req(proxyUrl, { headers })
+      const proxyHeaders = await buildHeaders(proxyUrl)
+      const proxyResp = await req(proxyUrl, { headers: proxyHeaders })
       const jsText = proxyResp.data || ''
 
-      // 内联：从 js 变量中提取直链
       for (const name of varNames) {
         const reg = new RegExp(`(?:var|let|const)\\s+${name}\\s*=\\s*["']([^"']+)["']`, 'i')
         const m = jsText.match(reg)
@@ -316,11 +313,6 @@ async function getVideoPlayUrl(args) {
   return JSON.stringify(backData)
 }
 
-/**
- * 搜索视频
- * @param {UZArgs} args
- * @returns {@Promise<JSON.stringify(new RepVideoList())>}
- */
 async function searchVideo(args) {
   var backData = new RepVideoList()
   try {
@@ -328,9 +320,10 @@ async function searchVideo(args) {
     const page = args.page || 1
     const url = `${removeTrailingSlash(appConfig.webSite)}/search/${searchKey}----------${page}---.html`
 
-    const response = await req(url)
-    backData.error = response.error
+    const headers = await buildHeaders(url)
+    const response = await req(url, { headers })
 
+    backData.error = response.error
     const $ = cheerio.load(response.data || '')
     $('ul li').each((_, element) => {
       const video = parseVideoCard($, element)
