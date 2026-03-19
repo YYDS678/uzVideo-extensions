@@ -1,11 +1,10 @@
 //@name:[盘] 闪电
 //@version:1
-//@webSite:http://1.95.79.193/
+//@webSite:https://sd.sduc.site
 //@remark:
 //@order: A04
-//@deprecated:1
 const appConfig = {
-    _webSite: 'http://1.95.79.193/',
+    _webSite: 'https://sd.sduc.site',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
