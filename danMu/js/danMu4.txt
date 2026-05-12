@@ -5,6 +5,7 @@
 //@remark:v1.6.60 及以上版本可用
 //@codeID:NdxXSowvepoE1fO2fRQh7t52ycEaCVbg
 //@order: A02
+//@deprecated:1
 
 // ignore
 
