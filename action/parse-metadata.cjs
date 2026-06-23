@@ -174,6 +174,10 @@ const shouldInclude = (filePath, includePaths) => {
                 const deprecated = extractValue(content, '@deprecated:')
                 if (deprecated && parseInt(deprecated) === 1) return false
             }
+            if (content.includes('@isAV:')) {
+                const isAV = extractValue(content, '@isAV:')
+                if (isAV && parseInt(isAV) === 1) return false
+            }
         } catch {}
     }
 
