@@ -376,16 +376,28 @@ const main = async () => {
     )
 
 
-    let sources = [
+    const mainSources = [
         ...orderedResult.panTools,
         ...orderedResult.danMu,
         ...orderedResult.recommend,
         ...orderedResult.live,
         ...orderedResult.vod,
-        ...avResultList,
     ]
+    const avSources = [...avResultList]
     // 7. 替换为 jsDelivr CDN 地址
-    sources.forEach((item) => {
+    mainSources.forEach((item) => {
+        item.api = item.api.replace(
+            `${githubRawHost}/${owner}/${repo}/${branch}/`,
+            jsdelivrCDN
+        )
+        if (item.logo) {
+            item.logo = item.logo.replace(
+                `${githubRawHost}/${owner}/${repo}/${branch}/`,
+                jsdelivrCDN
+            )
+        }
+    })
+    avSources.forEach((item) => {
         item.api = item.api.replace(
             `${githubRawHost}/${owner}/${repo}/${branch}/`,
             jsdelivrCDN
@@ -408,7 +420,7 @@ const main = async () => {
     )
 
     // 8. 提取环境变量配置
-    let sourcesCopy = JSON.parse(JSON.stringify(sources))
+    let sourcesCopy = JSON.parse(JSON.stringify(mainSources))
     let envList = []
     const envSet = new Set()
     sourcesCopy.forEach((item) => {
