@@ -1,14 +1,14 @@
 //@name:[盘] TG搜
-//@version:11
-//@webSite:豆儿盘@douerpan&豆儿123@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&百度@bdwpzhpd&夸克百度@Aliyun_4K_Movies&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman
-//@env:TG搜代理地址##默认直接访问 https://t.me/s/ 有自己的代理服务填入即可，没有不用改动。
+//@version:12
+//@webSite:豆儿盘@douerpan&偶豆豆@odoudouo&豆儿123@zyfb123&LEO资源@leoziyuan&资源宇宙@tgsearchers7
+//@env:TG搜代理地址##默认直接访问 https://telegram.me 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@logo:tg.png
 //@order: A17
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
-// 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
+// 如需添加通用依赖，请联系 https://telegram.me/uzVideoAppbot
 import {
     FilterLabel,
     FilterTitle,
@@ -55,7 +55,7 @@ import { cheerio, Crypto, Encrypt, JSONbig } from '../../core/core/uz3lib.js'
 // 请勿删减，可以新增
 
 const appConfig = {
-    _webSite: '豆儿盘@douerpan&豆儿123@zyfb123&天翼日更@tianyirigeng&天翼臻影@tyysypzypd&百度@bdwpzhpd&夸克百度@Aliyun_4K_Movies&夸克UC@ucquark&夸克电影@Q_dianying&夸克剧集@Q_dianshiju&夸克动漫@Q_dongman',
+    _webSite: '豆儿盘@douerpan&偶豆豆@odoudouo&豆儿123@zyfb123&LEO资源@leoziyuan&资源宇宙@tgsearchers7',
     /**
      * 网站主页，uz 调用每个函数前都会进行赋值操作
      * 如果不想被改变 请自定义一个变量
@@ -67,7 +67,7 @@ const appConfig = {
         this._webSite = value
     },
 
-    tgs: 'https://t.me/s/',
+    tgs: 'https://telegram.me',
     _tgsInitialized: false, // 标记是否已初始化代理地址
 
     _uzTag: '',
@@ -210,7 +210,7 @@ async function getVideoList(args) {
         // 初始化代理地址（仅首次执行）
         await initTgsProxy()
 
-        let endUrl = appConfig.tgs + args.url
+        let endUrl = `${appConfig.tgs}/s/${args.url}`
         if(args.page == 1) {
             _videoListPageMap[args.url] = ""
         }else {
@@ -478,7 +478,7 @@ async function searchVideo(args) {
 
         // 🚀 核心优化：并发请求所有频道
         const searchPromises = channels.map(async (element) => {
-            let endUrl = appConfig.tgs + element + "?q=" + args.searchWord
+            let endUrl = `${appConfig.tgs}/s/${element}?q=${args.searchWord}`
 
             if(args.page == 1) {
                 _searchListPageMap[element] = ""
