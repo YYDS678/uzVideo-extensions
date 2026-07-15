@@ -1,14 +1,14 @@
 //@name:[盘] TG搜
-//@version:12
+//@version:13
 //@webSite:豆儿盘@douerpan&偶豆豆@odoudouo&豆儿123@zyfb123&LEO资源@leoziyuan&资源宇宙@tgsearchers7
-//@env:TG搜代理地址##默认直接访问 https://telegram.me 有自己的代理服务填入即可，没有不用改动。
+//@env:TG搜代理地址##默认直接访问 https://t.me 有自己的代理服务填入即可，没有不用改动。
 //@remark:格式 频道名称1@频道id1&频道名称2@频道id2
 //@logo:tg.png
 //@order: A17
 
 // ignore
 // 不支持导入，这里只是本地开发用于代码提示
-// 如需添加通用依赖，请联系 https://telegram.me/uzVideoAppbot
+// 如需添加通用依赖，请联系 https://t.me/uzVideoAppbot
 import {
     FilterLabel,
     FilterTitle,
@@ -67,7 +67,7 @@ const appConfig = {
         this._webSite = value
     },
 
-    tgs: 'https://telegram.me',
+    tgs: 'https://t.me',
     _tgsInitialized: false, // 标记是否已初始化代理地址
 
     _uzTag: '',
